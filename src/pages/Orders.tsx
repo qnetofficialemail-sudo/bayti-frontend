@@ -122,10 +122,8 @@ export default function Orders() {
           })}
         </div>
       )}
-    </div>
-
-    {/* Review Modal */}
-    {reviewModal && (
+      {/* Review Modal */}
+      {reviewModal && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
           <h3 className="font-bold text-gray-900 mb-1">⭐ {isArabic ? "قيّم طلبك" : "Rate Your Order"}</h3>
@@ -166,5 +164,6 @@ export default function Orders() {
         </div>
       </div>
     )}
+    </div>
   );
 }
