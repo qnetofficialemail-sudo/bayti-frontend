@@ -95,10 +95,10 @@ export default function AdminPanel() {
 
   const toggleUser = async (user: any) => {
     if (user.role === "seller") {
-      // For sellers, find their seller profile and use seller disable/approve endpoint
       const seller = sellers.find(s => s.user?.id === user.id);
       if (seller) {
-        if (seller.is_approved) {
+        // Use user.is_active to decide: if currently active, disable; if inactive, approve
+        if (user.is_active) {
           await api.patch(`/api/admin/sellers/${seller.id}/disable`);
           setSellers(prev => prev.map(s => s.id === seller.id ? { ...s, is_approved: false } : s));
         } else {
