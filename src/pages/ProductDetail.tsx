@@ -197,6 +197,7 @@ export default function ProductDetail() {
             </button>
           </form>
         </div>
+      </div>
 
       {/* More from this seller */}
       {related.length > 0 && (
@@ -224,6 +225,5 @@ export default function ProductDetail() {
           </div>
         </div>
       )}
-    </div>
   );
 }
