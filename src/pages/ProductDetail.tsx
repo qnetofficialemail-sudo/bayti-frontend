@@ -16,6 +16,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState("");
   const [area, setArea] = useState("");
+  const [savedAddress, setSavedAddress] = useState<any>(null);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(true);
   const [ordering, setOrdering] = useState(false);
@@ -50,6 +51,10 @@ export default function ProductDetail() {
         items: [{ product_id: product.id, quantity }],
       });
       setSuccess(true);
+      // Save address for next time
+      if (address && area) {
+        api.patch(`/api/auth/me/address?saved_address=${encodeURIComponent(address)}&saved_area=${encodeURIComponent(area)}`).catch(() => {});
+      }
     } catch (err: any) {
       setError(err.response?.data?.detail || (isArabic ? "فشل الطلب. حاول مرة أخرى." : "Order failed. Try again."));
     } finally {
@@ -155,6 +160,15 @@ export default function ProductDetail() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "عنوان التوصيل" : "Delivery Address"}</label>
+              {savedAddress?.saved_address && !address && (
+                <button type="button"
+                  onClick={() => { setAddress(savedAddress.saved_address); setArea(savedAddress.saved_area || ""); }}
+                  className="w-full mb-2 text-sm bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 px-4 py-2.5 rounded-xl transition text-left flex items-center gap-2">
+                  <span>📍</span>
+                  <span className="flex-1 truncate">{savedAddress.saved_address}{savedAddress.saved_area ? ` · ${savedAddress.saved_area}` : ""}</span>
+                  <span className="text-xs font-medium flex-shrink-0">{isArabic ? "استخدم" : "Use"}</span>
+                </button>
+              )}
               <textarea value={address} onChange={e => setAddress(e.target.value)} required rows={2}
                 placeholder={isArabic ? "المبنى، الشارع، رقم الشقة..." : "Building, street, flat number..."}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
