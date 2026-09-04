@@ -325,7 +325,6 @@ export default function AdminPanel() {
                     </button>
                   </div>
                 </div>
-              </div>
               {expandedSeller === seller.id && (
                 <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
                   {(seller.sample_image_1 || seller.sample_image_2 || seller.sample_image_3) && (
@@ -377,7 +376,7 @@ export default function AdminPanel() {
                 </div>
               )}
             </div>
-            ))}
+          ))}
           </div>
         </div>
       )}
