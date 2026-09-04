@@ -79,9 +79,14 @@ export default function SellerDashboard() {
           </h1>
           <p className="text-gray-500 text-sm mt-1">📍 {profile?.area}, {profile?.city}</p>
         </div>
-        <Link to="/seller/products/new" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
-          {isArabic ? "+ إضافة منتج" : "+ Add Product"}
-        </Link>
+        <div className="flex gap-2">
+          <Link to="/seller/shop/edit" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition">
+            {isArabic ? "✏️ تعديل المتجر" : "✏️ Edit Shop"}
+          </Link>
+          <Link to="/seller/products/new" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
+            {isArabic ? "+ إضافة منتج" : "+ Add Product"}
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-8">
@@ -171,6 +176,10 @@ export default function SellerDashboard() {
                     <button onClick={() => setRestockId(restockId === product.id ? null : product.id)} className="text-xs text-blue-500 hover:text-blue-700 transition">
                       {isArabic ? "تعبئة" : "Restock"}
                     </button>
+                    <span className="text-gray-300">|</span>
+                    <Link to={`/seller/products/${product.id}/edit`} className="text-xs text-orange-500 hover:text-orange-700 transition">
+                      {isArabic ? "تعديل" : "Edit"}
+                    </Link>
                   </div>
                 </div>
               </div>

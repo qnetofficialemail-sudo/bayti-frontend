@@ -12,6 +12,8 @@ import AddProduct from "./pages/AddProduct";
 import Orders from "./pages/Orders";
 import AdminPanel from "./pages/AdminPanel";
 import SellerProfilePage from "./pages/SellerProfilePage";
+import EditProduct from "./pages/EditProduct";
+import EditShop from "./pages/EditShop";
 import Landing from "./pages/Landing";
 
 export default function App() {
@@ -31,6 +33,8 @@ export default function App() {
               <Route path="/seller/setup" element={<><Navbar /><SellerSetup /></>} />
               <Route path="/seller/products/new" element={<><Navbar /><AddProduct /></>} />
               <Route path="/admin" element={<><Navbar /><AdminPanel /></>} />
+              <Route path="/seller/products/:id/edit" element={<><Navbar /><EditProduct /></>} />
+              <Route path="/seller/shop/edit" element={<><Navbar /><EditShop /></>} />
               <Route path="/shop/:id" element={<><Navbar /><SellerProfilePage /></>} />
             </Routes>
           </div>
