@@ -110,9 +110,20 @@ export default function AdminPanel() {
   };
 
   const deleteUser = async (user: any) => {
-    if (!window.confirm(`⚠️ Permanently delete user "${user.full_name}" (${user.email})? This cannot be undone.`)) return;
+    if (!window.confirm(`⚠️ Permanently delete "${user.full_name}" (${user.email}) and ALL their data? This cannot be undone.`)) return;
     try {
-      await api.delete(`/api/admin/users/${user.id}`);
+      if (user.role === "seller") {
+        // Find seller profile id from sellers list
+        const seller = sellers.find(s => s.user?.id === user.id);
+        if (seller) {
+          await api.delete(`/api/admin/sellers/${seller.id}`);
+          setSellers(prev => prev.filter(s => s.id !== seller.id));
+        } else {
+          await api.delete(`/api/admin/users/${user.id}`);
+        }
+      } else {
+        await api.delete(`/api/admin/users/${user.id}`);
+      }
       setUsers(prev => prev.filter(u => u.id !== user.id));
     } catch (e: any) {
       alert(e.response?.data?.detail || "Delete failed");
@@ -448,7 +459,7 @@ export default function AdminPanel() {
                     className={`text-xs px-3 py-2 rounded-lg transition font-medium ${u.is_active ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-green-50 text-green-600 hover:bg-green-100"}`}>
                     {u.is_active ? (isArabic ? "تعطيل" : "Disable") : (isArabic ? "تفعيل" : "Enable")}
                   </button>
-                  {u.role === "buyer" && (
+                  {(u.role === "buyer" || u.role === "seller") && (
                     <button onClick={() => deleteUser(u)}
                       className="text-xs px-3 py-2 rounded-lg transition font-medium bg-red-700 text-white hover:bg-red-800">
                       🗑 {isArabic ? "حذف" : "Delete"}
