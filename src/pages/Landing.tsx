@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import api from "../api/client";
+import CookOfWeek from "../components/CookOfWeek";
 
 export default function Landing() {
   const { isArabic, toggleLanguage } = useLanguage();
@@ -129,6 +130,9 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      {/* Cook of the Week */}
+      <CookOfWeek />
 
       {/* For Sellers */}
       <section className="py-20 px-4 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
