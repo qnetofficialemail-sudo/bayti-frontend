@@ -105,7 +105,7 @@ export default function Home() {
                   <p className="text-gray-500 text-sm line-clamp-2 mb-2">{displayDesc}</p>
                   {getStockBadge(product)}
                   <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
-                    <span>🏠 {product.seller?.shop_name}</span>
+                    <Link to={`/shop/${product.seller?.id}`} onClick={e => e.stopPropagation()} className="hover:text-orange-500 transition">🏠 {product.seller?.shop_name}</Link>
                     <span>⏱ {product.preparation_time}{isArabic ? "د" : "min"}</span>
                   </div>
                   {displayCat && (

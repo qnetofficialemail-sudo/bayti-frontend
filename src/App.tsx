@@ -11,6 +11,7 @@ import SellerSetup from "./pages/SellerSetup";
 import AddProduct from "./pages/AddProduct";
 import Orders from "./pages/Orders";
 import AdminPanel from "./pages/AdminPanel";
+import SellerProfilePage from "./pages/SellerProfilePage";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
               <Route path="/seller/setup" element={<SellerSetup />} />
               <Route path="/seller/products/new" element={<AddProduct />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/shop/:id" element={<SellerProfilePage />} />
             </Routes>
           </div>
         </BrowserRouter>

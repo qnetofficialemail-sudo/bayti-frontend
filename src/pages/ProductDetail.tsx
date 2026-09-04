@@ -99,7 +99,7 @@ export default function ProductDetail() {
             {product.category && <span>{product.category.icon} {displayCat}</span>}
           </div>
           <div className="bg-gray-50 rounded-xl p-4">
-            <p className="text-sm text-gray-600 font-medium mb-1">🏠 {product.seller.shop_name}</p>
+            <Link to={`/shop/${product.seller.id}`} className="text-sm text-gray-600 font-medium mb-1 hover:text-orange-500 transition block">🏠 {product.seller.shop_name}</Link>
             <p className="text-sm text-gray-500">📍 {product.seller.area}</p>
             <p className="text-sm text-gray-500">⭐ {product.seller.rating} · {product.seller.total_orders} {isArabic ? "طلب" : "orders"}</p>
           </div>
