@@ -58,10 +58,23 @@ export default function Landing() {
               ? "اكتشف أشهى الأكلات المنزلية من طباخين موهوبين في منطقتك. مجبوس، حلويات، معجنات وأكثر."
               : "Discover authentic homemade dishes from talented cooks in your area. Machboos, sweets, pastries and more."}
           </p>
+          {/* Search bar */}
+          <div className="max-w-xl mx-auto mb-6">
+            <form onSubmit={e => { e.preventDefault(); const q = (e.target as any).q.value; if (q) window.location.href = `/marketplace?search=${encodeURIComponent(q)}`; }}
+              className="flex gap-2 bg-white rounded-2xl shadow-lg p-2 border border-gray-100">
+              <input name="q" type="text"
+                placeholder={isArabic ? "ابحث عن مجبوس، حلويات، كنافة..." : "Search for Machboos, sweets, Kunafa..."}
+                className="flex-1 px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
+              <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-xl font-medium transition">
+                {isArabic ? "بحث" : "Search"}
+              </button>
+            </form>
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/marketplace"
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-2xl text-lg transition shadow-lg shadow-orange-200">
-              {isArabic ? "🍽️ اطلب الآن" : "🍽️ Order Now"}
+              {isArabic ? "🍽️ تصفح المنتجات" : "🍽️ Browse Food"}
             </Link>
             <Link to="/register"
               className="bg-white hover:bg-gray-50 text-gray-900 font-semibold px-8 py-4 rounded-2xl text-lg transition border-2 border-gray-200 hover:border-orange-300">

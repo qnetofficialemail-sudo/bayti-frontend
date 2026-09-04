@@ -14,6 +14,7 @@ import AdminPanel from "./pages/AdminPanel";
 import SellerProfilePage from "./pages/SellerProfilePage";
 import EditProduct from "./pages/EditProduct";
 import EditShop from "./pages/EditShop";
+import CategoriesPage from "./pages/CategoriesPage";
 import Landing from "./pages/Landing";
 import { useAuth } from "./context/AuthContext";
 import { Navigate } from "react-router-dom";
@@ -46,6 +47,7 @@ export default function App() {
               <Route path="/admin" element={<><Navbar /><AdminPanel /></>} />
               <Route path="/seller/products/:id/edit" element={<><Navbar /><EditProduct /></>} />
               <Route path="/seller/shop/edit" element={<><Navbar /><EditShop /></>} />
+              <Route path="/categories" element={<><Navbar /><CategoriesPage /></>} />
               <Route path="/shop/:id" element={<><Navbar /><SellerProfilePage /></>} />
             </Routes>
           </div>
