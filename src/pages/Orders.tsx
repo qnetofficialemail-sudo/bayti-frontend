@@ -28,11 +28,17 @@ export default function Orders() {
       setOrders(r.data);
       // Check which delivered orders have been reviewed
       const delivered = r.data.filter((o: any) => o.status === "delivered");
-      Promise.all(delivered.map((o: any) => api.get(`/api/reviews/check/${o.id}`))).then(results => {
-        const reviewed = new Set<number>();
-        results.forEach((res, i) => { if (res.data.reviewed) reviewed.add(delivered[i].id); });
-        setReviewedOrders(reviewed);
-      }).catch(() => {});
+      if (delivered.length > 0) {
+        Promise.all(delivered.map((o: any) =>
+          api.get(`/api/reviews/check/${o.id}`).catch(() => ({ data: { reviewed: false } }))
+        )).then(results => {
+          const reviewed = new Set<number>();
+          results.forEach((res: any, i: number) => {
+            if (res.data?.reviewed) reviewed.add(delivered[i].id);
+          });
+          setReviewedOrders(reviewed);
+        });
+      }
     }).finally(() => setLoading(false));
   }, [user]);
 
