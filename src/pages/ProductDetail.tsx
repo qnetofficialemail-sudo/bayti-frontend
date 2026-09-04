@@ -11,6 +11,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const [product, setProduct] = useState<any>(null);
   const [sellerOpen, setSellerOpen] = useState<any>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState("");
   const [area, setArea] = useState("");

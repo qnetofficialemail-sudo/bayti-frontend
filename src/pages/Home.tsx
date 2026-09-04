@@ -106,6 +106,9 @@ export default function Home() {
                   {getStockBadge(product)}
                   <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
                     <Link to={`/shop/${product.seller?.id}`} onClick={e => e.stopPropagation()} className="hover:text-orange-500 transition">🏠 {product.seller?.shop_name}</Link>
+                    {product.seller?.rating > 0 && (
+                      <span className="text-yellow-400 text-xs">{"★".repeat(Math.round(product.seller.rating))}{"☆".repeat(5 - Math.round(product.seller.rating))} {product.seller.rating}</span>
+                    )}
                     <span>⏱ {product.preparation_time}{isArabic ? "د" : "min"}</span>
                   </div>
                   {displayCat && (
