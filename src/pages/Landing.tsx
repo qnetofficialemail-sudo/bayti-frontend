@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import api from "../api/client";
 
 export default function Landing() {
   const { isArabic, toggleLanguage } = useLanguage();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const userStr = localStorage.getItem("user");
+  // If already logged in, redirect to appropriate page
+  React.useEffect(() => {
+    if (token && userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        if (user.role === "seller") navigate("/seller/dashboard");
+        else if (user.role === "admin") navigate("/admin");
+        else navigate("/marketplace");
+      } catch {}
+    }
+  }, []);
   const [stats, setStats] = useState({ sellers: 0, products: 0 });
 
   useEffect(() => {

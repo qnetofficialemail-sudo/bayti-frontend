@@ -14,7 +14,12 @@ export function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setError(""); setLoading(true);
-    try { await login(email, password); navigate("/"); }
+    try {
+      const loggedUser = await login(email, password);
+      if (loggedUser.role === "seller") navigate("/seller/dashboard");
+      else if (loggedUser.role === "admin") navigate("/admin");
+      else navigate("/marketplace");
+    }
     catch (err: any) { setError(err.response?.data?.detail || (isArabic ? "البريد أو كلمة المرور غير صحيحة" : "Login failed")); }
     finally { setLoading(false); }
   };
@@ -68,7 +73,7 @@ export function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setError(""); setLoading(true);
-    try { await register(form); navigate(form.role === "seller" ? "/seller/setup" : "/"); }
+    try { await register(form); navigate(form.role === "seller" ? "/seller/setup" : "/marketplace"); }
     catch (err: any) { setError(err.response?.data?.detail || (isArabic ? "فشل إنشاء الحساب" : "Registration failed")); }
     finally { setLoading(false); }
   };
