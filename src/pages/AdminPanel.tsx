@@ -93,9 +93,22 @@ export default function AdminPanel() {
     loadData();
   };
 
-  const toggleUser = async (id: number) => {
-    await api.patch(`/api/admin/users/${id}/toggle`);
-    setUsers(prev => prev.map(u => u.id === id ? { ...u, is_active: !u.is_active } : u));
+  const toggleUser = async (user: any) => {
+    if (user.role === "seller") {
+      // For sellers, find their seller profile and use seller disable/approve endpoint
+      const seller = sellers.find(s => s.user?.id === user.id);
+      if (seller) {
+        if (seller.is_approved) {
+          await api.patch(`/api/admin/sellers/${seller.id}/disable`);
+          setSellers(prev => prev.map(s => s.id === seller.id ? { ...s, is_approved: false } : s));
+        } else {
+          await api.patch(`/api/admin/sellers/${seller.id}/approve`);
+          setSellers(prev => prev.map(s => s.id === seller.id ? { ...s, is_approved: true } : s));
+        }
+      }
+    }
+    await api.patch(`/api/admin/users/${user.id}/toggle`);
+    setUsers(prev => prev.map(u => u.id === user.id ? { ...u, is_active: !u.is_active } : u));
   };
 
   const deleteSeller = async (seller: any) => {
@@ -455,7 +468,7 @@ export default function AdminPanel() {
               </div>
               {u.role !== "admin" && (
                 <div className="flex gap-2">
-                  <button onClick={() => toggleUser(u.id)}
+                  <button onClick={() => toggleUser(u)}
                     className={`text-xs px-3 py-2 rounded-lg transition font-medium ${u.is_active ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-green-50 text-green-600 hover:bg-green-100"}`}>
                     {u.is_active ? (isArabic ? "تعطيل" : "Disable") : (isArabic ? "تفعيل" : "Enable")}
                   </button>
