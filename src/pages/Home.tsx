@@ -58,6 +58,11 @@ export default function Home() {
         <p className="text-gray-500 text-lg">{isArabic ? "ادعم الطباخين المنزليين في الإمارات" : "Support local home cooks across the UAE"}</p>
       </div>
 
+      <div className="mb-2 flex justify-end">
+        <Link to="/categories" className="text-sm text-orange-500 hover:underline">
+          {isArabic ? "تصفح جميع الفئات ←" : "Browse all categories →"}
+        </Link>
+      </div>
       <div className="mb-6">
         <input type="text" placeholder={isArabic ? "ابحث عن أكلات، حلويات، منتجات..." : "Search for dishes, sweets, crafts..."} value={search} onChange={e => setSearch(e.target.value)}
           className="w-full border border-gray-200 rounded-xl px-5 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white shadow-sm" />
