@@ -326,10 +326,8 @@ export default function AdminPanel() {
                   </div>
                 </div>
               </div>
-              {/* Expanded seller details */}
               {expandedSeller === seller.id && (
                 <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
-                  {/* Sample images */}
                   {(seller.sample_image_1 || seller.sample_image_2 || seller.sample_image_3) && (
                     <div>
                       <p className="text-xs font-medium text-gray-500 mb-2">{isArabic ? "صور العينات" : "Sample Photos"}</p>
@@ -342,7 +340,6 @@ export default function AdminPanel() {
                       </div>
                     </div>
                   )}
-                  {/* Details grid */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     {seller.whatsapp_number && (
                       <div className="bg-green-50 rounded-xl p-3">
@@ -371,12 +368,10 @@ export default function AdminPanel() {
                       </div>
                     )}
                   </div>
-                  {seller.categories_offered && (
+                  {seller.description && (
                     <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">{isArabic ? "ما يبيع" : "Sells"}</p>
-                      <p className="text-sm text-gray-700">
-                        {seller.description || (isArabic ? "لا يوجد وصف" : "No description")}
-                      </p>
+                      <p className="text-xs font-medium text-gray-500 mb-1">{isArabic ? "الوصف" : "Description"}</p>
+                      <p className="text-sm text-gray-700">{seller.description}</p>
                     </div>
                   )}
                 </div>
