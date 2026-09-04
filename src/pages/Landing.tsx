@@ -1,24 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
-import { useAuth } from "../context/AuthContext";
 import api from "../api/client";
 
 export default function Landing() {
   const { isArabic, toggleLanguage } = useLanguage();
-  const { user, isLoading } = useAuth();
-  const navigate = useNavigate();
-
-  // If already logged in, redirect to appropriate page
-  React.useEffect(() => {
-    if (!isLoading && user) {
-      if (user.role === "seller") navigate("/seller/dashboard", { replace: true });
-      else if (user.role === "admin") navigate("/admin", { replace: true });
-      else navigate("/marketplace", { replace: true });
-    }
-  }, [user?.id, isLoading]);
-
-  if (isLoading) return null;
   const [stats, setStats] = useState({ sellers: 0, products: 0 });
 
   useEffect(() => {

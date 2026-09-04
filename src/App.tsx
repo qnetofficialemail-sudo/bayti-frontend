@@ -15,6 +15,17 @@ import SellerProfilePage from "./pages/SellerProfilePage";
 import EditProduct from "./pages/EditProduct";
 import EditShop from "./pages/EditShop";
 import Landing from "./pages/Landing";
+import { useAuth } from "./context/AuthContext";
+import { Navigate } from "react-router-dom";
+
+function HomeRoute() {
+  const { user, isLoading } = useAuth();
+  if (isLoading) return null;
+  if (user?.role === "seller") return <Navigate to="/seller/dashboard" replace />;
+  if (user?.role === "admin") return <Navigate to="/admin" replace />;
+  if (user?.role === "buyer") return <Navigate to="/marketplace" replace />;
+  return <Landing />;
+}
 
 export default function App() {
   return (
@@ -23,7 +34,7 @@ export default function App() {
         <BrowserRouter>
           <div className="min-h-screen bg-gray-50">
             <Routes>
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<HomeRoute />} />
               <Route path="/marketplace" element={<><Navbar /><Home /></>} />
               <Route path="/login" element={<><Navbar /><LoginPage /></>} />
               <Route path="/register" element={<><Navbar /><RegisterPage /></>} />
