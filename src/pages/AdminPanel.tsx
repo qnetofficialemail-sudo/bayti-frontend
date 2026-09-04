@@ -302,6 +302,10 @@ export default function AdminPanel() {
                     <p className="text-sm text-gray-500">{seller.user.full_name} · {seller.user.email}</p>
                     <p className="text-sm text-gray-500">📍 {seller.area}, {seller.city} · ⭐ {seller.rating} · 📦 {seller.total_orders} {isArabic ? "طلب" : "orders"}</p>
                     {seller.badge_notes && <p className="text-xs text-orange-500 mt-1">📝 {seller.badge_notes}</p>}
+                    <button onClick={() => setExpandedSeller(expandedSeller === seller.id ? null : seller.id)}
+                      className="text-xs text-orange-500 hover:underline mt-2 inline-block">
+                      {expandedSeller === seller.id ? "▲ Hide details" : "▼ View details"}
+                    </button>
                   </div>
                   <div className="flex flex-col gap-2 flex-shrink-0">
                     {!seller.is_approved ? (
