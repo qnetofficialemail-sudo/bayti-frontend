@@ -98,6 +98,27 @@ export default function AdminPanel() {
     setUsers(prev => prev.map(u => u.id === id ? { ...u, is_active: !u.is_active } : u));
   };
 
+  const deleteSeller = async (seller: any) => {
+    if (!window.confirm(`⚠️ Permanently delete "${seller.shop_name}" and ALL their products and orders? This cannot be undone.`)) return;
+    try {
+      await api.delete(`/api/admin/sellers/${seller.id}`);
+      setSellers(prev => prev.filter(s => s.id !== seller.id));
+      setStats((prev: any) => prev ? ({ ...prev, total_sellers: prev.total_sellers - 1 }) : prev);
+    } catch (e: any) {
+      alert(e.response?.data?.detail || "Delete failed");
+    }
+  };
+
+  const deleteUser = async (user: any) => {
+    if (!window.confirm(`⚠️ Permanently delete user "${user.full_name}" (${user.email})? This cannot be undone.`)) return;
+    try {
+      await api.delete(`/api/admin/users/${user.id}`);
+      setUsers(prev => prev.filter(u => u.id !== user.id));
+    } catch (e: any) {
+      alert(e.response?.data?.detail || "Delete failed");
+    }
+  };
+
   const filteredSellers = sellers.filter(s => {
     if (sellerFilter === "pending") return !s.is_approved;
     if (sellerFilter === "approved") return s.is_approved;
@@ -422,10 +443,18 @@ export default function AdminPanel() {
                 <p className="text-xs text-gray-500">{u.email} · {u.phone || "No phone"}</p>
               </div>
               {u.role !== "admin" && (
-                <button onClick={() => toggleUser(u.id)}
-                  className={`text-xs px-3 py-2 rounded-lg transition font-medium ${u.is_active ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-green-50 text-green-600 hover:bg-green-100"}`}>
-                  {u.is_active ? (isArabic ? "تعطيل" : "Disable") : (isArabic ? "تفعيل" : "Enable")}
-                </button>
+                <div className="flex gap-2">
+                  <button onClick={() => toggleUser(u.id)}
+                    className={`text-xs px-3 py-2 rounded-lg transition font-medium ${u.is_active ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-green-50 text-green-600 hover:bg-green-100"}`}>
+                    {u.is_active ? (isArabic ? "تعطيل" : "Disable") : (isArabic ? "تفعيل" : "Enable")}
+                  </button>
+                  {u.role === "buyer" && (
+                    <button onClick={() => deleteUser(u)}
+                      className="text-xs px-3 py-2 rounded-lg transition font-medium bg-red-700 text-white hover:bg-red-800">
+                      🗑 {isArabic ? "حذف" : "Delete"}
+                    </button>
+                  )}
+                </div>
               )}
             </div>
           ))}
