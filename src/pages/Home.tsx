@@ -90,7 +90,7 @@ export default function Home() {
             return (
               <Link key={product.id} to={`/product/${product.id}`} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group">
                 <div className="h-48 bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center overflow-hidden relative">
-                  {product.created_at && new Date(product.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
+                  {(product as any).created_at && new Date((product as any).created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
                     <span className="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
                       {isArabic ? "جديد" : "New"}
                     </span>
