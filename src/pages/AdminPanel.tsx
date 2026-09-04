@@ -21,12 +21,14 @@ export default function AdminPanel() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission">("overview");
+  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue">("overview");
   const [stats, setStats] = useState<any>(null);
   const [sellers, setSellers] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [commissionSummary, setCommissionSummary] = useState<any[]>([]);
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [dailyRevenue, setDailyRevenue] = useState<any[]>([]);
   const [sellerFilter, setSellerFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
@@ -43,18 +45,22 @@ export default function AdminPanel() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [s, sel, o, u, cs] = await Promise.all([
+      const [s, sel, o, u, cs, prods, rev] = await Promise.all([
         api.get("/api/admin/stats"),
         api.get("/api/admin/sellers"),
         api.get("/api/admin/orders"),
         api.get("/api/admin/users"),
         api.get("/api/admin/commission/summary"),
+        api.get("/api/admin/products"),
+        api.get("/api/admin/revenue/daily"),
       ]);
       setStats(s.data);
       setSellers(sel.data);
       setOrders(o.data);
       setUsers(u.data);
       setCommissionSummary(cs.data);
+      setAllProducts(prods.data);
+      setDailyRevenue(rev.data);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -122,6 +128,21 @@ export default function AdminPanel() {
     }
   };
 
+  const toggleProduct = async (product: any) => {
+    await api.patch(`/api/admin/products/${product.id}/toggle`);
+    setAllProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_available: !p.is_available } : p));
+  };
+
+  const deleteProductAdmin = async (product: any) => {
+    if (!window.confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
+    await api.delete(`/api/admin/products/${product.id}`);
+    setAllProducts(prev => prev.filter(p => p.id !== product.id));
+  };
+
+  const exportCSV = (type: string) => {
+    window.open(`https://web-production-63685.up.railway.app/api/admin/${type}?token=${localStorage.getItem("token")}`, "_blank");
+  };
+
   const deleteUser = async (user: any) => {
     if (!window.confirm(`⚠️ Permanently delete "${user.full_name}" (${user.email}) and ALL their data? This cannot be undone.`)) return;
     try {
@@ -158,7 +179,17 @@ export default function AdminPanel() {
           <h1 className="text-2xl font-bold text-gray-900">⚙️ {isArabic ? "لوحة الإدارة" : "Admin Panel"}</h1>
           <p className="text-gray-500 text-sm mt-1">{isArabic ? "إدارة البائعين والطلبات والعمولات" : "Manage sellers, orders and commissions"}</p>
         </div>
-        <button onClick={loadData} className="text-sm text-gray-500 hover:text-orange-500 flex items-center gap-1 transition">↻ {isArabic ? "تحديث" : "Refresh"}</button>
+        <div className="flex gap-2">
+          <button onClick={loadData} className="text-sm text-gray-500 hover:text-orange-500 flex items-center gap-1 transition">↻ {isArabic ? "تحديث" : "Refresh"}</button>
+          <a href="https://web-production-63685.up.railway.app/api/admin/export/sellers" target="_blank"
+            className="text-xs bg-green-50 text-green-700 hover:bg-green-100 px-3 py-1.5 rounded-lg transition font-medium">
+            📥 {isArabic ? "تصدير البائعين" : "Export Sellers"}
+          </a>
+          <a href="https://web-production-63685.up.railway.app/api/admin/export/orders" target="_blank"
+            className="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition font-medium">
+            📥 {isArabic ? "تصدير الطلبات" : "Export Orders"}
+          </a>
+        </div>
       </div>
 
       {/* Stats */}
@@ -191,6 +222,8 @@ export default function AdminPanel() {
           { key: "commission", label: isArabic ? "العمولات" : "Commissions",  icon: "💰" },
           { key: "orders",     label: isArabic ? "الطلبات" : "Orders",        icon: "📦" },
           { key: "users",      label: isArabic ? "المستخدمون" : "Users",      icon: "👥" },
+          { key: "products",   label: isArabic ? "المنتجات" : "Products",    icon: "🍽️" },
+          { key: "revenue",    label: isArabic ? "الإيرادات" : "Revenue",    icon: "📈" },
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
@@ -426,6 +459,86 @@ export default function AdminPanel() {
               )}
             </div>
           ))}
+          </div>
+        </div>
+      )}
+
+      {/* Products Tab */}
+      {tab === "products" && (
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500">{allProducts.length} {isArabic ? "منتج" : "products total"}</p>
+          {allProducts.map(product => (
+            <div key={product.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center gap-4">
+              <div className="w-14 h-14 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center flex-shrink-0">
+                {product.image_url
+                  ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} className="w-full h-full object-cover" alt={product.name} />
+                  : <span className="text-2xl">🍽️</span>}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gray-900 truncate">{product.name}</p>
+                <p className="text-xs text-gray-500">🏠 {product.shop_name} · {product.category} · AED {product.price}</p>
+              </div>
+              <div className="flex gap-2 flex-shrink-0">
+                <span className={`text-xs px-2 py-1 rounded-full font-medium ${product.is_available ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
+                  {product.is_available ? (isArabic ? "متاح" : "Live") : (isArabic ? "مخفي" : "Hidden")}
+                </span>
+                <button onClick={() => toggleProduct(product)}
+                  className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg transition">
+                  {product.is_available ? (isArabic ? "إخفاء" : "Hide") : (isArabic ? "إظهار" : "Show")}
+                </button>
+                <button onClick={() => deleteProductAdmin(product)}
+                  className="text-xs bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded-lg transition">
+                  🗑
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Revenue Tab */}
+      {tab === "revenue" && (
+        <div className="space-y-6">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm text-center">
+              <p className="text-3xl font-bold text-orange-500">AED {dailyRevenue.reduce((a, r) => a + r.revenue, 0).toFixed(0)}</p>
+              <p className="text-sm text-gray-500 mt-1">{isArabic ? "إجمالي الإيرادات (30 يوم)" : "Total Revenue (30 days)"}</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm text-center">
+              <p className="text-3xl font-bold text-green-500">AED {dailyRevenue.reduce((a, r) => a + r.commission, 0).toFixed(0)}</p>
+              <p className="text-sm text-gray-500 mt-1">{isArabic ? "عمولة بيتي (30 يوم)" : "Bayti Commission (30 days)"}</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm text-center">
+              <p className="text-3xl font-bold text-blue-500">{dailyRevenue.reduce((a, r) => a + r.orders, 0)}</p>
+              <p className="text-sm text-gray-500 mt-1">{isArabic ? "إجمالي الطلبات (30 يوم)" : "Total Orders (30 days)"}</p>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="p-4 border-b border-gray-50">
+              <h3 className="font-semibold text-gray-900">📅 {isArabic ? "الإيرادات اليومية" : "Daily Revenue"}</h3>
+            </div>
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "اليوم" : "Date"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "الطلبات" : "Orders"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "الإيرادات" : "Revenue"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "العمولة" : "Commission"}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dailyRevenue.length === 0 ? (
+                  <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400 text-sm">{isArabic ? "لا توجد بيانات بعد" : "No data yet"}</td></tr>
+                ) : dailyRevenue.map((row, i) => (
+                  <tr key={i} className="border-t border-gray-50 hover:bg-gray-50">
+                    <td className="px-4 py-3 text-sm text-gray-900">{row.day}</td>
+                    <td className="px-4 py-3 text-right text-sm text-gray-600">{row.orders}</td>
+                    <td className="px-4 py-3 text-right text-sm text-gray-900 font-medium">AED {row.revenue}</td>
+                    <td className="px-4 py-3 text-right text-sm font-bold text-green-600">AED {row.commission}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
