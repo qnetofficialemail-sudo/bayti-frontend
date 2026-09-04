@@ -16,9 +16,9 @@ export function LoginPage() {
     e.preventDefault(); setError(""); setLoading(true);
     try {
       const loggedUser = await login(email, password);
-      if (loggedUser.role === "seller") navigate("/seller/dashboard");
-      else if (loggedUser.role === "admin") navigate("/admin");
-      else navigate("/marketplace");
+      if (loggedUser.role === "seller") navigate("/seller/dashboard", { replace: true });
+      else if (loggedUser.role === "admin") navigate("/admin", { replace: true });
+      else navigate("/marketplace", { replace: true });
     }
     catch (err: any) { setError(err.response?.data?.detail || (isArabic ? "البريد أو كلمة المرور غير صحيحة" : "Login failed")); }
     finally { setLoading(false); }

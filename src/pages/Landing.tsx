@@ -12,11 +12,11 @@ export default function Landing() {
   // If already logged in, redirect to appropriate page
   React.useEffect(() => {
     if (!isLoading && user) {
-      if (user.role === "seller") navigate("/seller/dashboard");
-      else if (user.role === "admin") navigate("/admin");
-      else navigate("/marketplace");
+      if (user.role === "seller") navigate("/seller/dashboard", { replace: true });
+      else if (user.role === "admin") navigate("/admin", { replace: true });
+      else navigate("/marketplace", { replace: true });
     }
-  }, [user, isLoading]);
+  }, [user?.id, isLoading]);
 
   if (isLoading) return null;
   const [stats, setStats] = useState({ sellers: 0, products: 0 });
