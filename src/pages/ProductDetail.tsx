@@ -24,6 +24,9 @@ export default function ProductDetail() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (user) {
+      api.get("/api/auth/me/address").then(r => setSavedAddress(r.data)).catch(() => {});
+    }
     api.get(`/api/products/${id}`)
       .then(r => {
         setProduct(r.data);
