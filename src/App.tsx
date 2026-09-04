@@ -12,6 +12,7 @@ import AddProduct from "./pages/AddProduct";
 import Orders from "./pages/Orders";
 import AdminPanel from "./pages/AdminPanel";
 import SellerProfilePage from "./pages/SellerProfilePage";
+import Landing from "./pages/Landing";
 
 export default function App() {
   return (
@@ -19,18 +20,18 @@ export default function App() {
       <LanguageProvider>
         <BrowserRouter>
           <div className="min-h-screen bg-gray-50">
-            <Navbar />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/seller/dashboard" element={<SellerDashboard />} />
-              <Route path="/seller/setup" element={<SellerSetup />} />
-              <Route path="/seller/products/new" element={<AddProduct />} />
-            <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/shop/:id" element={<SellerProfilePage />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="/marketplace" element={<><Navbar /><Home /></>} />
+              <Route path="/login" element={<><Navbar /><LoginPage /></>} />
+              <Route path="/register" element={<><Navbar /><RegisterPage /></>} />
+              <Route path="/product/:id" element={<><Navbar /><ProductDetail /></>} />
+              <Route path="/orders" element={<><Navbar /><Orders /></>} />
+              <Route path="/seller/dashboard" element={<><Navbar /><SellerDashboard /></>} />
+              <Route path="/seller/setup" element={<><Navbar /><SellerSetup /></>} />
+              <Route path="/seller/products/new" element={<><Navbar /><AddProduct /></>} />
+              <Route path="/admin" element={<><Navbar /><AdminPanel /></>} />
+              <Route path="/shop/:id" element={<><Navbar /><SellerProfilePage /></>} />
             </Routes>
           </div>
         </BrowserRouter>
