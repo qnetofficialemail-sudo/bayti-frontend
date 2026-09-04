@@ -88,7 +88,7 @@ export default function ProductDetail() {
         <div>
           <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 h-72 flex items-center justify-center mb-6">
             {product.image_url
-              ? <img src={`https://web-production-63685.up.railway.app${product.image_url}`} alt={displayName} className="w-full h-full object-cover" />
+              ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} alt={displayName} className="w-full h-full object-cover" />
               : <span className="text-8xl">{product.category?.icon || "🍽️"}</span>
             }
           </div>

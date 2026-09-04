@@ -152,7 +152,7 @@ export default function SellerDashboard() {
             <div key={product.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 text-3xl overflow-hidden">
-                  {product.image_url ? <img src={`https://web-production-63685.up.railway.app${product.image_url}`} alt={product.name} className="w-full h-full object-cover rounded-xl" /> : product.category?.icon || "🍽️"}
+                  {product.image_url ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} alt={product.name} className="w-full h-full object-cover rounded-xl" /> : product.category?.icon || "🍽️"}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 truncate">{isArabic && product.name_ar ? product.name_ar : product.name}</p>

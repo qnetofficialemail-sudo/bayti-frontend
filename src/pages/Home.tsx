@@ -90,7 +90,7 @@ export default function Home() {
             return (
               <Link key={product.id} to={`/product/${product.id}`} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group">
                 <div className="h-48 bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center overflow-hidden relative">
-                  {product.image_url ? <img src={`https://web-production-63685.up.railway.app${product.image_url}`} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" /> : <span className="text-6xl">{product.category?.icon || "🍽️"}</span>}
+                  {product.image_url ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" /> : <span className="text-6xl">{product.category?.icon || "🍽️"}</span>}
                   {product.track_stock === 1 && product.stock_quantity >= 0 && product.stock_quantity <= 3 && product.stock_quantity > 0 && (
                     <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">
                       🔥 {isArabic ? `${product.stock_quantity} فقط` : `${product.stock_quantity} left`}
