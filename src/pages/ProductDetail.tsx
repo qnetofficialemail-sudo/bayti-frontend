@@ -28,8 +28,9 @@ export default function ProductDetail() {
         setProduct(r.data);
         if (r.data?.seller?.id) {
           api.get(`/api/sellers/${r.data.seller.id}/status`)
-            .then(s => setSellerOpen(s.data))
-            .catch(() => {});
+            .then(s => setSellerOpen(s.data)).catch(() => {});
+          api.get('/api/products/', { params: { seller_id: r.data.seller.id } })
+            .then(rel => setRelated(rel.data.filter((p: any) => p.id !== Number(id)).slice(0, 3))).catch(() => {});
         }
       })
       .catch(() => navigate("/"))
