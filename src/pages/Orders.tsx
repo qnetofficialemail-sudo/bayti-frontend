@@ -20,7 +20,7 @@ export default function Orders() {
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
-  const [reviewedOrders, setReviewedOrders] = useState<Set<number>>(new Set());
+  const [reviewedOrders, setReviewedOrders] = useState<number[]>([]);
 
   useEffect(() => {
     if (!user) { navigate("/login"); return; }
@@ -32,11 +32,11 @@ export default function Orders() {
         Promise.all(delivered.map((o: any) =>
           api.get(`/api/reviews/check/${o.id}`).catch(() => ({ data: { reviewed: false } }))
         )).then(results => {
-          const reviewed = new Set<number>();
+                    const ids: number[] = [];
           results.forEach((res: any, i: number) => {
-            if (res.data?.reviewed) reviewed.add(delivered[i].id);
+            if (res.data?.reviewed) ids.push(delivered[i].id);
           });
-          setReviewedOrders(reviewed);
+          setReviewedOrders(ids);
         });
       }
     }).finally(() => setLoading(false));
@@ -47,7 +47,7 @@ export default function Orders() {
     setReviewSubmitting(true);
     try {
       await api.post(`/api/reviews/?order_id=${reviewModal.id}&rating=${reviewRating}${reviewComment ? `&comment=${encodeURIComponent(reviewComment)}` : ""}`);
-      setReviewedOrders(prev => new Set([...prev, reviewModal.id]));
+      setReviewedOrders(prev => [...prev, reviewModal.id]);
       setReviewModal(null);
       setReviewComment("");
       setReviewRating(5);
@@ -106,7 +106,7 @@ export default function Orders() {
                       {isArabic ? STATUS_AR[order.status] : order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </span>
                     {order.status === "delivered" && user?.role === "buyer" && (
-                      reviewedOrders.has(order.id) ? (
+                      reviewedOrders.includes(order.id) ? (
                         <span className="text-xs text-green-600 font-medium">⭐ {isArabic ? "تم التقييم" : "Reviewed"}</span>
                       ) : (
                         <button onClick={() => { setReviewModal(order); setReviewRating(5); setReviewComment(""); }}
