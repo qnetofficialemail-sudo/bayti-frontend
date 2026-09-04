@@ -10,6 +10,7 @@ export default function ProductDetail() {
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
   const [product, setProduct] = useState<any>(null);
+  const [sellerOpen, setSellerOpen] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);
   const [address, setAddress] = useState("");
   const [area, setArea] = useState("");

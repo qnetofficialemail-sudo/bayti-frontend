@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import ScheduleSettings from "../components/ScheduleSettings";
 
 const STATUS_COLORS: Record<string, string> = { pending: "bg-yellow-50 text-yellow-700", confirmed: "bg-blue-50 text-blue-700", preparing: "bg-purple-50 text-purple-700", ready: "bg-green-50 text-green-700", delivering: "bg-orange-50 text-orange-700", delivered: "bg-gray-50 text-gray-600", cancelled: "bg-red-50 text-red-600" };
 const NEXT_STATUS: Record<string, string> = { pending: "confirmed", confirmed: "preparing", preparing: "ready", ready: "delivering", delivering: "delivered" };
@@ -13,7 +14,7 @@ export default function SellerDashboard() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"orders"|"products">("orders");
+  const [tab, setTab] = useState<"orders"|"products"|"schedule">("orders");
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
@@ -98,11 +99,13 @@ export default function SellerDashboard() {
       </div>
 
       <div className="flex gap-2 mb-6">
-        {(["orders", "products"] as const).map(t => (
+        {(["orders", "products", "schedule"] as const).map(t => (
           <button key={t} onClick={() => setTab(t)} className={`px-5 py-2 rounded-xl text-sm font-medium capitalize transition ${tab === t ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
             {t === "orders"
               ? (isArabic ? `الطلبات${pendingCount > 0 ? ` (${pendingCount})` : ""}` : `Orders${pendingCount > 0 ? ` (${pendingCount})` : ""}`)
-              : (isArabic ? "منتجاتي" : "My Products")}
+              : t === "products"
+              ? (isArabic ? "منتجاتي" : "My Products")
+              : (isArabic ? "🕐 الجدول" : "🕐 Schedule")}
           </button>
         ))}
       </div>
@@ -130,6 +133,10 @@ export default function SellerDashboard() {
             </div>
           ))}
         </div>
+      )}
+
+      {tab === "schedule" && profile && (
+        <ScheduleSettings seller={profile} onUpdate={setProfile} />
       )}
 
       {tab === "products" && (
