@@ -26,6 +26,15 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
   const [accepting, setAccepting] = useState(seller?.accepting_orders !== false);
   const [useSchedule, setUseSchedule] = useState(!!(seller?.available_days || seller?.available_from));
 
+  // Sync state when seller prop updates (after save)
+  React.useEffect(() => {
+    setSelectedDays(parseDays(seller?.available_days));
+    setFromTime(seller?.available_from || "09:00");
+    setUntilTime(seller?.available_until || "21:00");
+    setAccepting(seller?.accepting_orders !== false);
+    setUseSchedule(!!(seller?.available_days || seller?.available_from));
+  }, [seller?.available_days, seller?.available_from, seller?.available_until, seller?.accepting_orders]);
+
   const toggleDay = (day: number) => {
     setSelectedDays(prev =>
       prev.includes(day) ? prev.filter(d => d !== day) : [...prev, day].sort()
