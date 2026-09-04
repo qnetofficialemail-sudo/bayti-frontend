@@ -16,11 +16,38 @@ export default function Orders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reviewModal, setReviewModal] = useState<any>(null);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewedOrders, setReviewedOrders] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     if (!user) { navigate("/login"); return; }
-    api.get("/api/orders/my").then(r => setOrders(r.data)).finally(() => setLoading(false));
+    api.get("/api/orders/my").then(r => {
+      setOrders(r.data);
+      // Check which delivered orders have been reviewed
+      const delivered = r.data.filter((o: any) => o.status === "delivered");
+      Promise.all(delivered.map((o: any) => api.get(`/api/reviews/check/${o.id}`))).then(results => {
+        const reviewed = new Set<number>();
+        results.forEach((res, i) => { if (res.data.reviewed) reviewed.add(delivered[i].id); });
+        setReviewedOrders(reviewed);
+      }).catch(() => {});
+    }).finally(() => setLoading(false));
   }, [user]);
+
+  const submitReview = async () => {
+    if (!reviewModal) return;
+    setReviewSubmitting(true);
+    try {
+      await api.post(`/api/reviews/?order_id=${reviewModal.id}&rating=${reviewRating}${reviewComment ? `&comment=${encodeURIComponent(reviewComment)}` : ""}`);
+      setReviewedOrders(prev => new Set([...prev, reviewModal.id]));
+      setReviewModal(null);
+      setReviewComment("");
+      setReviewRating(5);
+    } catch (e) { console.error(e); }
+    finally { setReviewSubmitting(false); }
+  };
 
   if (loading) return <div className="flex items-center justify-center h-64 text-gray-400">{isArabic ? "جاري التحميل..." : "Loading..."}</div>;
 
@@ -68,9 +95,21 @@ export default function Orders() {
                 )}
                 <div className="px-5 py-4">
                   <div className="text-sm text-gray-600 mb-1">{order.items?.map((item: any) => `${item.quantity}x ${item.product?.name}`).join(", ")}</div>
-                  <span className={`inline-block mt-2 text-xs border px-2 py-1 rounded-full font-medium ${STATUS_COLORS[order.status]}`}>
-                    {isArabic ? STATUS_AR[order.status] : order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                  </span>
+                  <div className="flex items-center gap-3 mt-2">
+                    <span className={`inline-block text-xs border px-2 py-1 rounded-full font-medium ${STATUS_COLORS[order.status]}`}>
+                      {isArabic ? STATUS_AR[order.status] : order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                    </span>
+                    {order.status === "delivered" && user?.role === "buyer" && (
+                      reviewedOrders.has(order.id) ? (
+                        <span className="text-xs text-green-600 font-medium">⭐ {isArabic ? "تم التقييم" : "Reviewed"}</span>
+                      ) : (
+                        <button onClick={() => { setReviewModal(order); setReviewRating(5); setReviewComment(""); }}
+                          className="text-xs bg-orange-50 text-orange-600 hover:bg-orange-100 px-3 py-1 rounded-full font-medium transition">
+                          ⭐ {isArabic ? "قيّم الطلب" : "Rate Order"}
+                        </button>
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
             );
@@ -78,5 +117,48 @@ export default function Orders() {
         </div>
       )}
     </div>
+
+    {/* Review Modal */}
+    {reviewModal && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+          <h3 className="font-bold text-gray-900 mb-1">⭐ {isArabic ? "قيّم طلبك" : "Rate Your Order"}</h3>
+          <p className="text-sm text-gray-500 mb-4">{reviewModal.seller?.shop_name}</p>
+
+          {/* Star rating */}
+          <div className="flex justify-center gap-2 mb-4">
+            {[1, 2, 3, 4, 5].map(star => (
+              <button key={star} onClick={() => setReviewRating(star)}
+                className={`text-3xl transition ${star <= reviewRating ? "text-yellow-400" : "text-gray-200"}`}>
+                ★
+              </button>
+            ))}
+          </div>
+          <p className="text-center text-sm text-gray-500 mb-4">
+            {reviewRating === 5 ? (isArabic ? "ممتاز! 🎉" : "Excellent! 🎉") :
+             reviewRating === 4 ? (isArabic ? "جيد جداً 👍" : "Very Good 👍") :
+             reviewRating === 3 ? (isArabic ? "مقبول" : "OK") :
+             reviewRating === 2 ? (isArabic ? "يحتاج تحسين" : "Needs improvement") :
+             (isArabic ? "سيئ" : "Poor")}
+          </p>
+
+          <textarea value={reviewComment} onChange={e => setReviewComment(e.target.value)}
+            placeholder={isArabic ? "أضف تعليقاً (اختياري)..." : "Add a comment (optional)..."}
+            rows={3}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none mb-4" />
+
+          <div className="flex gap-3">
+            <button onClick={() => setReviewModal(null)}
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl text-sm font-medium transition">
+              {isArabic ? "إلغاء" : "Cancel"}
+            </button>
+            <button onClick={submitReview} disabled={reviewSubmitting}
+              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-medium transition disabled:opacity-60">
+              {reviewSubmitting ? "..." : (isArabic ? "إرسال" : "Submit")}
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
   );
 }

@@ -15,6 +15,7 @@ export default function SellerProfilePage() {
   const [seller, setSeller] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,10 +23,12 @@ export default function SellerProfilePage() {
       api.get(`/api/sellers/${id}/public`),
       api.get("/api/products/", { params: { seller_id: id } }),
       api.get("/api/categories"),
-    ]).then(([s, p, c]) => {
+      api.get(`/api/reviews/seller/${id}`),
+    ]).then(([s, p, c, r]) => {
       setSeller(s.data);
       setProducts(p.data);
       setCategories(c.data);
+      setReviews(r.data);
     }).catch(() => {}).finally(() => setLoading(false));
   }, [id]);
 
@@ -115,6 +118,31 @@ export default function SellerProfilePage() {
           )}
         </div>
       </div>
+
+      {/* Reviews */}
+      {reviews.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">
+            ⭐ {isArabic ? "تقييمات العملاء" : "Customer Reviews"}
+          </h2>
+          <div className="space-y-3">
+            {reviews.map(review => (
+              <div key={review.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex">
+                    {[1,2,3,4,5].map(s => (
+                      <span key={s} className={`text-lg ${s <= review.rating ? "text-yellow-400" : "text-gray-200"}`}>★</span>
+                    ))}
+                  </div>
+                  <span className="text-sm font-medium text-gray-900">{review.buyer_name}</span>
+                  <span className="text-xs text-gray-400 ml-auto">{new Date(review.created_at).toLocaleDateString()}</span>
+                </div>
+                {review.comment && <p className="text-sm text-gray-600">{review.comment}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Products */}
       <h2 className="text-lg font-bold text-gray-900 mb-4">
