@@ -1,4 +1,8 @@
-import React, { useState, useEffect } from "react";
+import os
+FRONTEND = r'C:\Users\Dell\Desktop\homemarketplace\frontend'
+
+# Rewrite Landing.tsx with category selection as the hero
+landing_tsx = r'''import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
@@ -254,3 +258,8 @@ export default function Landing() {
     </div>
   );
 }
+'''
+
+landing_path = os.path.join(FRONTEND, 'src', 'pages', 'Landing.tsx')
+open(landing_path, 'w', encoding='utf-8').write(landing_tsx)
+print("✅ Landing.tsx rewritten with category selection")
