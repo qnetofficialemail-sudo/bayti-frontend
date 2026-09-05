@@ -108,14 +108,13 @@ export default function ProductDetail() {
         {/* Product Info */}
         <div>
           <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 h-72 flex items-center justify-center mb-6">
-            (() => {
+            {(() => {
                     const allImgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
                     const displayImg = allImgs[activeImageIndex] || allImgs[0];
-                    return displayImg
-                      ? <img src={displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`}
-                          alt={displayName} className="w-full h-full object-cover" />
-                      : <span className="text-6xl">🛍️</span>;
-                  })()</span>
+                    if (!displayImg) return <span className="text-6xl">🛍️</span>;
+                    const src = displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`;
+                    return <img src={src} alt={displayName} className="w-full h-full object-cover" />;
+                  })()}</span>
             }
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">{displayName}</h1>
