@@ -47,7 +47,7 @@ export default function AdminPanel() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [s, sel, o, u, cs, prods, rev, prods2, cats] = await Promise.all([
+      const [s, sel, o, u, cs, prods, rev, cats, prods2] = await Promise.all([
         api.get("/api/admin/stats"),
         api.get("/api/admin/sellers"),
         api.get("/api/admin/orders"),
