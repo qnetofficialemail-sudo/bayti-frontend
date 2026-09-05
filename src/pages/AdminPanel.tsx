@@ -21,13 +21,14 @@ export default function AdminPanel() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews">("overview");
+  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories">("overview");
   const [stats, setStats] = useState<any>(null);
   const [sellers, setSellers] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [commissionSummary, setCommissionSummary] = useState<any[]>([]);
   const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [managedCategories, setManagedCategories] = useState<any[]>([]);
   const [dailyRevenue, setDailyRevenue] = useState<any[]>([]);
   const [pendingReviews, setPendingReviews] = useState<any[]>([]);
   const [sellerFilter, setSellerFilter] = useState("all");
@@ -46,7 +47,7 @@ export default function AdminPanel() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [s, sel, o, u, cs, prods, rev, prods2] = await Promise.all([
+      const [s, sel, o, u, cs, prods, rev, prods2, cats] = await Promise.all([
         api.get("/api/admin/stats"),
         api.get("/api/admin/sellers"),
         api.get("/api/admin/orders"),
@@ -54,6 +55,7 @@ export default function AdminPanel() {
         api.get("/api/admin/commission/summary"),
         api.get("/api/admin/products"),
         api.get("/api/admin/revenue/daily"),
+        api.get("/api/admin/categories/manage"),
         api.get("/api/reviews/admin/pending"),
       ]);
       setStats(s.data);
@@ -64,6 +66,7 @@ export default function AdminPanel() {
       setAllProducts(prods.data);
       setDailyRevenue(rev.data);
       setPendingReviews(prods2.data);
+      setManagedCategories(cats.data);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -228,6 +231,7 @@ export default function AdminPanel() {
           { key: "products",   label: isArabic ? "المنتجات" : "Products",    icon: "🍽️" },
           { key: "revenue",    label: isArabic ? "الإيرادات" : "Revenue",    icon: "📈" },
           { key: "reviews",    label: isArabic ? `التقييمات${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}` : `Reviews${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}`, icon: "⭐" },
+          { key: "categories", label: isArabic ? "الفئات" : "Categories", icon: "🏷️" },
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
@@ -486,6 +490,13 @@ export default function AdminPanel() {
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${product.is_available ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
                   {product.is_available ? (isArabic ? "متاح" : "Live") : (isArabic ? "مخفي" : "Hidden")}
                 </span>
+                <button onClick={async () => {
+                    await api.patch(`/api/admin/products/${product.id}/feature`);
+                    setAllProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_featured: !p.is_featured } : p));
+                  }}
+                  className={`text-xs px-3 py-1.5 rounded-lg transition font-medium ${product.is_featured ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-600"}`}>
+                  ⭐ {product.is_featured ? (isArabic ? "مميز" : "Featured") : (isArabic ? "تمييز" : "Feature")}
+                </button>
                 <button onClick={() => toggleProduct(product)}
                   className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg transition">
                   {product.is_available ? (isArabic ? "إخفاء" : "Hide") : (isArabic ? "إظهار" : "Show")}
@@ -544,6 +555,34 @@ export default function AdminPanel() {
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {/* Categories Tab */}
+      {tab === "categories" && (
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500">{isArabic ? "تحكم في الفئات المعروضة للعملاء" : "Control which categories are visible to customers"}</p>
+          {managedCategories.map((cat: any) => (
+            <div key={cat.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center gap-4">
+              <span className="text-3xl">{cat.icon}</span>
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">{cat.name}</p>
+                {cat.name_ar && <p className="text-sm text-gray-500">{cat.name_ar}</p>}
+              </div>
+              <div className="flex items-center gap-3">
+                <span className={`text-xs px-2 py-1 rounded-full font-medium ${cat.is_active ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
+                  {cat.is_active ? (isArabic ? "نشط" : "Active") : (isArabic ? "مخفي" : "Hidden")}
+                </span>
+                <button onClick={async () => {
+                  const res = await api.patch(`/api/admin/categories/${cat.id}/toggle`);
+                  setManagedCategories(prev => prev.map(c => c.id === cat.id ? { ...c, is_active: res.data.is_active } : c));
+                }}
+                  className={`relative w-12 h-6 rounded-full transition-colors ${cat.is_active ? "bg-green-500" : "bg-gray-300"}`}>
+                  <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${cat.is_active ? "translate-x-6" : ""}`} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

@@ -42,6 +42,16 @@ export default function Orders() {
     }).finally(() => setLoading(false));
   }, [user]);
 
+  const cancelOrder = async (orderId: number) => {
+    if (!window.confirm(isArabic ? "هل تريد إلغاء هذا الطلب؟" : "Cancel this order?")) return;
+    try {
+      await api.delete(`/api/orders/${orderId}/cancel`);
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: "cancelled" } : o));
+    } catch (e: any) {
+      alert(e.response?.data?.detail || "Cannot cancel");
+    }
+  };
+
   const submitReview = async () => {
     if (!reviewModal) return;
     setReviewSubmitting(true);
@@ -105,6 +115,12 @@ export default function Orders() {
                     <span className={`inline-block text-xs border px-2 py-1 rounded-full font-medium ${STATUS_COLORS[order.status]}`}>
                       {isArabic ? STATUS_AR[order.status] : order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </span>
+                    {order.status === "pending" && user?.role === "buyer" && order.cancel_deadline && new Date(order.cancel_deadline) > new Date() && (
+                      <button onClick={() => cancelOrder(order.id)}
+                        className="text-xs bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1 rounded-full font-medium transition">
+                        ✕ {isArabic ? "إلغاء" : "Cancel"}
+                      </button>
+                    )}
                     {order.status === "delivered" && user?.role === "buyer" && (
                       reviewedOrders.includes(order.id) ? (
                         <span className="text-xs text-green-600 font-medium">⭐ {isArabic ? "تم التقييم" : "Reviewed"}</span>

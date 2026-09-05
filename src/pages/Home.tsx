@@ -95,7 +95,12 @@ export default function Home() {
             return (
               <Link key={product.id} to={`/product/${product.id}`} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group">
                 <div className="h-48 bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center overflow-hidden relative">
-                  {(product as any).created_at && new Date((product as any).created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
+                  {(product as any).is_featured && (
+                    <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                      ⭐ {isArabic ? "مميز" : "Featured"}
+                    </span>
+                  )}
+                  {!(product as any).is_featured && (product as any).created_at && new Date((product as any).created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
                     <span className="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
                       {isArabic ? "جديد" : "New"}
                     </span>
@@ -118,6 +123,9 @@ export default function Home() {
                     <Link to={`/shop/${product.seller?.id}`} onClick={e => e.stopPropagation()} className="hover:text-orange-500 transition">🏠 {product.seller?.shop_name}</Link>
                     {product.seller?.rating > 0 && (
                       <span className="text-yellow-400 text-xs">{"★".repeat(Math.round(product.seller.rating))}{"☆".repeat(5 - Math.round(product.seller.rating))} {product.seller.rating}</span>
+                    )}
+                    {(product as any).sold_count > 0 && (
+                      <span className="text-gray-400 text-xs">· {(product as any).sold_count} {isArabic ? "مبيع" : "sold"}</span>
                     )}
                     <span>⏱ {product.preparation_time}{isArabic ? "د" : "min"}</span>
                   </div>
