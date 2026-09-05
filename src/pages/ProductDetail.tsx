@@ -14,6 +14,9 @@ export default function ProductDetail() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [related, setRelated] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const [variants, setVariants] = useState<any[]>([]);
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+  const [variantError, setVariantError] = useState("");
   const [address, setAddress] = useState("");
   const [area, setArea] = useState("");
   const [savedAddress, setSavedAddress] = useState<any>(null);
@@ -44,6 +47,12 @@ export default function ProductDetail() {
   const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) { navigate("/login"); return; }
+    const missingVariant = variants.find((v: any) => v.is_required && !selectedVariants[v.name]);
+    if (missingVariant) {
+      setVariantError(isArabic ? `يرجى اختيار ${missingVariant.name_ar || missingVariant.name}` : `Please select ${missingVariant.name}`);
+      return;
+    }
+    setVariantError("");
     setOrdering(true); setError("");
     try {
       await api.post("/api/orders/", {
@@ -115,6 +124,42 @@ export default function ProductDetail() {
             <p className="text-sm text-gray-500">⭐ {product.seller.rating} · {product.seller.total_orders} {isArabic ? "طلب" : "orders"}</p>
           </div>
         </div>
+
+        {/* Variants */}
+        {variants.length > 0 && (
+          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm mb-4">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">{isArabic ? "اختر الخيارات" : "Select Options"}</h3>
+            <div className="space-y-4">
+              {variants.map((variant: any) => {
+                const options = JSON.parse(variant.options || "[]");
+                return (
+                  <div key={variant.id}>
+                    <p className="text-sm font-medium text-gray-700 mb-2">
+                      {isArabic && variant.name_ar ? variant.name_ar : variant.name}
+                      {variant.is_required && <span className="text-red-400 ml-1">*</span>}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {options.map((opt: any) => (
+                        <button key={opt.label} type="button"
+                          onClick={() => { setSelectedVariants((prev: any) => ({ ...prev, [variant.name]: opt.label })); setVariantError(""); }}
+                          className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition ${
+                            selectedVariants[variant.name] === opt.label
+                              ? "border-orange-500 bg-orange-50 text-orange-700"
+                              : "border-gray-200 hover:border-orange-300 text-gray-700"
+                          }`}>
+                          {opt.label}
+                          {opt.price_adj > 0 && <span className="text-xs ml-1 text-orange-500">+AED {opt.price_adj}</span>}
+                          {opt.price_adj < 0 && <span className="text-xs ml-1 text-green-500">-AED {Math.abs(opt.price_adj)}</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+              {variantError && <p className="text-red-500 text-sm">{variantError}</p>}
+            </div>
+          </div>
+        )}
 
         {/* Order Form */}
         <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm h-fit">

@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from "react";
+import os
+
+FRONTEND = r'C:\Users\Dell\Desktop\homemarketplace\frontend'
+
+# ── 1. Rewrite AddProduct.tsx with variant builder ──
+add_product = r'''import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
@@ -334,3 +339,110 @@ export default function AddProduct() {
     </div>
   );
 }
+'''
+
+add_path = os.path.join(FRONTEND, 'src', 'pages', 'AddProduct.tsx')
+open(add_path, 'w', encoding='utf-8').write(add_product)
+print("Done - AddProduct.tsx rewritten with variant builder")
+
+# ── 2. Patch ProductDetail.tsx to load and show variants ──
+detail_path = os.path.join(FRONTEND, 'src', 'pages', 'ProductDetail.tsx')
+detail = open(detail_path, encoding='utf-8').read()
+
+# Add variants state
+old_state = "  const [quantity, setQuantity] = useState(1);"
+new_state = "  const [quantity, setQuantity] = useState(1);\n  const [variants, setVariants] = useState<any[]>([]);\n  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});\n  const [variantError, setVariantError] = useState(\"\");"
+
+if 'variants' not in detail:
+    if old_state in detail:
+        detail = detail.replace(old_state, new_state)
+        print("Done - variant state added to ProductDetail")
+    else:
+        print("FAIL - could not find quantity state in ProductDetail")
+else:
+    print("Skip - variants already in ProductDetail")
+
+# Add variants fetch
+old_fetch = "      api.get(`/api/products/${id}`),"
+new_fetch = "      api.get(`/api/products/${id}`),\n      api.get(`/api/products/${id}/variants`),"
+
+old_then = "    ]).then(([p, r, related]) => {"
+new_then = "    ]).then(([p, r, related, v]) => {"
+
+old_set = "      setRelated(related.data.filter((r: any) => r.id !== parseInt(id!)));"
+new_set = "      setRelated(related.data.filter((r: any) => r.id !== parseInt(id!)));\n      setVariants(v.data || []);"
+
+if 'variants' not in detail or '/variants`' not in detail:
+    detail = detail.replace(old_fetch, new_fetch)
+    detail = detail.replace(old_then, new_then)
+    detail = detail.replace(old_set, new_set)
+    print("Done - variants fetch added to ProductDetail")
+
+# Add variant validation before add to cart
+old_add = "  const handleAddToCart = () => {"
+new_add = '''  const handleAddToCart = () => {
+    // Check required variants
+    const missingVariant = variants.find(v => v.is_required && !selectedVariants[v.name]);
+    if (missingVariant) {
+      setVariantError(isArabic ? `يرجى اختيار ${missingVariant.name_ar || missingVariant.name}` : `Please select ${missingVariant.name}`);
+      return;
+    }
+    setVariantError("");'''
+
+if 'missingVariant' not in detail:
+    if old_add in detail:
+        detail = detail.replace(old_add, new_add)
+        print("Done - variant validation added")
+    else:
+        print("FAIL - could not find handleAddToCart")
+
+# Add variant price to total price calculation - find price display
+old_price_display = "{product.price}"
+new_price_display = "{(product.price + variants.reduce((sum: number, v: any) => { const sel = selectedVariants[v.name]; if (!sel) return sum; const opt = JSON.parse(v.options || '[]').find((o: any) => o.label === sel); return sum + (opt?.price_adj || 0); }, 0)).toFixed(2)}"
+
+# Add variant selector UI before the add to cart button area
+old_qty = "      {/* Quantity */}"
+new_qty = '''      {/* Variants */}
+      {variants.length > 0 && (
+        <div className="space-y-4 mb-4">
+          {variants.map((variant: any) => {
+            const options = JSON.parse(variant.options || "[]");
+            return (
+              <div key={variant.id}>
+                <p className="text-sm font-medium text-gray-700 mb-2">
+                  {isArabic && variant.name_ar ? variant.name_ar : variant.name}
+                  {variant.is_required && <span className="text-red-400 ml-1">*</span>}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {options.map((opt: any) => (
+                    <button key={opt.label} type="button"
+                      onClick={() => { setSelectedVariants(prev => ({ ...prev, [variant.name]: opt.label })); setVariantError(""); }}
+                      className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition ${
+                        selectedVariants[variant.name] === opt.label
+                          ? "border-orange-500 bg-orange-50 text-orange-700"
+                          : "border-gray-200 hover:border-orange-300 text-gray-700"
+                      }`}>
+                      {opt.label}
+                      {opt.price_adj > 0 && <span className="text-xs ml-1 text-orange-500">+AED {opt.price_adj}</span>}
+                      {opt.price_adj < 0 && <span className="text-xs ml-1 text-green-500">-AED {Math.abs(opt.price_adj)}</span>}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          {variantError && <p className="text-red-500 text-sm">{variantError}</p>}
+        </div>
+      )}
+
+      {/* Quantity */}'''
+
+if 'variants.length > 0' not in detail:
+    if old_qty in detail:
+        detail = detail.replace(old_qty, new_qty)
+        print("Done - variant selector UI added to ProductDetail")
+    else:
+        print("FAIL - could not find Quantity comment in ProductDetail")
+
+open(detail_path, 'w', encoding='utf-8').write(detail)
+print("Done - ProductDetail.tsx updated")
