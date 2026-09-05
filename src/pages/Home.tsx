@@ -108,7 +108,13 @@ export default function Home() {
                       {isArabic ? "جديد" : "New"}
                     </span>
                   )}
-                  {(() => { const imgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean); const main = imgs[product.primary_image_index || 0] || imgs[0]; return main ? <img src={main.startsWith("http") ? main : `https://web-production-63685.up.railway.app${main}`} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" /> : <span className="text-5xl">{product.category?.icon || "🛍️"}</span>; })()</span>}
+                  {(() => {
+                    const imgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
+                    const main = imgs[product.primary_image_index || 0] || imgs[0];
+                    if (!main) return <span className="text-5xl">{product.category?.icon || "🛍️"}</span>;
+                    const src = main.startsWith("http") ? main : `https://web-production-63685.up.railway.app${main}`;
+                    return <img src={src} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />;
+                  })()}
                   {product.track_stock === 1 && product.stock_quantity >= 0 && product.stock_quantity <= 3 && product.stock_quantity > 0 && (
                     <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">
                       🔥 {isArabic ? `${product.stock_quantity} فقط` : `${product.stock_quantity} left`}
