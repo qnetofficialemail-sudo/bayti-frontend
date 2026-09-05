@@ -413,6 +413,10 @@ export default function AdminPanel() {
                       className="text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg transition font-medium">
                       💰 {isArabic ? "عمولة" : "Commission"}
                     </button>
+                    <button onClick={() => deleteSeller(seller)}
+                      className="text-xs bg-red-700 hover:bg-red-800 text-white px-3 py-2 rounded-lg transition font-medium">
+                      🗑️ {isArabic ? "حذف" : "Delete"}
+                    </button>
                   </div>
                 </div>
               {expandedSeller === seller.id && (
