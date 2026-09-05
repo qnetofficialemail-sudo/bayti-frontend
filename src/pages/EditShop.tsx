@@ -11,6 +11,9 @@ export default function EditShop() {
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
   const [form, setForm] = useState({ shop_name: "", description: "", area: "", city: "Dubai", whatsapp_number: "", instagram_handle: "", min_order_amount: "" });
+  const [existingImages, setExistingImages] = useState<(string|null)[]>([null, null, null]);
+  const [newImages, setNewImages] = useState<(File|null)[]>([null, null, null]);
+  const [newPreviews, setNewPreviews] = useState<(string|null)[]>([null, null, null]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -21,6 +24,7 @@ export default function EditShop() {
     api.get("/api/sellers/").then(r => {
       const myShop = r.data.find((s: any) => s.user?.id === user.id);
       if (myShop) {
+        setExistingImages([myShop.sample_image_1 || null, myShop.sample_image_2 || null, myShop.sample_image_3 || null]);
         setForm({
           shop_name: myShop.shop_name || "",
           description: myShop.description || "",
@@ -34,10 +38,21 @@ export default function EditShop() {
     }).finally(() => setLoading(false));
   }, [user]);
 
+  const handleNewImage = (i: number, file: File | null) => {
+    const imgs = [...newImages]; const prevs = [...newPreviews];
+    imgs[i] = file; prevs[i] = file ? URL.createObjectURL(file) : null;
+    setNewImages(imgs); setNewPreviews(prevs);
+  };
+
+  const imgUrl = (img: string) => img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setSaving(true); setError(""); setSuccess(false);
     try {
-      await api.patch("/api/sellers/profile/edit", form);
+      const data = new FormData();
+      Object.entries(form).forEach(([k, v]) => { if (v !== "") data.append(k, v); });
+      newImages.forEach((img, i) => { if (img) data.append(`sample_image_${i+1}`, img); });
+      await api.patch("/api/sellers/profile/edit", data, { headers: { "Content-Type": "multipart/form-data" } });
       setSuccess(true);
       setTimeout(() => navigate("/seller/dashboard"), 1500);
     } catch (err: any) {
@@ -53,6 +68,32 @@ export default function EditShop() {
       {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
       {success && <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-xl mb-4">✅ {isArabic ? "تم الحفظ!" : "Saved!"}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Shop images */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "صور المتجر (حتى 3)" : "Shop Photos (up to 3)"}</label>
+          <p className="text-xs text-gray-400 mb-3">{isArabic ? "تظهر في صفحة متجرك للعملاء" : "Shown on your public shop page"}</p>
+          <div className="grid grid-cols-3 gap-3">
+            {[0,1,2].map(i => (
+              <div key={i} className="space-y-1">
+                <div className="aspect-square rounded-xl overflow-hidden border-2 border-dashed border-gray-200 flex items-center justify-center bg-gray-50">
+                  {newPreviews[i]
+                    ? <img src={newPreviews[i]!} alt="" className="w-full h-full object-cover" />
+                    : existingImages[i]
+                    ? <img src={imgUrl(existingImages[i]!)} alt="" className="w-full h-full object-cover" />
+                    : <div className="text-center text-gray-300"><div className="text-3xl">📷</div><div className="text-xs mt-1">{i+1}</div></div>
+                  }
+                </div>
+                <label className="block cursor-pointer">
+                  <div className="text-center text-xs text-orange-500 hover:text-orange-600 py-1 border border-orange-200 rounded-lg hover:bg-orange-50 transition">
+                    {isArabic ? "تغيير" : "Upload"}
+                  </div>
+                  <input type="file" accept="image/*" className="hidden" onChange={e => handleNewImage(i, e.target.files?.[0] || null)} />
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "اسم المتجر *" : "Shop name *"}</label>
           <input type="text" value={form.shop_name} onChange={e => setForm(f => ({ ...f, shop_name: e.target.value }))} required
