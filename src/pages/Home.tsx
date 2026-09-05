@@ -109,8 +109,8 @@ export default function Home() {
                     </span>
                   )}
                   {(() => {
-                    const imgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
-                    const main = imgs[product.primary_image_index || 0] || imgs[0];
+                    const p = product as any; const imgs = [p.image_url, p.image_2, p.image_3, p.image_4, p.image_5].filter(Boolean);
+                    const main = imgs[p.primary_image_index || 0] || imgs[0];
                     if (!main) return <span className="text-5xl">{product.category?.icon || "🛍️"}</span>;
                     const src = main.startsWith("http") ? main : `https://web-production-63685.up.railway.app${main}`;
                     return <img src={src} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />;
