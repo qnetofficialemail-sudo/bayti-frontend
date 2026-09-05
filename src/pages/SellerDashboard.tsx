@@ -32,6 +32,17 @@ export default function SellerDashboard() {
     }).finally(() => setLoading(false));
   }, [user]);
 
+  const rejectOrder = async (orderId: number) => {
+    const confirmed = window.confirm(isArabic ? "هل تريد رفض هذا الطلب؟" : "Reject this order?");
+    if (!confirmed) return;
+    try {
+      await api.patch(`/api/orders/${orderId}/reject`);
+      setOrders((prev: any[]) => prev.map(o => o.id === orderId ? { ...o, status: "cancelled" } : o));
+    } catch (e: any) {
+      alert(e.response?.data?.detail || "Failed to reject order");
+    }
+  };
+
   const advanceOrder = async (orderId: number, nextStatus: string) => {
     await api.patch(`/api/orders/${orderId}/status`, null, { params: { status: nextStatus } });
     setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: nextStatus } : o));
