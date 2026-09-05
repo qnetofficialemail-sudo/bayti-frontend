@@ -144,7 +144,7 @@ export default function EditProduct() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <label className="block text-sm font-medium text-gray-700">{isArabic ? "\u0627\u0644\u0635\u0648\u0631 \u0627\u0644\u062d\u0627\u0644\u064a\u0629" : "Current Photos"}</label>
-            <span className="text-xs text-gray-400">{isArabic ? "\u2605 \u0644\u062a\u0639\u064a\u064a\u0646 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629" : "\u2605 to set main"}</span>
+            <span className="text-xs text-gray-400">{isArabic ? "★ \u0644\u062a\u0639\u064a\u064a\u0646 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629" : "★ to set main"}</span>
           </div>
           {existingImages.length > 0 && (
             <div className="flex gap-2 flex-wrap mb-3">
@@ -153,7 +153,14 @@ export default function EditProduct() {
                   <img src={imgUrl(img)} alt={`Image ${i+1}`} className={`w-16 h-16 object-cover rounded-xl border-2 ${primaryIndex === i ? "border-orange-500" : "border-gray-200"}`} />
                   <button type="button" onClick={() => setPrimaryIndex(i)}
                     className={`absolute top-0.5 right-0.5 w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-white" : "bg-white text-gray-400"}`}>
-                    \u2605
+                    ★
+                  </button>
+                  <button type="button" onClick={() => {
+                    const updated = existingImages.filter((_, idx) => idx !== i);
+                    setExistingImages(updated);
+                    if (primaryIndex >= updated.length) setPrimaryIndex(0);
+                  }} className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow hover:bg-red-600 transition">
+                    ✕
                   </button>
                   {primaryIndex === i && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-orange-500 text-white rounded-b-xl py-0.5">{isArabic ? "\u0631\u0626\u064a\u0633\u064a\u0629" : "Main"}</span>}
                 </div>
@@ -169,7 +176,7 @@ export default function EditProduct() {
                 <div className={`aspect-square rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${newPreviews[i] ? "border-orange-300" : "border-gray-200 hover:border-orange-300"}`}>
                   {newPreviews[i]
                     ? <img src={newPreviews[i]!} alt="" className="w-full h-full object-cover" />
-                    : <div className="text-center text-gray-300"><div className="text-xl">\U0001f4f7</div><div className="text-xs">{i+1}</div></div>}
+                    : <div className="text-center text-gray-300"><div className="text-xl">📷</div><div className="text-xs">{i+1}</div></div>}
                 </div>
                 <input type="file" accept="image/*" className="hidden" onChange={e => handleNewImage(i, e.target.files?.[0] || null)} />
               </label>
@@ -227,7 +234,7 @@ export default function EditProduct() {
         <div className="border border-gray-200 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-sm font-medium text-gray-900">\U0001f3a8 {isArabic ? "\u0627\u0644\u062e\u064a\u0627\u0631\u0627\u062a (\u0645\u0642\u0627\u0633\u060c \u0644\u0648\u0646\u060c \u0639\u0637\u0631...)" : "Variants (size, color, scent...)"}</p>
+              <p className="text-sm font-medium text-gray-900">🎨 {isArabic ? "\u0627\u0644\u062e\u064a\u0627\u0631\u0627\u062a (\u0645\u0642\u0627\u0633\u060c \u0644\u0648\u0646\u060c \u0639\u0637\u0631...)" : "Variants (size, color, scent...)"}</p>
             </div>
             <button type="button" onClick={() => setShowVariantBuilder(true)}
               className="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-lg hover:bg-orange-600 transition">
@@ -242,10 +249,10 @@ export default function EditProduct() {
                   <div>
                     <span className="text-sm font-medium text-gray-900">{v.name}</span>
                     <span className="text-xs text-gray-500 ml-2">{v.options.map(o => o.label).join(", ")}</span>
-                    {v.id && <span className="text-xs text-green-600 ml-2">\u2713 saved</span>}
+                    {v.id && <span className="text-xs text-green-600 ml-2">✓ saved</span>}
                   </div>
                   <button type="button" onClick={() => deleteVariant(v, i)}
-                    className="text-gray-400 hover:text-red-500 text-sm transition">\u2715</button>
+                    className="text-gray-400 hover:text-red-500 text-sm transition">✕</button>
                 </div>
               ))}
             </div>
@@ -277,7 +284,7 @@ export default function EditProduct() {
                     <input type="number" value={opt.price_adj} onChange={e => updateOption(i, "price_adj", e.target.value)}
                       placeholder="0" step="0.5" className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
                     {newVariant.options.length > 1 && (
-                      <button type="button" onClick={() => removeOption(i)} className="text-gray-400 hover:text-red-500">\u2715</button>
+                      <button type="button" onClick={() => removeOption(i)} className="text-gray-400 hover:text-red-500">✕</button>
                     )}
                   </div>
                 ))}
