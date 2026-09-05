@@ -20,8 +20,9 @@ export default function AddProduct() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<any[]>([]);
   const [form, setForm] = useState({ name: "", name_ar: "", description: "", description_ar: "", price: "", category_id: "", processing_days: "3", time_unit: "days", stock_quantity: "10", track_stock: false });
-  const [image, setImage] = useState<File | null>(null);
-  const [preview, setPreview] = useState("");
+  const [images, setImages] = useState<(File | null)[]>([null, null, null, null, null]);
+  const [previews, setPreviews] = useState<(string | null)[]>([null, null, null, null, null]);
+  const [primaryIndex, setPrimaryIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [error, setError] = useState("");
@@ -35,9 +36,14 @@ export default function AddProduct() {
     api.get("/api/categories").then(r => setCategories(r.data));
   }, [user]);
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) { setImage(file); setPreview(URL.createObjectURL(file)); setAiSuggestion(null); }
+  const handleImage = (index: number, file: File | null) => {
+    const newImages = [...images];
+    const newPreviews = [...previews];
+    newImages[index] = file;
+    newPreviews[index] = file ? URL.createObjectURL(file) : null;
+    setImages(newImages);
+    setPreviews(newPreviews);
+    if (file && index === 0) setAiSuggestion(null);
   };
 
   const generateWithAI = async () => {
@@ -50,7 +56,7 @@ export default function AddProduct() {
       data.append("category", selectedCat?.name || "Fashion");
       data.append("language", isArabic ? "ar" : "en");
       if (form.price) data.append("price", form.price);
-      if (image) data.append("image", image);
+      if (images[0]) data.append("image", images[0]);
       const response = await api.post("/api/ai/generate-description", data, { headers: { "Content-Type": "multipart/form-data" } });
       if (response.data.success) {
         const suggestion = response.data.data;
@@ -99,7 +105,12 @@ export default function AddProduct() {
       if (form.category_id) data.append("category_id", form.category_id);
       data.append("track_stock", String(form.track_stock));
       if (form.track_stock) data.append("stock_quantity", form.stock_quantity);
-      if (image) data.append("image", image);
+      if (images[0]) data.append("image", images[0]);
+      if (images[1]) data.append("image_2", images[1]);
+      if (images[2]) data.append("image_3", images[2]);
+      if (images[3]) data.append("image_4", images[3]);
+      if (images[4]) data.append("image_5", images[4]);
+      data.append("primary_image_index", String(primaryIndex));
       const res = await api.post("/api/products/", data, { headers: { "Content-Type": "multipart/form-data" } });
       const productId = res.data.id;
       // Save variants
@@ -123,20 +134,45 @@ export default function AddProduct() {
       {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
 
-        {/* Photo */}
+        {/* Photos */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "الصورة" : "Photo"}</label>
-          <label className="block cursor-pointer">
-            <div className={`h-56 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${preview ? "border-orange-300" : "border-gray-200 hover:border-orange-300"}`}>
-              {preview ? <img src={preview} alt="Preview" className="w-full h-full object-cover" /> : (
-                <div className="text-center text-gray-400">
-                  <div className="text-5xl mb-2">📷</div>
-                  <p className="text-sm font-medium">{isArabic ? "اضغط لرفع صورة" : "Click to upload a photo"}</p>
-                </div>
-              )}
-            </div>
-            <input type="file" accept="image/*" onChange={handleImage} className="hidden" />
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-gray-700">{isArabic ? "الصور (حتى 5)" : "Photos (up to 5)"}</label>
+            <span className="text-xs text-gray-400">{isArabic ? "اضغط النجمة لتعيين الصورة الرئيسية" : "Tap ★ to set main photo"}</span>
+          </div>
+          <div className="grid grid-cols-5 gap-2">
+            {[0,1,2,3,4].map(i => (
+              <div key={i} className="relative">
+                <label className="block cursor-pointer">
+                  <div className={`aspect-square rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${previews[i] ? "border-orange-300" : "border-gray-200 hover:border-orange-300"}`}>
+                    {previews[i]
+                      ? <img src={previews[i]!} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
+                      : <div className="text-center text-gray-300"><div className="text-2xl">📷</div><div className="text-xs mt-1">{i === 0 ? (isArabic ? "رئيسية" : "Main") : i+1}</div></div>
+                    }
+                  </div>
+                  <input type="file" accept="image/*" className="hidden"
+                    onChange={e => handleImage(i, e.target.files?.[0] || null)} />
+                </label>
+                {previews[i] && (
+                  <div className="absolute top-1 right-1 flex flex-col gap-1">
+                    <button type="button" onClick={() => setPrimaryIndex(i)}
+                      className={`w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-white" : "bg-white text-gray-400 hover:text-orange-500"}`}>
+                      ★
+                    </button>
+                    <button type="button" onClick={() => handleImage(i, null)}
+                      className="w-5 h-5 rounded-full bg-white text-gray-400 hover:text-red-500 text-xs flex items-center justify-center shadow">
+                      ✕
+                    </button>
+                  </div>
+                )}
+                {primaryIndex === i && previews[i] && (
+                  <div className="absolute bottom-1 left-1 bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                    {isArabic ? "رئيسية" : "Main"}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* AI Button */}

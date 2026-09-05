@@ -14,6 +14,7 @@ export default function ProductDetail() {
   const [reviews, setReviews] = useState<any[]>([]);
   const [related, setRelated] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [variants, setVariants] = useState<any[]>([]);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
   const [variantError, setVariantError] = useState("");
@@ -107,9 +108,14 @@ export default function ProductDetail() {
         {/* Product Info */}
         <div>
           <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 h-72 flex items-center justify-center mb-6">
-            {product.image_url
-              ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} alt={displayName} className="w-full h-full object-cover" />
-              : <span className="text-8xl">{product.category?.icon || "🍽️"}</span>
+            (() => {
+                    const allImgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
+                    const displayImg = allImgs[activeImageIndex] || allImgs[0];
+                    return displayImg
+                      ? <img src={displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`}
+                          alt={displayName} className="w-full h-full object-cover" />
+                      : <span className="text-6xl">🛍️</span>;
+                  })()</span>
             }
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">{displayName}</h1>
@@ -278,6 +284,18 @@ export default function ProductDetail() {
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-orange-50 flex-shrink-0 flex items-center justify-center">
                     {imgUrl ? <img src={imgUrl} alt={name} className="w-full h-full object-cover" /> : <span className="text-2xl">{p.category?.icon || "🍽️"}</span>}
                   </div>
+              {/* Thumbnail strip */}
+              {[product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean).length > 1 && (
+                <div className="flex gap-2 mt-3 flex-wrap">
+                  {[product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean).map((img: string, i: number) => (
+                    <button key={i} type="button" onClick={() => setActiveImageIndex(i)}
+                      className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${activeImageIndex === i ? "border-orange-500" : "border-gray-200 hover:border-orange-300"}`}>
+                      <img src={img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`}
+                        alt={`View ${i+1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm truncate">{name}</p>
                     <p className="text-orange-500 font-bold text-sm">AED {p.price}</p>
