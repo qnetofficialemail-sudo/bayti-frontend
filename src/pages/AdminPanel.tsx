@@ -238,7 +238,7 @@ export default function AdminPanel() {
           { key: "revenue",    label: isArabic ? "الإيرادات" : "Revenue",    icon: "📈" },
           { key: "reviews",    label: isArabic ? `التقييمات${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}` : `Reviews${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}`, icon: "⭐" },
           { key: "categories", label: isArabic ? "الفئات" : "Categories", icon: "🏷️" },
-          { key: "applications", label: isArabic ? `الطلبات${applications.filter(a => a.status === "pending").length > 0 ? \` (\${applications.filter(a => a.status === "pending").length})\` : ""}` : `Applications${applications.filter(a => a.status === "pending").length > 0 ? \` (\${applications.filter(a => a.status === "pending").length})\` : ""}`, icon: "📋" },
+          { key: "applications", label: (isArabic ? "الطلبات" : "Applications") + (applications.filter(a => a.status === "pending").length > 0 ? ` (${applications.filter(a => a.status === "pending").length})` : ""), icon: "📋" },
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
