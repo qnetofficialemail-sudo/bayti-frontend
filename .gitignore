@@ -6,3 +6,12 @@ build/
 *.py
 __pycache__/
 *.pyc
+
+# Utility scripts
+fix_*.py
+add_*.py
+write_*.py
+redesign_*.py
+rewrite_*.py
+waitlist_*.py
+update_*.py
