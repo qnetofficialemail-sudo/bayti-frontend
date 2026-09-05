@@ -112,7 +112,7 @@ export default function SellerProfilePage() {
         {/* Sample photos */}
         {(seller.sample_image_1 || seller.sample_image_2 || seller.sample_image_3) && (
           <div className="mt-4 pt-4 border-t border-gray-100">
-            <p className="text-xs font-medium text-gray-500 mb-2">{isArabic ? "صور من المطبخ" : "From the kitchen"}</p>
+            <p className="text-xs font-medium text-gray-500 mb-2">{isArabic ? "صور من المتجر" : "Shop Photos"}</p>
             <div className="flex gap-3">
               {[seller.sample_image_1, seller.sample_image_2, seller.sample_image_3].filter(Boolean).map((img: string, i: number) => (
                 <img key={i} src={img} alt={`Sample ${i + 1}`}
