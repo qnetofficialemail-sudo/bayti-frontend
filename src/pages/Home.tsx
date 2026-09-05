@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import api from "../api/client";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -16,8 +16,11 @@ export default function Home() {
   const { isArabic } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [search, setSearch] = useState("");
+  const [searchParams] = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(
+    searchParams.get("category") ? Number(searchParams.get("category")) : null
+  );
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => { api.get("/api/categories").then(r => setCategories(r.data)).catch(() => {}); }, []);
