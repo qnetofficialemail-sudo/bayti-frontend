@@ -115,7 +115,6 @@ export default function ProductDetail() {
                     const src = displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`;
                     return <img src={src} alt={displayName} className="w-full h-full object-cover" />;
                   })()}
-            }
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">{displayName}</h1>
           <p className="text-gray-500 mb-4">{displayDesc}</p>
