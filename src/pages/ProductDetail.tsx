@@ -115,7 +115,7 @@ export default function ProductDetail() {
           <h1 className="text-2xl font-bold text-gray-900 mb-2">{displayName}</h1>
           <p className="text-gray-500 mb-4">{displayDesc}</p>
           <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-            <span>⏱ {product.preparation_time} {isArabic ? "دقيقة تحضير" : "min prep"}</span>
+            <span>⏱ {product.preparation_time} {product.time_unit === "days" ? (isArabic ? "يوم" : "days") : product.time_unit === "hours" ? (isArabic ? "ساعة" : "hrs") : (isArabic ? "د" : "min")} {isArabic ? "دقيقة تحضير" : "min prep"}</span>
             {product.category && <span>{product.category.icon} {displayCat}</span>}
           </div>
           <div className="bg-gray-50 rounded-xl p-4">

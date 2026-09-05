@@ -19,7 +19,7 @@ export default function AddProduct() {
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
   const [categories, setCategories] = useState<any[]>([]);
-  const [form, setForm] = useState({ name: "", name_ar: "", description: "", description_ar: "", price: "", category_id: "", processing_days: "3", stock_quantity: "10", track_stock: false });
+  const [form, setForm] = useState({ name: "", name_ar: "", description: "", description_ar: "", price: "", category_id: "", processing_days: "3", time_unit: "days", stock_quantity: "10", track_stock: false });
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
@@ -95,6 +95,7 @@ export default function AddProduct() {
       data.append("description", form.description);
       data.append("price", form.price);
       data.append("preparation_time", form.processing_days);
+      data.append("time_unit", form.time_unit);
       if (form.category_id) data.append("category_id", form.category_id);
       data.append("track_stock", String(form.track_stock));
       if (form.track_stock) data.append("stock_quantity", form.stock_quantity);
@@ -176,9 +177,17 @@ export default function AddProduct() {
               className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "أيام التجهيز" : "Processing days"}</label>
-            <input type="number" value={form.processing_days} onChange={e => setForm(f => ({ ...f, processing_days: e.target.value }))} min="1" max="30"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وقت التجهيز" : "Processing time"}</label>
+            <div className="flex gap-2">
+              <input type="number" value={form.processing_days} onChange={e => setForm(f => ({ ...f, processing_days: e.target.value }))} min="1" max="999"
+                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              <select value={form.time_unit} onChange={e => setForm(f => ({ ...f, time_unit: e.target.value }))}
+                className="border border-gray-200 rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white text-sm">
+                <option value="minutes">{isArabic ? "دقيقة" : "mins"}</option>
+                <option value="hours">{isArabic ? "ساعة" : "hrs"}</option>
+                <option value="days">{isArabic ? "يوم" : "days"}</option>
+              </select>
+            </div>
           </div>
         </div>
 
