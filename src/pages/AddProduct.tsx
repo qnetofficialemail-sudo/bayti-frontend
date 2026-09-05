@@ -47,7 +47,7 @@ export default function AddProduct() {
   };
 
   const generateWithAI = async () => {
-    if (!image && !form.name) { setError(isArabic ? "أضف صورة أو اسم المنتج أولاً." : "Add a photo or product name first."); return; }
+    if (!images[0] && !form.name) { setError(isArabic ? "أضف صورة أو اسم المنتج أولاً." : "Add a photo or product name first."); return; }
     setAiLoading(true); setError("");
     try {
       const data = new FormData();
@@ -62,8 +62,10 @@ export default function AddProduct() {
         const suggestion = response.data.data;
         setAiSuggestion(suggestion);
         setForm(f => ({ ...f, description: suggestion.description || f.description, name: suggestion.suggested_name || f.name }));
+      } else {
+        setError(isArabic ? "فشل الذكاء الاصطناعي." : "AI generation failed.");
       }
-    } catch (err: any) { setError("AI generation failed."); }
+    } catch (err: any) { setError(err.response?.data?.detail || "AI generation failed."); console.error("AI error:", err); }
     finally { setAiLoading(false); }
   };
 
