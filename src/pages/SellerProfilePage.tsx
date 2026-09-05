@@ -70,10 +70,24 @@ export default function SellerProfilePage() {
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-3 text-sm text-gray-500 mb-2">
+            <div className="flex items-center gap-3 text-sm text-gray-500 mb-2 flex-wrap">
               <span>📍 {seller.area}, {seller.city}</span>
               <span>⭐ {seller.rating}</span>
               <span>📦 {seller.total_orders} {isArabic ? "طلب" : "orders"}</span>
+              {seller.avg_response_minutes != null && (
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium border ${
+                  seller.avg_response_minutes <= 30
+                    ? "bg-green-50 text-green-700 border-green-200"
+                    : seller.avg_response_minutes <= 120
+                    ? "bg-yellow-50 text-yellow-700 border-yellow-200"
+                    : "bg-red-50 text-red-600 border-red-200"
+                }`}>
+                  ⚡ {isArabic ? "يرد عادةً خلال " : "Usually responds in "}
+                  {seller.avg_response_minutes < 60
+                    ? `${Math.round(seller.avg_response_minutes)} ${isArabic ? "دقيقة" : "min"}`
+                    : `${Math.round(seller.avg_response_minutes / 60 * 10) / 10} ${isArabic ? "ساعة" : "hr"}`}
+                </span>
+              )}
             </div>
             {seller.description && (
               <p className="text-gray-600 text-sm">{seller.description}</p>
