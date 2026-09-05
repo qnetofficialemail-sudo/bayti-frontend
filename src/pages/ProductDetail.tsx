@@ -31,17 +31,22 @@ export default function ProductDetail() {
     if (user) {
       api.get("/api/auth/me/address").then(r => setSavedAddress(r.data)).catch(() => {});
     }
-    api.get(`/api/products/${id}`)
-      .then(r => {
-        setProduct(r.data);
-        if (r.data?.seller?.id) {
-          api.get(`/api/sellers/${r.data.seller.id}/status`)
-            .then(s => setSellerOpen(s.data)).catch(() => {});
-          api.get('/api/products/', { params: { seller_id: r.data.seller.id } })
-            .then(rel => { const filtered = rel.data.filter((p: any) => String(p.id) !== String(id)); setRelated(filtered.slice(0, 3)); }).catch(() => {});
-        }
-      })
-      .catch(() => navigate("/"))
+    Promise.all([
+      api.get(`/api/products/${id}`),
+      api.get(`/api/products/${id}/variants`),
+    ]).then(([p, v]) => {
+      setProduct(p.data);
+      setVariants(v.data || []);
+      if (p.data?.seller?.id) {
+        api.get(`/api/sellers/${p.data.seller.id}/status`)
+          .then(s => setSellerOpen(s.data)).catch(() => {});
+        api.get("/api/products/", { params: { seller_id: p.data.seller.id } })
+          .then(rel => {
+            const filtered = rel.data.filter((r: any) => String(r.id) !== String(id));
+            setRelated(filtered.slice(0, 3));
+          }).catch(() => {});
+      }
+    }).catch(() => navigate("/"))
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -64,7 +69,6 @@ export default function ProductDetail() {
         items: [{ product_id: product.id, quantity }],
       });
       setSuccess(true);
-      // Save address for next time
       if (address && area) {
         api.patch(`/api/auth/me/address?saved_address=${encodeURIComponent(address)}&saved_area=${encodeURIComponent(area)}`).catch(() => {});
       }
@@ -82,6 +86,9 @@ export default function ProductDetail() {
   const displayDesc = isArabic && product.description_ar ? product.description_ar : product.description;
   const displayCat = isArabic && product.category?.name_ar ? product.category.name_ar : product.category?.name;
   const total = (product.price * quantity + 10).toFixed(2);
+  const allImgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
+  const displayImg = allImgs[activeImageIndex] || allImgs[0];
+  const imgSrc = displayImg ? (displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`) : null;
 
   if (success) return (
     <div className="max-w-md mx-auto px-4 py-20 text-center">
@@ -107,19 +114,31 @@ export default function ProductDetail() {
       <div className="grid md:grid-cols-2 gap-8">
         {/* Product Info */}
         <div>
-          <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 h-72 flex items-center justify-center mb-6">
-            {(() => {
-                    const allImgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
-                    const displayImg = allImgs[activeImageIndex] || allImgs[0];
-                    if (!displayImg) return <span className="text-6xl">🛍️</span>;
-                    const src = displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`;
-                    return <img src={src} alt={displayName} className="w-full h-full object-cover" />;
-                  })()}
+          {/* Main image */}
+          <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 h-72 flex items-center justify-center mb-3">
+            {imgSrc
+              ? <img src={imgSrc} alt={displayName} className="w-full h-full object-cover" />
+              : <span className="text-6xl">🛍️</span>
+            }
           </div>
+
+          {/* Thumbnail strip */}
+          {allImgs.length > 1 && (
+            <div className="flex gap-2 mb-6 flex-wrap">
+              {allImgs.map((img: string, i: number) => (
+                <button key={i} type="button" onClick={() => setActiveImageIndex(i)}
+                  className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${activeImageIndex === i ? "border-orange-500" : "border-gray-200 hover:border-orange-300"}`}>
+                  <img src={img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`}
+                    alt={`View ${i + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+
           <h1 className="text-2xl font-bold text-gray-900 mb-2">{displayName}</h1>
           <p className="text-gray-500 mb-4">{displayDesc}</p>
           <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-            <span>⏱ {product.preparation_time} {product.time_unit === "days" ? (isArabic ? "يوم" : "days") : product.time_unit === "hours" ? (isArabic ? "ساعة" : "hrs") : (isArabic ? "د" : "min")} {isArabic ? "دقيقة تحضير" : "min prep"}</span>
+            <span>⏱ {product.preparation_time} {product.time_unit === "days" ? (isArabic ? "يوم" : "days") : product.time_unit === "hours" ? (isArabic ? "ساعة" : "hrs") : (isArabic ? "د" : "min")}</span>
             {product.category && <span>{product.category.icon} {displayCat}</span>}
           </div>
           <div className="bg-gray-50 rounded-xl p-4">
@@ -129,140 +148,134 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* Variants */}
-        {variants.length > 0 && (
-          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm mb-4">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">{isArabic ? "اختر الخيارات" : "Select Options"}</h3>
-            <div className="space-y-4">
-              {variants.map((variant: any) => {
-                const options = JSON.parse(variant.options || "[]");
-                return (
-                  <div key={variant.id}>
-                    <p className="text-sm font-medium text-gray-700 mb-2">
-                      {isArabic && variant.name_ar ? variant.name_ar : variant.name}
-                      {variant.is_required && <span className="text-red-400 ml-1">*</span>}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {options.map((opt: any) => (
-                        <button key={opt.label} type="button"
-                          onClick={() => { setSelectedVariants((prev: any) => ({ ...prev, [variant.name]: opt.label })); setVariantError(""); }}
-                          className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition ${
-                            selectedVariants[variant.name] === opt.label
-                              ? "border-orange-500 bg-orange-50 text-orange-700"
-                              : "border-gray-200 hover:border-orange-300 text-gray-700"
-                          }`}>
-                          {opt.label}
-                          {opt.price_adj > 0 && <span className="text-xs ml-1 text-orange-500">+AED {opt.price_adj}</span>}
-                          {opt.price_adj < 0 && <span className="text-xs ml-1 text-green-500">-AED {Math.abs(opt.price_adj)}</span>}
-                        </button>
-                      ))}
+        {/* Right column: variants + order form */}
+        <div className="space-y-4">
+          {/* Variants */}
+          {variants.length > 0 && (
+            <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4">{isArabic ? "اختر الخيارات" : "Select Options"}</h3>
+              <div className="space-y-4">
+                {variants.map((variant: any) => {
+                  const options = JSON.parse(variant.options || "[]");
+                  return (
+                    <div key={variant.id}>
+                      <p className="text-sm font-medium text-gray-700 mb-2">
+                        {isArabic && variant.name_ar ? variant.name_ar : variant.name}
+                        {variant.is_required && <span className="text-red-400 ml-1">*</span>}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {options.map((opt: any) => (
+                          <button key={opt.label} type="button"
+                            onClick={() => { setSelectedVariants(prev => ({ ...prev, [variant.name]: opt.label })); setVariantError(""); }}
+                            className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition ${selectedVariants[variant.name] === opt.label ? "border-orange-500 bg-orange-50 text-orange-700" : "border-gray-200 hover:border-orange-300 text-gray-700"}`}>
+                            {opt.label}
+                            {opt.price_adj > 0 && <span className="text-xs ml-1 text-orange-500">+AED {opt.price_adj}</span>}
+                            {opt.price_adj < 0 && <span className="text-xs ml-1 text-green-500">-AED {Math.abs(opt.price_adj)}</span>}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-              {variantError && <p className="text-red-500 text-sm">{variantError}</p>}
+                  );
+                })}
+                {variantError && <p className="text-red-500 text-sm">{variantError}</p>}
+              </div>
             </div>
+          )}
+
+          {/* Order Form */}
+          <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-bold text-gray-900">{isArabic ? "تقديم الطلب" : "Place Order"}</h2>
+              <span className="text-2xl font-bold text-orange-500">AED {product.price}</span>
+            </div>
+
+            {sellerOpen && !sellerOpen.is_open && (
+              <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
+                <span>🔴</span>
+                <span>{isArabic ? "لا تقبل طلبات الآن" : "Not accepting orders right now"}{sellerOpen.message ? ` · ${sellerOpen.message}` : ""}</span>
+              </div>
+            )}
+            {sellerOpen && sellerOpen.is_open && sellerOpen.reason !== "always_open" && (
+              <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
+                <span>🟢</span>
+                <span>{isArabic ? "تقبل الطلبات الآن" : "Accepting orders now"}</span>
+              </div>
+            )}
+
+            {!user && (
+              <div className="bg-orange-50 text-orange-700 text-sm px-4 py-3 rounded-xl mb-4">
+                <Link to="/login" className="font-medium underline">{isArabic ? "سجل الدخول" : "Sign in"}</Link>
+                {isArabic ? " لتقديم طلب" : " to place an order"}
+              </div>
+            )}
+            {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
+
+            <form onSubmit={handleOrder} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الكمية" : "Quantity"}</label>
+                <div className="flex items-center gap-3">
+                  <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    className="w-10 h-10 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-bold text-lg transition">−</button>
+                  <span className="w-8 text-center font-semibold text-gray-900">{quantity}</span>
+                  <button type="button" onClick={() => setQuantity(q => q + 1)}
+                    className="w-10 h-10 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-bold text-lg transition">+</button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "عنوان التوصيل" : "Delivery Address"}</label>
+                {savedAddress?.saved_address && !address && (
+                  <button type="button"
+                    onClick={() => { setAddress(savedAddress.saved_address); setArea(savedAddress.saved_area || ""); }}
+                    className="w-full mb-2 text-sm bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 px-4 py-2.5 rounded-xl transition text-left flex items-center gap-2">
+                    <span>📍</span>
+                    <span className="flex-1 truncate">{savedAddress.saved_address}{savedAddress.saved_area ? ` · ${savedAddress.saved_area}` : ""}</span>
+                    <span className="text-xs font-medium flex-shrink-0">{isArabic ? "استخدم" : "Use"}</span>
+                  </button>
+                )}
+                <textarea value={address} onChange={e => setAddress(e.target.value)} required rows={2}
+                  placeholder={isArabic ? "المبنى، الشارع، رقم الشقة..." : "Building, street, flat number..."}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "المنطقة" : "Area"}</label>
+                <input type="text" value={area} onChange={e => setArea(e.target.value)} required
+                  placeholder={isArabic ? "مثال: جي بي آر، وسط المدينة..." : "e.g. JBR, Downtown, Mirdif..."}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "ملاحظات (اختياري)" : "Notes (optional)"}</label>
+                <input type="text" value={notes} onChange={e => setNotes(e.target.value)}
+                  placeholder={isArabic ? "بدون بصل، حار جداً..." : "No onions, extra spicy..."}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              </div>
+
+              <div className="border-t border-gray-100 pt-4 space-y-2 text-sm text-gray-500">
+                <div className="flex justify-between">
+                  <span>{isArabic ? "المجموع الفرعي" : "Subtotal"}</span>
+                  <span>AED {(product.price * quantity).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>{isArabic ? "التوصيل" : "Delivery"}</span>
+                  <span>AED 10.00</span>
+                </div>
+                <div className="flex justify-between font-bold text-gray-900 text-base">
+                  <span>{isArabic ? "الإجمالي" : "Total"}</span>
+                  <span>AED {total}</span>
+                </div>
+              </div>
+
+              <button type="submit" disabled={!user || ordering || (sellerOpen && !sellerOpen.is_open)}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition disabled:opacity-60">
+                {ordering
+                  ? (isArabic ? "جاري تقديم الطلب..." : "Placing order...")
+                  : (isArabic ? `اطلب بـ AED ${total}` : `Order for AED ${total}`)
+                }
+              </button>
+            </form>
           </div>
-        )}
-
-        {/* Order Form */}
-        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm h-fit">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">{isArabic ? "تقديم الطلب" : "Place Order"}</h2>
-            <span className="text-2xl font-bold text-orange-500">AED {product.price}</span>
-          </div>
-
-          {/* Seller schedule status banner */}
-          {sellerOpen && !sellerOpen.is_open && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
-              <span>🔴</span>
-              <span>
-                {isArabic ? "لا تقبل طلبات الآن" : "Not accepting orders right now"}
-                {sellerOpen.message ? ` · ${sellerOpen.message}` : ""}
-              </span>
-            </div>
-          )}
-          {sellerOpen && sellerOpen.is_open && sellerOpen.reason !== "always_open" && (
-            <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
-              <span>🟢</span>
-              <span>{isArabic ? "تقبل الطلبات الآن" : "Accepting orders now"}</span>
-              {sellerOpen.message ? <span className="text-green-600">· {sellerOpen.message}</span> : null}
-            </div>
-          )}
-
-          {!user && (
-            <div className="bg-orange-50 text-orange-700 text-sm px-4 py-3 rounded-xl mb-4">
-              <Link to="/login" className="font-medium underline">{isArabic ? "سجل الدخول" : "Sign in"}</Link>
-              {isArabic ? " لتقديم طلب" : " to place an order"}
-            </div>
-          )}
-          {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
-
-          <form onSubmit={handleOrder} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الكمية" : "Quantity"}</label>
-              <div className="flex items-center gap-3">
-                <button type="button" onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                  className="w-10 h-10 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-bold text-lg transition">−</button>
-                <span className="w-8 text-center font-semibold text-gray-900">{quantity}</span>
-                <button type="button" onClick={() => setQuantity(q => q + 1)}
-                  className="w-10 h-10 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 font-bold text-lg transition">+</button>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "عنوان التوصيل" : "Delivery Address"}</label>
-              {savedAddress?.saved_address && !address && (
-                <button type="button"
-                  onClick={() => { setAddress(savedAddress.saved_address); setArea(savedAddress.saved_area || ""); }}
-                  className="w-full mb-2 text-sm bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 px-4 py-2.5 rounded-xl transition text-left flex items-center gap-2">
-                  <span>📍</span>
-                  <span className="flex-1 truncate">{savedAddress.saved_address}{savedAddress.saved_area ? ` · ${savedAddress.saved_area}` : ""}</span>
-                  <span className="text-xs font-medium flex-shrink-0">{isArabic ? "استخدم" : "Use"}</span>
-                </button>
-              )}
-              <textarea value={address} onChange={e => setAddress(e.target.value)} required rows={2}
-                placeholder={isArabic ? "المبنى، الشارع، رقم الشقة..." : "Building, street, flat number..."}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "المنطقة" : "Area"}</label>
-              <input type="text" value={area} onChange={e => setArea(e.target.value)} required
-                placeholder={isArabic ? "مثال: جي بي آر، وسط المدينة..." : "e.g. JBR, Downtown, Mirdif..."}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "ملاحظات (اختياري)" : "Notes (optional)"}</label>
-              <input type="text" value={notes} onChange={e => setNotes(e.target.value)}
-                placeholder={isArabic ? "بدون بصل، حار جداً..." : "No onions, extra spicy..."}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            </div>
-
-            <div className="border-t border-gray-100 pt-4 space-y-2 text-sm text-gray-500">
-              <div className="flex justify-between">
-                <span>{isArabic ? "المجموع الفرعي" : "Subtotal"}</span>
-                <span>AED {(product.price * quantity).toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>{isArabic ? "التوصيل" : "Delivery"}</span>
-                <span>AED 10.00</span>
-              </div>
-              <div className="flex justify-between font-bold text-gray-900 text-base">
-                <span>{isArabic ? "الإجمالي" : "Total"}</span>
-                <span>AED {total}</span>
-              </div>
-            </div>
-
-            <button type="submit" disabled={!user || ordering || (sellerOpen && !sellerOpen.is_open)}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition disabled:opacity-60">
-              {ordering
-                ? (isArabic ? "جاري تقديم الطلب..." : "Placing order...")
-                : (isArabic ? `اطلب بـ AED ${total}` : `Order for AED ${total}`)
-              }
-            </button>
-          </form>
         </div>
       </div>
 
@@ -280,20 +293,8 @@ export default function ProductDetail() {
                 <Link key={p.id} to={`/product/${p.id}`}
                   className="flex gap-3 bg-white rounded-xl border border-gray-100 p-3 hover:border-orange-300 transition shadow-sm">
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-orange-50 flex-shrink-0 flex items-center justify-center">
-                    {imgUrl ? <img src={imgUrl} alt={name} className="w-full h-full object-cover" /> : <span className="text-2xl">{p.category?.icon || "🍽️"}</span>}
+                    {imgUrl ? <img src={imgUrl} alt={name} className="w-full h-full object-cover" /> : <span className="text-2xl">{p.category?.icon || "🛍️"}</span>}
                   </div>
-              {/* Thumbnail strip */}
-              {[product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean).length > 1 && (
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  {[product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean).map((img: string, i: number) => (
-                    <button key={i} type="button" onClick={() => setActiveImageIndex(i)}
-                      className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${activeImageIndex === i ? "border-orange-500" : "border-gray-200 hover:border-orange-300"}`}>
-                      <img src={img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`}
-                        alt={`View ${i+1}`} className="w-full h-full object-cover" />
-                    </button>
-                  ))}
-                </div>
-              )}
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm truncate">{name}</p>
                     <p className="text-orange-500 font-bold text-sm">AED {p.price}</p>
