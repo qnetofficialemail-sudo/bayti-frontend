@@ -73,7 +73,7 @@ export function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setError(""); setLoading(true);
-    try { await register(form); navigate(form.role === "seller" ? "/seller/setup" : "/marketplace"); }
+    try { await register(form); navigate("/marketplace"); }
     catch (err: any) { setError(err.response?.data?.detail || (isArabic ? "فشل إنشاء الحساب" : "Registration failed")); }
     finally { setLoading(false); }
   };
@@ -88,18 +88,16 @@ export function RegisterPage() {
         </div>
         {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
 
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          {[
-            { value: "buyer", label: isArabic ? "أريد الشراء" : "I want to buy", icon: "🛍️" },
-            { value: "seller", label: isArabic ? "أريد البيع" : "I want to sell", icon: "🍳" }
-          ].map(opt => (
-            <button key={opt.value} type="button"
-              onClick={() => setForm(f => ({ ...f, role: opt.value }))}
-              className={`p-4 rounded-xl border-2 text-center transition ${form.role === opt.value ? "border-orange-500 bg-orange-50" : "border-gray-200 hover:border-gray-300"}`}>
-              <div className="text-2xl mb-1">{opt.icon}</div>
-              <div className="text-sm font-medium text-gray-700">{opt.label}</div>
-            </button>
-          ))}
+        <div className="mb-6 p-4 bg-orange-50 rounded-xl border border-orange-100 text-center">
+          <p className="text-sm text-orange-700 font-medium">
+            {isArabic ? "هذا التسجيل للمشترين فقط" : "This registration is for buyers only"}
+          </p>
+          <p className="text-xs text-orange-500 mt-1">
+            {isArabic ? "للبيع، " : "Want to sell? "}
+            <a href="/seller-apply" className="underline font-medium">
+              {isArabic ? "قدم طلبك هنا" : "Apply as a seller"}
+            </a>
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
