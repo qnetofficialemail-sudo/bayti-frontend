@@ -132,7 +132,13 @@ export default function SellerDashboard() {
               <div className="text-sm text-gray-500 mb-1">📍 {order.delivery_address} · {order.delivery_area}</div>
               {order.notes && <div className="text-sm text-orange-600 mb-1">📝 {order.notes}</div>}
               <div className="text-sm text-gray-600 mb-3">{order.items?.map((item: any) => `${item.quantity}x ${item.product?.name}`).join(", ")}</div>
-              {NEXT_STATUS[order.status] && (
+              {!["delivered", "cancelled"].includes(order.status) && (
+                  <button onClick={() => rejectOrder(order.id)}
+                    className="text-sm bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2 rounded-xl transition font-medium">
+                    {isArabic ? "✕ رفض" : "✕ Reject"}
+                  </button>
+                )}
+                {NEXT_STATUS[order.status] && (
                 <button onClick={() => advanceOrder(order.id, NEXT_STATUS[order.status])} className="text-sm bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl transition font-medium">
                   {isArabic ? `تحديد كـ ${NEXT_STATUS_AR[order.status]}` : `Mark as ${NEXT_STATUS[order.status]}`}
                 </button>
