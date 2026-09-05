@@ -80,6 +80,16 @@ export default function SellerDashboard() {
   if (loading) return <div className="flex items-center justify-center h-64 text-gray-400">{isArabic ? "جاري التحميل..." : "Loading..."}</div>;
   const pendingCount = orders.filter(o => o.status === "pending").length;
 
+  const deleteProduct = async (product: any) => {
+    if (!window.confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
+    try {
+      await api.delete(`/api/products/seller/${product.id}`);
+      setProducts((prev: any[]) => prev.filter((p: any) => p.id !== product.id));
+    } catch (e: any) {
+      alert(e.response?.data?.detail || "Delete failed");
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
@@ -199,6 +209,10 @@ export default function SellerDashboard() {
                     <Link to={`/seller/products/${product.id}/edit`} className="text-xs text-orange-500 hover:text-orange-700 transition">
                       {isArabic ? "تعديل" : "Edit"}
                     </Link>
+                    <span className="text-gray-300">|</span>
+                    <button onClick={() => deleteProduct(product)} className="text-xs text-red-500 hover:text-red-700 transition">
+                      {isArabic ? "حذف" : "Delete"}
+                    </button>
                   </div>
                 </div>
               </div>

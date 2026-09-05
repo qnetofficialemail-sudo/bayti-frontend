@@ -71,7 +71,17 @@ export default function EditProduct() {
       {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "الصورة" : "Photo"}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "الصور" : "Photos"}</label>
+          {/* Show existing images */}
+          <div className="flex gap-2 flex-wrap mb-2">
+            {[currentImage].filter(Boolean).map((img: string, i: number) => (
+              <div key={i} className="relative">
+                <img src={img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`}
+                  alt="Current" className="w-16 h-16 object-cover rounded-xl border border-orange-300" />
+                <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-orange-500 text-white rounded-b-xl py-0.5">Main</span>
+              </div>
+            ))}
+          </div>
           <label className="block cursor-pointer">
             <div className="h-48 rounded-2xl border-2 border-dashed border-gray-200 hover:border-orange-300 flex items-center justify-center overflow-hidden transition">
               {imageUrl ? <img src={imageUrl} alt="Product" className="w-full h-full object-cover" /> :
