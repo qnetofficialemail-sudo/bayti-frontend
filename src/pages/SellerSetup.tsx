@@ -97,14 +97,14 @@ export default function SellerSetup() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "اسم المتجر *" : "Shop name *"}</label>
               <input type="text" value={form.shop_name} onChange={e => setForm(f => ({ ...f, shop_name: e.target.value }))} required
-                placeholder={isArabic ? "مثال: مطبخ مريم" : "e.g. Maryam Kitchen"}
+                placeholder={isArabic ? "مثال: مطبخ مريم" : "e.g. Maryam Boutique"}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "عن متجرك" : "About your shop"}</label>
               <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
-                placeholder={isArabic ? "ماذا تصنع؟ ما الذي يميز طعامك؟" : "What do you make? What makes your food special?"}
+                placeholder={isArabic ? "ماذا تصنع؟ ما الذي يميز طعامك؟" : "What do you sell? What makes your shop special?"}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
             </div>
 
