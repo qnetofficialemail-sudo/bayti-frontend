@@ -57,7 +57,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-gray-900 mb-3">
           {isArabic
             ? <><span>أكل بيتي،</span> <span className="text-orange-500">يوصلك على بابك</span></>
-            : <>Local sellers, <span className="text-orange-500">delivered to your door</span></>
+            : <>Your neighborhood, <span className="text-[#FF5A1F]">online.</span></>
           }
         </h1>
         <p className="text-gray-500 text-lg">{isArabic ? "اكتشف بائعين محليين في الإمارات" : "Discover local sellers across the UAE"}</p>
