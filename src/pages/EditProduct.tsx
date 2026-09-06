@@ -205,6 +205,7 @@ export default function EditProduct() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "\u0627\u0644\u0633\u0639\u0631 (\u062f\u0631\u0647\u0645) *" : "Price (AED) *"}</label>
             <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required min="1" step="0.5"
               className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <PricingAdvisor price={form.price} productName={form.name} categoryName={categories.find((c: any) => String(c.id) === form.category_id)?.name || ""} isArabic={isArabic} />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "\u0648\u0642\u062a \u0627\u0644\u062a\u062c\u0647\u064a\u0632" : "Processing time"}</label>
