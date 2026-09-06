@@ -125,7 +125,7 @@ export default function SellerApplyPage() {
               {isArabic ? "ماذا ستبيع؟" : "What will you sell?"} *
             </label>
             <textarea required value={form.what_they_sell} rows={3}
-              placeholder={isArabic ? "مثال: وجبات منزلية، حلويات، مخبوزات..." : "e.g. Home-cooked meals, desserts, baked goods..."}
+              placeholder={isArabic ? "مثال: شموع، عبايات، إكسسوارات، منتجات يدوية..." : "e.g. Candles, abayas, accessories, handmade crafts..."}
               onChange={e => setForm(f => ({ ...f, what_they_sell: e.target.value }))}
               className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
           </div>
