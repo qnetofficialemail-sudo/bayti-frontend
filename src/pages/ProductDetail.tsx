@@ -34,7 +34,7 @@ export default function ProductDetail() {
   useEffect(() => {
     if (user) {
       api.get("/api/auth/me/address").then(r => setSavedAddress(r.data)).catch(() => {});
-      if (user.phone) setBuyerPhone(user.phone);
+      if ((user as any).phone) setBuyerPhone((user as any).phone);
     }
     Promise.all([
       api.get(`/api/products/${id}`),
