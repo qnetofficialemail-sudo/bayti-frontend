@@ -59,39 +59,12 @@ export default function AIPersonalShopper() {
         description: p.description?.slice(0, 100),
       }));
 
-      const systemPrompt = `You are Bayti's AI Personal Shopper for a UAE local marketplace. 
-Your job is to recommend the best matching products from the available inventory based on what the buyer is looking for.
-Always respond in the same language the buyer uses (Arabic or English).
-Return ONLY a valid JSON array of exactly 3 recommendations (or fewer if less than 3 products match).
-Each recommendation must have: product_id (number), reason (string, max 20 words, warm and personal tone).
-Example: [{"product_id": 1, "reason": "Perfect oud scent under AED 150, handmade by a local Dubai seller."}]
-If nothing matches well, return your best 3 guesses with honest reasons.
-ONLY return the JSON array, nothing else.`;
-
-      const userPrompt = `Buyer request: "${query}"
-
-Available products:
-${JSON.stringify(productList, null, 2)}
-
-Return 3 product recommendations as JSON array.`;
-
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: "user", content: userPrompt }],
-        }),
+      // Call backend AI endpoint
+      const aiRes = await api.post("/api/ai/shopper", {
+        query,
+        products: productList,
       });
-
-      const data = await response.json();
-      const text = data.content?.[0]?.text || "[]";
-      
-      // Parse recommendations
-      const clean = text.replace(/```json|```/g, "").trim();
-      const recs: Recommendation[] = JSON.parse(clean);
+      const recs: Recommendation[] = aiRes.data.recommendations;
 
       // Match with product data
       const matched = recs.map((rec: Recommendation) => {
