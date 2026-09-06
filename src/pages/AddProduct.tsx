@@ -215,6 +215,12 @@ export default function AddProduct() {
             <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required min="1" step="0.5"
               className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
+          <PricingAdvisor
+            price={form.price}
+            productName={form.name}
+            categoryName={categories.find((c: any) => String(c.id) === form.category_id)?.name || ""}
+            isArabic={isArabic}
+          />
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وقت التجهيز" : "Processing time"}</label>
             <div className="flex gap-2">
