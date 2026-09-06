@@ -149,7 +149,7 @@ export default function SellerDashboard() {
                 </div>
                 <span className="font-bold text-gray-900">AED {(order.total_amount + order.delivery_fee).toFixed(2)}</span>
               </div>
-              <div className="text-sm text-gray-500 mb-1">👤 {order.buyer?.full_name} {order.buyer?.phone ? `· 📞 ${order.buyer.phone}` : ""}</div>
+              <div className="text-sm text-gray-500 mb-1">👤 {order.buyer?.full_name} {(order.buyer_phone || order.buyer?.phone) ? `· 📞 ${order.buyer_phone || order.buyer?.phone}` : ""}</div>
               <div className="text-sm text-gray-500 mb-1">📍 {order.delivery_address} · {order.delivery_area}</div>
               {order.notes && <div className="text-sm text-orange-600 mb-1">📝 {order.notes}</div>}
               <div className="text-sm text-gray-600 mb-3">{order.items?.map((item: any) => `${item.quantity}x ${item.product?.name}`).join(", ")}</div>
