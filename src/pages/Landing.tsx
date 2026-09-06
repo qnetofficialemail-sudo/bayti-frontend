@@ -62,7 +62,7 @@ export default function Landing() {
       <section className="bg-gradient-to-br from-orange-50 via-amber-50 to-white py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-block bg-orange-100 text-orange-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-            🇦🇪 {isArabic ? "سوق المنزل الإماراتي الأول" : "UAE's First Home Business Marketplace"}
+            🇦🇪 {isArabic ? "سوق المنزل الإماراتي الأول" : "UAE's Local Sellers Marketplace"}
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-4">
             {isArabic ? (
@@ -188,7 +188,7 @@ export default function Landing() {
                 { icon: "🕯️", label: isArabic ? "شموع وعطور" : "Candles & Perfumes" },
                 { icon: "👗", label: isArabic ? "أزياء وإكسسوار" : "Fashion & Accessories" },
                 { icon: "🍰", label: isArabic ? "حلويات" : "Sweets" },
-                { icon: "🍛", label: isArabic ? "منتجات محلية" : "Local Products" },
+                { icon: "🍛", label: isArabic ? "بين يديك." : "Local Products" },
                 { icon: "✨", label: isArabic ? "عناية بالبشرة" : "Skincare" },
               ].map((item, i) => (
                 <div key={i} className="bg-gray-700 rounded-2xl p-4 text-center">
