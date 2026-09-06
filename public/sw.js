@@ -1,44 +1,52 @@
-const CACHE_NAME = "bayti-v1";
-const STATIC_ASSETS = [
-  "/",
-  "/marketplace",
-  "/offline.html"
-];
+const CACHE_NAME = "bayti-v2";
 
 self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
-  );
   self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+      Promise.all(keys.map(k => caches.delete(k)))
     )
   );
   self.clients.claim();
 });
 
+// Network first for everything - only use cache as fallback for images/fonts
 self.addEventListener("fetch", event => {
-  // Network first for API calls
-  if (event.request.url.includes("/api/")) {
+  const url = new URL(event.request.url);
+  
+  // Always network-first for HTML, API calls, and navigation
+  if (
+    event.request.mode === "navigate" ||
+    url.pathname.includes("/api/") ||
+    event.request.headers.get("accept")?.includes("text/html")
+  ) {
     event.respondWith(
-      fetch(event.request).catch(() => new Response(JSON.stringify({ error: "Offline" }), { headers: { "Content-Type": "application/json" } }))
+      fetch(event.request).catch(() => caches.match("/offline.html"))
     );
     return;
   }
-  // Cache first for static assets
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request).then(response => {
-        if (!response || response.status !== 200 || response.type !== "basic") return response;
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        return response;
-      }).catch(() => caches.match("/offline.html"));
-    })
-  );
+  
+  // Cache first only for images and fonts
+  if (
+    event.request.destination === "image" ||
+    event.request.destination === "font"
+  ) {
+    event.respondWith(
+      caches.match(event.request).then(cached => {
+        if (cached) return cached;
+        return fetch(event.request).then(response => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+          return response;
+        });
+      })
+    );
+    return;
+  }
+  
+  // Network first for everything else
+  event.respondWith(fetch(event.request));
 });
