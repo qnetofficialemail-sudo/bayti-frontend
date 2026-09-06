@@ -74,7 +74,7 @@ export default function Landing() {
           <p className="text-xl text-gray-500 mb-8 max-w-2xl mx-auto">
             {isArabic
               ? "من المشغولات اليدوية إلى العطور والمأكولات — اختر ما يناسبك"
-              : "From handmade crafts to perfumes and food — choose what suits you"}
+              : "From handmade crafts to perfumes and fashion — choose what suits you"}
           </p>
 
           {/* Search */}

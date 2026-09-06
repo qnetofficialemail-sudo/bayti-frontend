@@ -32,7 +32,7 @@ export default function SellerSpotlight() {
 
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
           <div className="grid md:grid-cols-2">
-            {/* Left - Cook info */}
+            {/* Left - Seller info */}
             <div className="p-8 flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-4 mb-6">
@@ -82,7 +82,7 @@ export default function SellerSpotlight() {
               <div className="bg-gradient-to-br from-orange-500 to-amber-500 p-8 flex flex-col justify-between text-white">
                 <div>
                   <p className="text-orange-100 text-sm font-medium mb-3">
-                    {isArabic ? "🍽️ أشهر طبق" : "🍽️ Signature Dish"}
+                    {isArabic ? "🌟 أبرز منتج" : "🌟 Featured Product"}
                   </p>
                   <div className="h-48 rounded-2xl overflow-hidden mb-4 bg-white bg-opacity-20">
                     {productImg
