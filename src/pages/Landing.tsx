@@ -258,11 +258,10 @@ export default function Landing() {
       <footer className="bg-gray-900 text-gray-400 py-8 px-4 text-center text-sm">
         <p>© 2026 بيتي Bayti · {isArabic ? "جميع الحقوق محفوظة" : "All rights reserved"} · UAE 🇦🇪</p>
       </footer>
-    </div>
 
       {/* Floating install button */}
       {showInstall && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-bounce">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
           <button
             onClick={handleInstall}
             className="flex items-center gap-2 bg-[#FF5A1F] text-white px-6 py-3 rounded-2xl shadow-lg font-medium text-sm"
