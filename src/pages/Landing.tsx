@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/client";
-import CookOfWeek from "../components/CookOfWeek";
 
 export default function Landing() {
   const { isArabic, toggleLanguage } = useLanguage();
@@ -82,7 +81,7 @@ export default function Landing() {
           <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8">
             <div className="flex gap-2 bg-white rounded-2xl shadow-lg p-2 border border-gray-100">
               <input value={search} onChange={e => setSearch(e.target.value)} type="text"
-                placeholder={isArabic ? "ابحث عن منتجات، طباخين، حرفيين..." : "Search for products, cooks, artisans..."}
+                placeholder={isArabic ? "ابحث عن منتجات، طباخين، حرفيين..." : "Search for products, sellers, artisans..."}
                 className="flex-1 px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
               <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-xl font-medium transition">
                 {isArabic ? "بحث" : "Search"}
@@ -152,8 +151,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Cook/Seller of the Week */}
-      <CookOfWeek />
+
 
       {/* For Sellers */}
       <section className="py-20 px-4 bg-gradient-to-br from-gray-900 to-gray-800 text-white">

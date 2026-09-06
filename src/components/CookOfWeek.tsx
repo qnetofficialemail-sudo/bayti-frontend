@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../api/client";
 import { useLanguage } from "../context/LanguageContext";
 
-export default function CookOfWeek() {
+export default function SellerSpotlight() {
   const { isArabic } = useLanguage();
   const [cook, setCook] = useState<any>(null);
 
@@ -23,7 +23,7 @@ export default function CookOfWeek() {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 text-sm font-semibold px-4 py-2 rounded-full mb-4">
             <span>⭐</span>
-            <span>{isArabic ? "طاهية الأسبوع" : "Cook of the Week"}</span>
+            <span>{isArabic ? "طاهية الأسبوع" : "Seller of the Week"}</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900">
             {isArabic ? `نُسلّط الضوء على ${cook.shop_name}` : `Spotlight on ${cook.shop_name}`}

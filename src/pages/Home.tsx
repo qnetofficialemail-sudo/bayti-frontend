@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "../api/client";
 import { useLanguage } from "../context/LanguageContext";
+import CookOfWeek from "../components/CookOfWeek";
 
 interface Product {
   id: number; name: string; name_ar?: string; description: string; description_ar?: string;
@@ -58,7 +59,7 @@ export default function Home() {
             : <>Homemade food, <span className="text-orange-500">delivered to your door</span></>
           }
         </h1>
-        <p className="text-gray-500 text-lg">{isArabic ? "ادعم الطباخين المنزليين في الإمارات" : "Support local home cooks across the UAE"}</p>
+        <p className="text-gray-500 text-lg">{isArabic ? "ادعم الطباخين المنزليين في الإمارات" : "Discover local sellers across the UAE"}</p>
       </div>
 
       <div className="mb-2 flex justify-end">
@@ -67,9 +68,11 @@ export default function Home() {
         </Link>
       </div>
       <div className="mb-6">
-        <input type="text" placeholder={isArabic ? "ابحث عن أكلات، حلويات، منتجات..." : "Search for dishes, sweets, crafts..."} value={search} onChange={e => setSearch(e.target.value)}
+        <input type="text" placeholder={isArabic ? "ابحث عن أكلات، حلويات، منتجات..." : "Search for products, sellers, artisans..."} value={search} onChange={e => setSearch(e.target.value)}
           className="w-full border border-gray-200 rounded-xl px-5 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white shadow-sm" />
       </div>
+
+      <CookOfWeek />
 
       <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
         <button onClick={() => setSelectedCategory(null)} className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${!selectedCategory ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
