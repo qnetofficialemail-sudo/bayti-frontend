@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import PricingAdvisor from "../components/PricingAdvisor";
 
 interface VariantOption { label: string; price_adj: number; }
 interface Variant { name: string; name_ar: string; options: VariantOption[]; is_required: boolean; }
