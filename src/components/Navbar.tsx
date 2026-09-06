@@ -5,6 +5,21 @@ import { useLanguage } from "../context/LanguageContext";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const [installPrompt, setInstallPrompt] = React.useState<any>(null);
+  const [showInstall, setShowInstall] = React.useState(false);
+
+  React.useEffect(() => {
+    const handler = (e: any) => { e.preventDefault(); setInstallPrompt(e); setShowInstall(true); };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === 'accepted') setShowInstall(false);
+  };
   const { language, toggleLanguage, isArabic } = useLanguage();
   const navigate = useNavigate();
   const handleLogout = () => { logout(); navigate("/"); };
