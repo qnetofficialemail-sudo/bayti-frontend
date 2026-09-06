@@ -56,7 +56,7 @@ export default function Landing() {
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl">🏠</span>
+            
             <div className="flex items-center gap-2">
               <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
                 <rect x="4" y="4" width="44" height="44" rx="12" fill="#FF5A1F"/>
