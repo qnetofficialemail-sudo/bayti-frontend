@@ -59,7 +59,7 @@ export default function Home() {
             : <>Local sellers, <span className="text-orange-500">delivered to your door</span></>
           }
         </h1>
-        <p className="text-gray-500 text-lg">{isArabic ? "ادعم الطباخين المنزليين في الإمارات" : "Discover local sellers across the UAE"}</p>
+        <p className="text-gray-500 text-lg">{isArabic ? "اكتشف بائعين محليين في الإمارات" : "Discover local sellers across the UAE"}</p>
       </div>
 
       <div className="mb-2 flex justify-end">

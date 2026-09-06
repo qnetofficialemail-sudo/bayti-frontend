@@ -68,7 +68,7 @@ export default function Landing() {
             {isArabic ? (
               <>اكتشف منتجات<br /><span className="text-orange-500">منزلية أصيلة</span></>
             ) : (
-              <>Discover authentic<br /><span className="text-orange-500">homemade products</span></>
+              <>Discover authentic<br /><span className="text-orange-500">local products</span></>
             )}
           </h1>
           <p className="text-xl text-gray-500 mb-8 max-w-2xl mx-auto">
@@ -81,7 +81,7 @@ export default function Landing() {
           <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8">
             <div className="flex gap-2 bg-white rounded-2xl shadow-lg p-2 border border-gray-100">
               <input value={search} onChange={e => setSearch(e.target.value)} type="text"
-                placeholder={isArabic ? "ابحث عن منتجات، طباخين، حرفيين..." : "Search for products, sellers, artisans..."}
+                placeholder={isArabic ? "ابحث عن منتجات، بائعين، حرفيين..." : "Search for products, sellers, artisans..."}
                 className="flex-1 px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
               <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-xl font-medium transition">
                 {isArabic ? "بحث" : "Search"}
@@ -119,7 +119,7 @@ export default function Landing() {
               {isArabic ? "ماذا تريد اليوم؟" : "What are you looking for?"}
             </h2>
             <p className="text-gray-500">
-              {isArabic ? "اختر الفئة واكتشف أفضل المنتجات المنزلية" : "Choose a category and discover the best homemade products"}
+              {isArabic ? "اختر الفئة واكتشف أفضل المنتجات المحلية" : "Choose a category and discover the best local products"}
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export default function Landing() {
                 { icon: "🕯️", label: isArabic ? "شموع وعطور" : "Candles & Perfumes" },
                 { icon: "👗", label: isArabic ? "أزياء وإكسسوار" : "Fashion & Accessories" },
                 { icon: "🍰", label: isArabic ? "حلويات" : "Sweets" },
-                { icon: "🍛", label: isArabic ? "وجبات منزلية" : "Home Meals" },
+                { icon: "🍛", label: isArabic ? "منتجات محلية" : "Local Products" },
                 { icon: "✨", label: isArabic ? "عناية بالبشرة" : "Skincare" },
               ].map((item, i) => (
                 <div key={i} className="bg-gray-700 rounded-2xl p-4 text-center">
@@ -230,7 +230,7 @@ export default function Landing() {
             {isArabic ? "جاهز تبدأ؟" : "Ready to start?"}
           </h2>
           <p className="text-orange-100 mb-8 text-lg">
-            {isArabic ? "اكتشف أفضل المنتجات المنزلية في الإمارات" : "Discover the best homemade products in the UAE"}
+            {isArabic ? "اكتشف أفضل المنتجات المحلية في الإمارات" : "Discover the best local products in the UAE"}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/marketplace"
