@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import api from "../api/client";
 import { useLanguage } from "../context/LanguageContext";
 import CookOfWeek from "../components/CookOfWeek";
+import AIPersonalShopper from "../components/AIPersonalShopper";
 
 interface Product {
   id: number; name: string; name_ar?: string; description: string; description_ar?: string;
@@ -151,5 +152,6 @@ export default function Home() {
         </div>
       )}
     </div>
+    <AIPersonalShopper />
   );
 }
