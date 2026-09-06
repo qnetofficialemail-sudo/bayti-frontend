@@ -6,6 +6,21 @@ import api from "../api/client";
 
 export default function Landing() {
   const { isArabic, toggleLanguage } = useLanguage();
+  const [installPrompt, setInstallPrompt] = React.useState<any>(null);
+  const [showInstall, setShowInstall] = React.useState(false);
+
+  React.useEffect(() => {
+    const handler = (e: any) => { e.preventDefault(); setInstallPrompt(e); setShowInstall(true); };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === 'accepted') setShowInstall(false);
+  };
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
   const [categories, setCategories] = useState<any[]>([]);
