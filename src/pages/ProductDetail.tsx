@@ -4,6 +4,8 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 
+const EMIRATES = ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"];
+
 export default function ProductDetail() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -22,6 +24,7 @@ export default function ProductDetail() {
   const [area, setArea] = useState("");
   const [savedAddress, setSavedAddress] = useState<any>(null);
   const [notes, setNotes] = useState("");
+  const [buyerEmirate, setBuyerEmirate] = useState("");
   const [loading, setLoading] = useState(true);
   const [ordering, setOrdering] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -64,9 +67,10 @@ export default function ProductDetail() {
       await api.post("/api/orders/", {
         seller_id: product.seller.id,
         delivery_address: address,
-        delivery_area: area,
+        delivery_area: buyerEmirate || area,
         notes,
         items: [{ product_id: product.id, quantity }],
+        delivery_fee: deliveryFee !== null ? deliveryFee : 10,
       });
       setSuccess(true);
       if (address && area) {
@@ -85,7 +89,17 @@ export default function ProductDetail() {
   const displayName = isArabic && product.name_ar ? product.name_ar : product.name;
   const displayDesc = isArabic && product.description_ar ? product.description_ar : product.description;
   const displayCat = isArabic && product.category?.name_ar ? product.category.name_ar : product.category?.name;
-  const total = (product.price * quantity + 10).toFixed(2);
+  const getDeliveryFee = () => {
+    if (!buyerEmirate || !product.seller?.delivery_fees) return null;
+    try {
+      const fees = JSON.parse(product.seller.delivery_fees);
+      const fee = fees[buyerEmirate];
+      return fee !== undefined ? parseFloat(fee) : null;
+    } catch { return null; }
+  };
+  const deliveryFee = getDeliveryFee();
+  const deliveryAvailable = !buyerEmirate || deliveryFee !== null;
+  const total = (product.price * quantity + (deliveryFee !== null ? deliveryFee : 0)).toFixed(2);
   const allImgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
   const displayImg = allImgs[activeImageIndex] || allImgs[0];
   const imgSrc = displayImg ? (displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`) : null;
@@ -223,7 +237,31 @@ export default function ProductDetail() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "عنوان التوصيل" : "Delivery Address"}</label>
+                {/* Emirate selector */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الإمارة" : "Your Emirate"}</label>
+                <select value={buyerEmirate} onChange={e => setBuyerEmirate(e.target.value)}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+                  <option value="">{isArabic ? "اختر إمارتك" : "Select your emirate"}</option>
+                  {EMIRATES.map(e => {
+                    const fees = product.seller?.delivery_fees ? (() => { try { return JSON.parse(product.seller.delivery_fees); } catch { return {}; } })() : {};
+                    const fee = fees[e];
+                    return (
+                      <option key={e} value={e}>
+                        {e} {fee !== undefined ? `— AED ${fee}` : isArabic ? "(غير متاح)" : "(Not available)"}
+                      </option>
+                    );
+                  })}
+                </select>
+                {buyerEmirate && deliveryFee === null && (
+                  <p className="text-red-500 text-xs mt-1">{isArabic ? "عذراً، لا يتوفر التوصيل إلى هذه الإمارة" : "Sorry, delivery is not available to this emirate"}</p>
+                )}
+                {buyerEmirate && deliveryFee !== null && (
+                  <p className="text-green-600 text-xs mt-1">✓ {isArabic ? `رسم التوصيل: AED ${deliveryFee}` : `Delivery fee: AED ${deliveryFee}`}</p>
+                )}
+              </div>
+
+              <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "عنوان التوصيل" : "Delivery Address"}</label>
                 {savedAddress?.saved_address && !address && (
                   <button type="button"
                     onClick={() => { setAddress(savedAddress.saved_address); setArea(savedAddress.saved_area || ""); }}
@@ -259,7 +297,7 @@ export default function ProductDetail() {
                 </div>
                 <div className="flex justify-between">
                   <span>{isArabic ? "التوصيل" : "Delivery"}</span>
-                  <span>AED 10.00</span>
+                  <span>{!buyerEmirate ? (isArabic ? "حدد إمارتك" : "Select emirate") : deliveryFee !== null ? `AED ${deliveryFee}` : (isArabic ? "غير متاح" : "Not available")}</span>
                 </div>
                 <div className="flex justify-between font-bold text-gray-900 text-base">
                   <span>{isArabic ? "الإجمالي" : "Total"}</span>

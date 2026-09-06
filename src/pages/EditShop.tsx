@@ -4,6 +4,8 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 
+const EMIRATES = ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"];
+
 const UAE_AREAS = ["Downtown Dubai","Dubai Marina","JBR","Jumeirah","Deira","Bur Dubai","Business Bay","JLT","Al Barsha","Mirdif","Sharjah","Abu Dhabi","Ajman","Ras Al Khaimah"];
 
 export default function EditShop() {
@@ -11,6 +13,7 @@ export default function EditShop() {
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
   const [form, setForm] = useState({ shop_name: "", description: "", area: "", city: "Dubai", whatsapp_number: "", instagram_handle: "", min_order_amount: "" });
+  const [deliveryFees, setDeliveryFees] = useState<Record<string, string>>({});
   const [existingImages, setExistingImages] = useState<(string|null)[]>([null, null, null]);
   const [newImages, setNewImages] = useState<(File|null)[]>([null, null, null]);
   const [newPreviews, setNewPreviews] = useState<(string|null)[]>([null, null, null]);
@@ -24,6 +27,9 @@ export default function EditShop() {
     api.get("/api/sellers/").then(r => {
       const myShop = r.data.find((s: any) => s.user?.id === user.id);
       if (myShop) {
+        if (myShop.delivery_fees) {
+          try { setDeliveryFees(JSON.parse(myShop.delivery_fees)); } catch {}
+        }
         setExistingImages([myShop.sample_image_1 || null, myShop.sample_image_2 || null, myShop.sample_image_3 || null]);
         setForm({
           shop_name: myShop.shop_name || "",
@@ -51,6 +57,7 @@ export default function EditShop() {
     try {
       const data = new FormData();
       Object.entries(form).forEach(([k, v]) => { if (v !== "") data.append(k, v); });
+      data.append("delivery_fees", JSON.stringify(deliveryFees));
       newImages.forEach((img, i) => { if (img) data.append(`sample_image_${i+1}`, img); });
       await api.patch("/api/sellers/profile/edit", data, { headers: { "Content-Type": "multipart/form-data" } });
       setSuccess(true);
@@ -132,6 +139,49 @@ export default function EditShop() {
             placeholder="e.g. 50" min="0"
             className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
         </div>
+        {/* Delivery Fees */}
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-1">
+            {isArabic ? "رسوم التوصيل" : "Delivery Fees"}
+          </label>
+          <p className="text-xs text-gray-400 mb-3">
+            {isArabic ? "حدد سعر التوصيل لكل إمارة أو اتركها فارغًا إذا لا توصل إليها" : "Set delivery fee per emirate, or leave empty if you don\'t deliver there"}
+          </p>
+          <div className="space-y-2">
+            {EMIRATES.map(emirate => (
+              <div key={emirate} className="flex items-center gap-3">
+                <span className="text-sm text-gray-700 w-36 flex-shrink-0">{emirate}</span>
+                <div className="flex items-center gap-2 flex-1">
+                  <span className="text-xs text-gray-400">AED</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="5"
+                    value={deliveryFees[emirate] || ""}
+                    onChange={e => {
+                      const val = e.target.value;
+                      setDeliveryFees(prev => {
+                        const updated = { ...prev };
+                        if (val === "") delete updated[emirate];
+                        else updated[emirate] = val;
+                        return updated;
+                      });
+                    }}
+                    placeholder={isArabic ? "لا يتوفر" : "Not available"}
+                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                  />
+                </div>
+                {deliveryFees[emirate] && (
+                  <span className="text-xs text-green-600 font-medium w-16">AED {deliveryFees[emirate]}</span>
+                )}
+                {!deliveryFees[emirate] && (
+                  <span className="text-xs text-gray-300 w-16">{isArabic ? "غير متاح" : "N/A"}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="flex gap-3">
           <button type="button" onClick={() => navigate("/seller/dashboard")}
             className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition">
