@@ -94,7 +94,7 @@ export default function Landing() {
             <div className="flex justify-center gap-8 text-center">
               <div>
                 <p className="text-3xl font-bold text-orange-500">{stats.sellers}+</p>
-                <p className="text-sm text-gray-500">{isArabic ? "بائع منزلي" : "Local Sellers"}</p>
+                <p className="text-sm text-gray-500">{isArabic ? "بائع محلي" : "Local Sellers"}</p>
               </div>
               <div className="w-px bg-gray-200" />
               <div>
