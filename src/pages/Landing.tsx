@@ -68,7 +68,7 @@ export default function Landing() {
             {isArabic ? (
               <>اكتشف منتجات<br /><span className="text-orange-500">منزلية أصيلة</span></>
             ) : (
-              <>Discover authentic<br /><span className="text-orange-500">local products</span></>
+              <>Your neighborhood,<br /><span className="text-[#FF5A1F]">online.</span></>
             )}
           </h1>
           <p className="text-xl text-gray-500 mb-8 max-w-2xl mx-auto">
