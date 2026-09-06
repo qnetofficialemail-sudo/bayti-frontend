@@ -89,7 +89,7 @@ export default function Orders() {
                     <span className="font-bold text-gray-900">AED {(order.total_amount + order.delivery_fee).toFixed(2)}</span>
                   </div>
                   <div className="text-sm text-gray-500">
-                    {user?.role === "buyer" ? `🏠 ${order.seller?.shop_name}` : `👤 ${order.buyer?.full_name}`} · 📍 {order.delivery_area} · {new Date(order.created_at).toLocaleDateString()}
+                    {user?.role === "buyer" ? `🏠 ${order.seller?.shop_name}` : `👤 ${order.buyer?.full_name}`} · 📍 {order.delivery_area}{order.buyer_phone ? ` · 📱 ${order.buyer_phone}` : ""} · {new Date(order.created_at).toLocaleDateString()}
                   </div>
                 </div>
                 {order.status !== "cancelled" && (

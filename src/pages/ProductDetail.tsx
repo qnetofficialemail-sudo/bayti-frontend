@@ -25,6 +25,7 @@ export default function ProductDetail() {
   const [savedAddress, setSavedAddress] = useState<any>(null);
   const [notes, setNotes] = useState("");
   const [buyerEmirate, setBuyerEmirate] = useState("");
+  const [buyerPhone, setBuyerPhone] = useState("");
   const [loading, setLoading] = useState(true);
   const [ordering, setOrdering] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -33,6 +34,7 @@ export default function ProductDetail() {
   useEffect(() => {
     if (user) {
       api.get("/api/auth/me/address").then(r => setSavedAddress(r.data)).catch(() => {});
+      if (user.phone) setBuyerPhone(user.phone);
     }
     Promise.all([
       api.get(`/api/products/${id}`),
@@ -71,6 +73,7 @@ export default function ProductDetail() {
         notes,
         items: [{ product_id: product.id, quantity }],
         delivery_fee: deliveryFee !== null ? deliveryFee : 10,
+        buyer_phone: buyerPhone,
       });
       setSuccess(true);
       if (address && area) {
@@ -284,7 +287,14 @@ export default function ProductDetail() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "ملاحظات (اختياري)" : "Notes (optional)"}</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                {isArabic ? "رقم الهاتف *" : "Phone Number *"}
+              </label>
+              <input type="tel" value={buyerPhone} onChange={e => setBuyerPhone(e.target.value)}
+                required placeholder="+971 50 000 0000"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+
+              <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "ملاحظات (اختياري)" : "Notes (optional)"}</label>
                 <input type="text" value={notes} onChange={e => setNotes(e.target.value)}
                   placeholder={isArabic ? "بدون بصل، حار جداً..." : "No onions, extra spicy..."}
                   className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
