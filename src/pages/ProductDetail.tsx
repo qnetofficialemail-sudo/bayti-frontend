@@ -148,7 +148,7 @@ export default function ProductDetail() {
           {/* Main image */}
           <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 h-72 flex items-center justify-center mb-3">
             {imgSrc
-              ? <img src={imgSrc} alt={displayName} className="w-full h-full object-cover" />
+              ? <img src={imgSrc} alt={displayName} className="w-full h-full object-contain bg-white" />
               : <span className="text-6xl">🛍️</span>
             }
           </div>
@@ -160,7 +160,7 @@ export default function ProductDetail() {
                 <button key={i} type="button" onClick={() => setActiveImageIndex(i)}
                   className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${activeImageIndex === i ? "border-orange-500" : "border-gray-200 hover:border-orange-300"}`}>
                   <img src={img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`}
-                    alt={`View ${i + 1}`} className="w-full h-full object-cover" />
+                    alt={`View ${i + 1}`} className="w-full h-full object-contain bg-white" />
                 </button>
               ))}
             </div>
