@@ -26,8 +26,8 @@ export default function SellerProfilePage() {
       .catch(() => setSeller(null))
       .finally(() => setLoading(false));
     api.get(`/api/products`, { params: { seller_id: id } })
-      .then(p => setProducts(Array.isArray(p.data) ? p.data : p.data.items || []))
-      .catch(() => setProducts([]))
+      .then(p => { console.log('Products response:', p.data); setProducts(Array.isArray(p.data) ? p.data : p.data.items || []); })
+      .catch(e => { console.error('Products error:', e); setProducts([]); })
       .finally(() => setProductsLoading(false));
     api.get("/api/categories")
       .then(c => setCategories(c.data))
