@@ -14,6 +14,7 @@ export default function SellerProfilePage() {
   const { isArabic } = useLanguage();
   const [seller, setSeller] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
+  const [productsLoading, setProductsLoading] = useState(true);
   const [categories, setCategories] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,8 @@ export default function SellerProfilePage() {
       .finally(() => setLoading(false));
     api.get(`/api/products`, { params: { seller_id: id } })
       .then(p => setProducts(Array.isArray(p.data) ? p.data : p.data.items || []))
-      .catch(() => setProducts([]));
+      .catch(() => setProducts([]))
+      .finally(() => setProductsLoading(false));
     api.get("/api/categories")
       .then(c => setCategories(c.data))
       .catch(() => setCategories([]));
@@ -184,9 +186,13 @@ export default function SellerProfilePage() {
         {isArabic ? "منتجات المتجر" : "Shop Products"}
       </h2>
 
-      {products.length === 0 ? (
+      {productsLoading ? (
+        <div className="text-center py-8 text-gray-400 animate-pulse">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">{[1,2,3].map(i => <div key={i} className="bg-gray-100 rounded-2xl h-48" />)}</div>
+        </div>
+      ) : products.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
-          <div className="text-4xl mb-3">🍽️</div>
+          <div className="text-4xl mb-3">🛍️</div>
           <p>{isArabic ? "لا توجد منتجات بعد" : "No products yet"}</p>
         </div>
       ) : (
