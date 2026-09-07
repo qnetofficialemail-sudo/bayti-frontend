@@ -168,6 +168,31 @@ export default function ProductDetail() {
 
           <h1 className="text-2xl font-bold text-gray-900 mb-2">{displayName}</h1>
           <p className="text-gray-500 mb-4">{displayDesc}</p>
+
+          {/* Product Specs */}
+          {product.specs && (() => {
+            try {
+              const specsData = JSON.parse(product.specs);
+              const entries = Object.entries(specsData).filter(([_, v]) => v && (Array.isArray(v) ? v.length > 0 : true));
+              if (entries.length === 0) return null;
+              return (
+                <div className="bg-gray-50 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-semibold text-gray-700 mb-3">📋 {isArabic ? "مواصفات المنتج" : "Product Specifications"}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {entries.map(([key, value]) => (
+                      <div key={key} className="text-sm">
+                        <span className="text-gray-500 capitalize">{key.replace(/_/g, " ")}: </span>
+                        <span className="text-gray-900 font-medium">
+                          {Array.isArray(value) ? value.join(", ") : String(value)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            } catch { return null; }
+          })()}
+
           <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
             <span>⏱ {product.preparation_time} {product.time_unit === "days" ? (isArabic ? "يوم" : "days") : product.time_unit === "hours" ? (isArabic ? "ساعة" : "hrs") : (isArabic ? "د" : "min")}</span>
             {product.category && <span>{product.category.icon} {displayCat}</span>}
