@@ -170,7 +170,7 @@ export default function SellerDashboard() {
           <p className="text-gray-500 text-sm mt-1">📍 {profile?.area}, {profile?.city}</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={enableNotifications} disabled={notifEnabled || notifLoading}
+          <button onClick={enableNotifications} disabled={notifLoading}
           className={`text-sm px-3 py-2 rounded-xl font-medium transition flex items-center gap-1 ${notifEnabled ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700 hover:bg-orange-200"}`}>
           {notifEnabled ? "🔔 " + (isArabic ? "تم التفعيل" : "Notifications On") : notifLoading ? "..." : "🔔 " + (isArabic ? "فعّل الإشعارات" : "Enable Notifications")}
         </button>
