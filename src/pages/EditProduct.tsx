@@ -41,9 +41,11 @@ export default function EditProduct() {
       api.get(`/api/products/${id}/variants`),
     ]).then(([p, c, v]) => {
       const prod = p.data;
-      setForm({
-        name: prod.name || "",
-        description: prod.description || "",
+      // Detect original language — show what seller typed
+        const isArabicProduct = prod.name_ar && /[؀-ۿ]/.test(prod.name_ar) && prod.name_ar !== prod.name;
+        setForm({
+        name: isArabicProduct ? prod.name_ar : (prod.name || ""),
+        description: isArabicProduct ? (prod.description_ar || "") : (prod.description || ""),
         price: String(prod.price || ""),
         category_id: String(prod.category?.id || ""),
         preparation_time: String(prod.preparation_time || "3"),
