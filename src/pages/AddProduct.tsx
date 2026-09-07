@@ -10,22 +10,21 @@ interface Variant { name: string; name_ar: string; options: VariantOption[]; is_
 
 const VARIANT_PRESETS: Record<string, { name: string; name_ar: string; options: string[] }> = {
   size:     { name: "Size",     name_ar: "المقاس",  options: ["XS", "S", "M", "L", "XL", "XXL"] },
-  color:    { name: "Color",    name_ar: "اللون",   options: ["Black", "White", "Beige", "Brown", "Navy", "Red", "Pink", "Green"] },
-  scent:    { name: "Scent",    name_ar: "العطر",   options: ["Rose", "Oud", "Musk", "Jasmine", "Vanilla", "Lavender"] },
-  material: { name: "Material", name_ar: "الخامة",  options: ["Cotton", "Silk", "Linen", "Chiffon", "Satin"] },
+  color:    { name: "Color",    name_ar: "اللون",   options: ["Black / أسود", "White / أبيض", "Beige / بيج", "Brown / بني", "Navy / كحلي", "Red / أحمر", "Pink / وردي", "Green / أخضر"] },
+  scent:    { name: "Scent",    name_ar: "العطر",   options: ["Rose / ورد", "Oud / عود", "Musk / مسك", "Jasmine / ياسمين", "Vanilla / فانيلا", "Lavender / لافندر"] },
+  material: { name: "Material", name_ar: "الخامة",  options: ["Cotton / قطن", "Silk / حرير", "Linen / كتان", "Chiffon / شيفون", "Satin / ساتان"] },
 };
 
-// Category-specific specs config
 const CATEGORY_SPECS: Record<string, { key: string; label: string; label_ar: string; type: "select" | "text" | "multiselect"; options?: string[] }[]> = {
   "Clothing & Abayas": [
-    { key: "sizes_available", label: "Available Sizes", label_ar: "المقاسات المتاحة", type: "multiselect", options: ["XS", "S", "M", "L", "XL", "XXL", "Custom"] },
-    { key: "colors_available", label: "Available Colors", label_ar: "الألوان المتاحة", type: "multiselect", options: ["Black", "White", "Beige", "Navy", "Brown", "Grey", "Other"] },
-    { key: "material", label: "Material", label_ar: "الخامة", type: "select", options: ["Nida", "Crepe", "Linen", "Chiffon", "Cotton", "Silk", "Satin", "Other"] },
-    { key: "care_instructions", label: "Care Instructions", label_ar: "تعليمات العناية", type: "select", options: ["Hand wash", "Machine wash", "Dry clean only"] },
-    { key: "custom_sizing", label: "Custom Sizing", label_ar: "مقاس مخصص", type: "select", options: ["Available", "Not available"] },
+    { key: "sizes_available", label: "Available Sizes", label_ar: "المقاسات المتاحة", type: "multiselect", options: ["XS", "S", "M", "L", "XL", "XXL", "Custom / مقاس مخصص"] },
+    { key: "colors_available", label: "Available Colors", label_ar: "الألوان المتاحة", type: "multiselect", options: ["Black / أسود", "White / أبيض", "Beige / بيج", "Navy / كحلي", "Brown / بني", "Grey / رمادي", "Other / أخرى"] },
+    { key: "material", label: "Material", label_ar: "الخامة", type: "select", options: ["Nida / نيدا", "Crepe / كريب", "Linen / كتان", "Chiffon / شيفون", "Cotton / قطن", "Silk / حرير", "Satin / ساتان", "Other / أخرى"] },
+    { key: "care_instructions", label: "Care Instructions", label_ar: "تعليمات العناية", type: "select", options: ["غسيل يدوي / Hand wash", "غسيل آلي / Machine wash", "تنظيف جاف / Dry clean only"] },
+    { key: "custom_sizing", label: "Custom Sizing Available", label_ar: "مقاس مخصص", type: "select", options: ["متاح / Available", "غير متاح / Not available"] },
   ],
   "Perfumes & Candles": [
-    { key: "scent_family", label: "Scent Family", label_ar: "عائلة العطر", type: "select", options: ["Oud", "Floral", "Musk", "Citrus", "Woody", "Oriental", "Fresh"] },
+    { key: "scent_family", label: "Scent Family", label_ar: "عائلة العطر", type: "select", options: ["عود / Oud", "زهري / Floral", "مسك / Musk", "حمضي / Citrus", "خشبي / Woody", "شرقي / Oriental", "منعش / Fresh"] },
     { key: "volume_ml", label: "Volume / Weight", label_ar: "الحجم / الوزن", type: "text" },
     { key: "burn_time", label: "Burn Time (candles)", label_ar: "مدة الاحتراق (شموع)", type: "text" },
     { key: "ingredients", label: "Key Ingredients", label_ar: "المكونات الرئيسية", type: "text" },
@@ -33,31 +32,31 @@ const CATEGORY_SPECS: Record<string, { key: string; label: string; label_ar: str
   "Handmade Crafts": [
     { key: "material", label: "Material", label_ar: "الخامة", type: "text" },
     { key: "dimensions", label: "Dimensions", label_ar: "الأبعاد", type: "text" },
-    { key: "customizable", label: "Customizable", label_ar: "قابل للتخصيص", type: "select", options: ["Yes", "No"] },
-    { key: "occasion", label: "Occasion", label_ar: "المناسبة", type: "select", options: ["Gift", "Wedding", "Ramadan", "Eid", "Home Decor", "Other"] },
+    { key: "customizable", label: "Customizable", label_ar: "قابل للتخصيص", type: "select", options: ["نعم / Yes", "لا / No"] },
+    { key: "occasion", label: "Occasion", label_ar: "المناسبة", type: "select", options: ["هدية / Gift", "زفاف / Wedding", "رمضان / Ramadan", "عيد / Eid", "ديكور / Home Decor", "أخرى / Other"] },
   ],
   "Accessories": [
-    { key: "material", label: "Material", label_ar: "الخامة", type: "select", options: ["Gold plated", "Silver", "Stainless steel", "Leather", "Fabric", "Other"] },
-    { key: "colors_available", label: "Available Colors", label_ar: "الألوان المتاحة", type: "multiselect", options: ["Gold", "Silver", "Black", "White", "Brown", "Other"] },
-    { key: "occasion", label: "Occasion", label_ar: "المناسبة", type: "select", options: ["Casual", "Formal", "Wedding", "Everyday"] },
+    { key: "material", label: "Material", label_ar: "الخامة", type: "select", options: ["ذهبي مطلي / Gold plated", "فضة / Silver", "ستانلس ستيل / Stainless steel", "جلد / Leather", "قماش / Fabric", "أخرى / Other"] },
+    { key: "colors_available", label: "Available Colors", label_ar: "الألوان المتاحة", type: "multiselect", options: ["ذهبي / Gold", "فضي / Silver", "أسود / Black", "أبيض / White", "بني / Brown", "أخرى / Other"] },
+    { key: "occasion", label: "Occasion", label_ar: "المناسبة", type: "select", options: ["يومي / Casual", "رسمي / Formal", "زفاف / Wedding", "عملي / Everyday"] },
   ],
   "Beauty & Skincare": [
-    { key: "skin_type", label: "Skin Type", label_ar: "نوع البشرة", type: "select", options: ["All skin types", "Dry", "Oily", "Combination", "Sensitive"] },
+    { key: "skin_type", label: "Skin Type", label_ar: "نوع البشرة", type: "select", options: ["جميع أنواع البشرة / All skin types", "جافة / Dry", "دهنية / Oily", "مختلطة / Combination", "حساسة / Sensitive"] },
     { key: "volume_ml", label: "Volume (ml)", label_ar: "الحجم (مل)", type: "text" },
     { key: "key_ingredients", label: "Key Ingredients", label_ar: "المكونات الرئيسية", type: "text" },
-    { key: "natural", label: "Natural / Organic", label_ar: "طبيعي / عضوي", type: "select", options: ["Yes", "No"] },
+    { key: "natural", label: "Natural / Organic", label_ar: "طبيعي / عضوي", type: "select", options: ["نعم / Yes", "لا / No"] },
   ],
   "Makeup & Beauty": [
     { key: "shade", label: "Available Shades", label_ar: "الألوان المتاحة", type: "text" },
-    { key: "finish", label: "Finish", label_ar: "النهاية", type: "select", options: ["Matte", "Glossy", "Satin", "Natural"] },
-    { key: "longevity", label: "Longevity", label_ar: "مدة الثبات", type: "select", options: ["Up to 4 hrs", "4-8 hrs", "8-12 hrs", "24 hrs"] },
+    { key: "finish", label: "Finish", label_ar: "النهاية", type: "select", options: ["ماتي / Matte", "لامع / Glossy", "ساتاني / Satin", "طبيعي / Natural"] },
+    { key: "longevity", label: "Longevity", label_ar: "مدة الثبات", type: "select", options: ["حتى 4 ساعات / Up to 4 hrs", "4-8 ساعات / 4-8 hrs", "8-12 ساعة / 8-12 hrs", "24 ساعة / 24 hrs"] },
   ],
   "Home Cooked Meals": [
-    { key: "serves", label: "Serves", label_ar: "عدد الأشخاص", type: "select", options: ["1 person", "2 persons", "4 persons", "6 persons", "Family size"] },
+    { key: "serves", label: "Serves", label_ar: "عدد الأشخاص", type: "select", options: ["شخص واحد / 1 person", "شخصان / 2 persons", "4 أشخاص / 4 persons", "6 أشخاص / 6 persons", "عائلة / Family size"] },
     { key: "allergens", label: "Allergens", label_ar: "مسببات الحساسية", type: "text" },
-    { key: "halal", label: "Halal Certified", label_ar: "حلال", type: "select", options: ["Yes", "No"] },
-    { key: "heating", label: "Heating Required", label_ar: "يحتاج تسخين", type: "select", options: ["Ready to eat", "Microwave", "Oven", "Stovetop"] },
-    { key: "dietary", label: "Dietary", label_ar: "النظام الغذائي", type: "select", options: ["Regular", "Vegetarian", "Vegan", "Gluten-free", "Dairy-free"] },
+    { key: "halal", label: "Halal", label_ar: "حلال", type: "select", options: ["نعم / Yes", "لا / No"] },
+    { key: "heating", label: "Heating Required", label_ar: "يحتاج تسخين", type: "select", options: ["جاهز للأكل / Ready to eat", "ميكروويف / Microwave", "فرن / Oven", "موقد / Stovetop"] },
+    { key: "dietary", label: "Dietary", label_ar: "النظام الغذائي", type: "select", options: ["عادي / Regular", "نباتي / Vegetarian", "نباتي صرف / Vegan", "خالي من الجلوتين / Gluten-free", "خالي من الألبان / Dairy-free"] },
   ],
 };
 
@@ -84,10 +83,9 @@ export default function AddProduct() {
     api.get("/api/categories").then(r => setCategories(r.data));
   }, [user]);
 
-  // Get specs config for selected category
   const selectedCategory = categories.find(c => String(c.id) === form.category_id);
   const categorySpecsConfig = selectedCategory
-    ? CATEGORY_SPECS[selectedCategory.name] || CATEGORY_SPECS[selectedCategory.name_ar] || null
+    ? CATEGORY_SPECS[selectedCategory.name] || null
     : null;
 
   const handleSpecChange = (key: string, value: string) => {
@@ -97,9 +95,7 @@ export default function AddProduct() {
   const handleSpecMultiselect = (key: string, option: string) => {
     setSpecs(prev => {
       const current = (prev[key] as string[]) || [];
-      const updated = current.includes(option)
-        ? current.filter(o => o !== option)
-        : [...current, option];
+      const updated = current.includes(option) ? current.filter(o => o !== option) : [...current, option];
       return { ...prev, [key]: updated };
     });
   };
@@ -170,7 +166,6 @@ export default function AddProduct() {
       if (form.category_id) data.append("category_id", form.category_id);
       data.append("track_stock", String(form.track_stock));
       if (form.track_stock) data.append("stock_quantity", form.stock_quantity);
-      // Attach specs as JSON
       if (Object.keys(specs).length > 0) data.append("specs", JSON.stringify(specs));
       if (images[0]) data.append("image", images[0]);
       if (images[1]) data.append("image_2", images[1]);
@@ -211,10 +206,8 @@ export default function AddProduct() {
               <div key={i} className="relative">
                 <label className="block cursor-pointer">
                   <div className={`aspect-square rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${previews[i] ? "border-orange-300" : "border-gray-200 hover:border-orange-300"}`}>
-                    {previews[i]
-                      ? <img src={previews[i]!} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
-                      : <div className="text-center text-gray-300"><div className="text-2xl">📷</div><div className="text-xs mt-1">{i === 0 ? (isArabic ? "رئيسية" : "Main") : i+1}</div></div>
-                    }
+                    {previews[i] ? <img src={previews[i]!} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
+                      : <div className="text-center text-gray-300"><div className="text-2xl">📷</div><div className="text-xs mt-1">{i === 0 ? (isArabic ? "رئيسية" : "Main") : i+1}</div></div>}
                   </div>
                   <input type="file" accept="image/*" className="hidden" onChange={e => handleImage(i, e.target.files?.[0] || null)} />
                 </label>
@@ -264,7 +257,7 @@ export default function AddProduct() {
             className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none ${aiSuggestion ? "border-purple-300 bg-purple-50" : "border-gray-200"}`} />
         </div>
 
-        {/* Category — MOVED UP */}
+        {/* Category */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الفئة" : "Category"}</label>
           <select value={form.category_id} onChange={e => { setForm(f => ({ ...f, category_id: e.target.value })); setSpecs({}); }}
@@ -274,17 +267,13 @@ export default function AddProduct() {
           </select>
         </div>
 
-        {/* Category-specific specs — appear after category selected */}
+        {/* Dynamic Category Specs */}
         {categorySpecsConfig && (
           <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-4">
-            <p className="text-sm font-semibold text-orange-700">
-              📋 {isArabic ? "مواصفات المنتج" : "Product Specifications"}
-            </p>
+            <p className="text-sm font-semibold text-orange-700">📋 {isArabic ? "مواصفات المنتج" : "Product Specifications"}</p>
             {categorySpecsConfig.map(spec => (
               <div key={spec.key}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {isArabic ? spec.label_ar : spec.label}
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? spec.label_ar : spec.label}</label>
                 {spec.type === "select" && (
                   <select value={(specs[spec.key] as string) || ""}
                     onChange={e => handleSpecChange(spec.key, e.target.value)}
@@ -304,8 +293,7 @@ export default function AddProduct() {
                     {spec.options?.map(o => {
                       const selected = ((specs[spec.key] as string[]) || []).includes(o);
                       return (
-                        <button key={o} type="button"
-                          onClick={() => handleSpecMultiselect(spec.key, o)}
+                        <button key={o} type="button" onClick={() => handleSpecMultiselect(spec.key, o)}
                           className={`text-xs px-3 py-1.5 rounded-full border transition ${selected ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
                           {o}
                         </button>
@@ -374,7 +362,6 @@ export default function AddProduct() {
               + {isArabic ? "إضافة خيار" : "Add Variant"}
             </button>
           </div>
-
           {variants.length > 0 && (
             <div className="space-y-2 mb-3">
               {variants.map((v, i) => (
@@ -389,7 +376,6 @@ export default function AddProduct() {
               ))}
             </div>
           )}
-
           {showVariantBuilder && (
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
               <p className="text-sm font-medium text-gray-700">{isArabic ? "بناء الخيار" : "Build Variant"}</p>
