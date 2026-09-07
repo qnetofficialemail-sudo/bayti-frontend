@@ -27,6 +27,7 @@ export default function PricingAdvisor({ price, productName, isArabic }: Props) 
           category: "",
           category_id: null,
           price: numPrice,
+          lang: isArabic ? "ar" : "en",
         });
         setAdvice(res.data);
       } catch {
