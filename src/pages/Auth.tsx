@@ -30,7 +30,7 @@ export function LoginPage() {
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">🏠</div>
           <h1 className="text-2xl font-bold text-gray-900">{isArabic ? "أهلاً بعودتك" : "Welcome back"}</h1>
-          <p className="text-gray-500 text-sm mt-1">{isArabic ? "تسجيل الدخول إلى HomeMarket UAE" : "Sign in to HomeMarket UAE"}</p>
+          <p className="text-gray-500 text-sm mt-1">{isArabic ? "تسجيل الدخول إلى بيتي" : "Sign in to Bayti"}</p>
         </div>
         {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,9 +54,7 @@ export function LoginPage() {
           <Link to="/register" className="text-orange-500 hover:underline">{isArabic ? "انضم إلينا" : "Join us"}</Link>
         </div>
         <div className="mt-6 p-4 bg-gray-50 rounded-xl text-xs text-gray-500">
-          <p className="font-medium mb-1">{isArabic ? "حسابات تجريبية:" : "Demo accounts:"}</p>
-          <p>🍽️ {isArabic ? "بائع:" : "Seller:"} fatima@homemarket.ae / seller123</p>
-          <p>⚙️ {isArabic ? "مدير:" : "Admin:"} admin@homemarket.ae / admin123</p>
+
         </div>
       </div>
     </div>
