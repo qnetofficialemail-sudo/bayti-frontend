@@ -57,7 +57,7 @@ export default function Home() {
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-gray-900 mb-3">
           {isArabic
-            ? <><span>أكل بيتي،</span> <span className="text-orange-500">يوصلك على بابك</span></>
+            ? <><span>حارتك،</span> <span className="text-orange-500">بين يديك.</span></>
             : <>Your neighborhood, <span className="text-[#FF5A1F]">online.</span></>
           }
         </h1>
