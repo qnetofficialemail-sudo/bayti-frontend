@@ -21,6 +21,46 @@ export default function SellerDashboard() {
   const [loading, setLoading] = useState(true);
   const [restockId, setRestockId] = useState<number | null>(null);
   const [restockQty, setRestockQty] = useState("10");
+  const [notifEnabled, setNotifEnabled] = useState(false);
+  const [notifLoading, setNotifLoading] = useState(false);
+
+  const enableNotifications = async () => {
+    setNotifLoading(true);
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") { setNotifLoading(false); return; }
+      const reg = await navigator.serviceWorker.ready;
+      const vapidResp = await api.get("/api/push/vapid-public-key");
+      const publicKey = vapidResp.data.public_key;
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: publicKey
+      });
+      await api.post("/api/push/subscribe", { subscription: sub.toJSON() });
+      setNotifEnabled(true);
+    } catch (e) { console.error("Push subscription failed:", e); }
+    setNotifLoading(false);
+  };
+  const [notifEnabled, setNotifEnabled] = useState(false);
+  const [notifLoading, setNotifLoading] = useState(false);
+
+  const enableNotifications = async () => {
+    setNotifLoading(true);
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") { setNotifLoading(false); return; }
+      const reg = await navigator.serviceWorker.ready;
+      const vapidResp = await api.get("/api/push/vapid-public-key");
+      const publicKey = vapidResp.data.public_key;
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: publicKey
+      });
+      await api.post("/api/push/subscribe", { subscription: sub.toJSON() });
+      setNotifEnabled(true);
+    } catch (e) { console.error("Push subscription failed:", e); }
+    setNotifLoading(false);
+  };
 
   useEffect(() => {
     if (!user || user.role !== "seller") { navigate("/login"); return; }
@@ -121,7 +161,13 @@ export default function SellerDashboard() {
           <p className="text-gray-500 text-sm mt-1">📍 {profile?.area}, {profile?.city}</p>
         </div>
         <div className="flex gap-2">
-          <Link to="/seller/shop/edit" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition">
+          {"Notification" in window && (
+          <button onClick={enableNotifications} disabled={notifEnabled || notifLoading}
+            className={`text-sm px-3 py-2 rounded-xl font-medium transition flex items-center gap-1 ${notifEnabled ? "bg-green-100 text-green-700" : "bg-orange-100 text-orange-700 hover:bg-orange-200"}`}>
+            {notifEnabled ? "🔔 " + (isArabic ? "تم التفعيل" : "Notifications On") : notifLoading ? "..." : "🔔 " + (isArabic ? "فعّل الإشعارات" : "Enable Notifications")}
+          </button>
+        )}
+        <Link to="/seller/shop/edit" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition">
             {isArabic ? "✏️ تعديل المتجر" : "✏️ Edit Shop"}
           </Link>
           <Link to="/seller/products/new" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
