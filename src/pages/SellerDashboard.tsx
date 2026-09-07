@@ -36,11 +36,27 @@ export default function SellerDashboard() {
   }, []);
 
   const enableNotifications = async () => {
+    if (notifEnabled) {
+      // Unsubscribe
+      setNotifLoading(true);
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) await sub.unsubscribe();
+        await api.delete("/api/push/unsubscribe");
+        setNotifEnabled(false);
+      } catch (e) { console.error("Unsubscribe failed:", e); }
+      setNotifLoading(false);
+      return;
+    }
     setNotifLoading(true);
     try {
       const permission = await Notification.requestPermission();
       if (permission !== "granted") { setNotifLoading(false); return; }
       const reg = await navigator.serviceWorker.ready;
+      // Clear any existing subscription first
+      const existing = await reg.pushManager.getSubscription();
+      if (existing) await existing.unsubscribe();
       const vapidResp = await api.get("/api/push/vapid-public-key");
       const publicKey = vapidResp.data.public_key;
       const sub = await reg.pushManager.subscribe({
