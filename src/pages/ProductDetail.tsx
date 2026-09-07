@@ -86,7 +86,21 @@ export default function ProductDetail() {
     }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-64 text-gray-400">{isArabic ? "جاري التحميل..." : "Loading..."}</div>;
+  if (loading) return (
+    <div className="max-w-4xl mx-auto px-4 py-8 animate-pulse">
+      <div className="grid md:grid-cols-2 gap-8">
+        <div className="w-full h-80 bg-gray-100 rounded-2xl" />
+        <div>
+          <div className="h-8 bg-gray-100 rounded w-3/4 mb-4" />
+          <div className="h-6 bg-gray-100 rounded w-1/4 mb-6" />
+          <div className="h-4 bg-gray-100 rounded w-full mb-2" />
+          <div className="h-4 bg-gray-100 rounded w-5/6 mb-2" />
+          <div className="h-4 bg-gray-100 rounded w-4/6 mb-8" />
+          <div className="h-12 bg-gray-100 rounded-xl w-full" />
+        </div>
+      </div>
+    </div>
+  );
   if (!product) return null;
 
   const displayName = isArabic && product.name_ar ? product.name_ar : product.name;

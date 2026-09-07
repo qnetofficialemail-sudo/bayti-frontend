@@ -36,7 +36,7 @@ export default function Landing() {
   }, [user?.id, isLoading]);
 
   useEffect(() => {
-    api.get("/api/categories").then(r => setCategories(r.data)).catch(() => {});
+    api.get("/api/categories").then(r => setCategories(r.data.filter((c: any) => c.is_active !== false))).catch(() => setCategories([]));
     Promise.all([api.get("/api/sellers/"), api.get("/api/products/")]).then(([s, p]) => {
       setStats({ sellers: s.data.length, products: p.data.length });
     }).catch(() => {});
@@ -149,7 +149,7 @@ export default function Landing() {
 
           {categories.length === 0 ? (
             <div className="text-center py-8 text-gray-400">
-              {isArabic ? "جاري التحميل..." : "Loading..."}
+              {isArabic ? "لا توجد فئات متاحة حالياً" : "No categories available yet"}
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
