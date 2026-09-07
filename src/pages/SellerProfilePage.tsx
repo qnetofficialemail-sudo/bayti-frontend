@@ -19,22 +19,43 @@ export default function SellerProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      api.get(`/api/sellers/${id}/public`),
-      api.get("/api/products/", { params: { seller_id: id } }),
-      api.get("/api/categories"),
-      api.get(`/api/reviews/seller/${id}`),
-    ]).then(([s, p, c, r]) => {
-      setSeller(s.data);
-      setProducts(p.data);
-      setCategories(c.data);
-      setReviews(r.data);
-    }).catch(() => {}).finally(() => setLoading(false));
+    if (!id) return;
+    api.get(`/api/sellers/${id}/public`)
+      .then(s => setSeller(s.data))
+      .catch(() => setSeller(null))
+      .finally(() => setLoading(false));
+    api.get(`/api/products`, { params: { seller_id: id } })
+      .then(p => setProducts(Array.isArray(p.data) ? p.data : p.data.items || []))
+      .catch(() => setProducts([]));
+    api.get("/api/categories")
+      .then(c => setCategories(c.data))
+      .catch(() => setCategories([]));
+    api.get(`/api/reviews/seller/${id}`)
+      .then(r => setReviews(r.data))
+      .catch(() => setReviews([]));
   }, [id]);
 
   if (loading) return (
-    <div className="flex items-center justify-center h-64 text-gray-400">
-      {isArabic ? "جاري التحميل..." : "Loading..."}
+    <div className="max-w-4xl mx-auto px-4 py-8 animate-pulse">
+      <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-6">
+        <div className="flex gap-6">
+          <div className="w-24 h-24 bg-gray-100 rounded-full" />
+          <div className="flex-1">
+            <div className="h-6 bg-gray-100 rounded w-48 mb-3" />
+            <div className="h-4 bg-gray-100 rounded w-32 mb-2" />
+            <div className="h-4 bg-gray-100 rounded w-64" />
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        {[1,2,3,4,5,6].map(i => (
+          <div key={i} className="bg-white rounded-2xl border border-gray-100 p-4">
+            <div className="w-full h-32 bg-gray-100 rounded-xl mb-3" />
+            <div className="h-4 bg-gray-100 rounded w-3/4 mb-2" />
+            <div className="h-3 bg-gray-100 rounded w-1/2" />
+          </div>
+        ))}
+      </div>
     </div>
   );
 
