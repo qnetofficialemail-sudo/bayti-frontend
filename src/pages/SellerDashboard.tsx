@@ -41,8 +41,6 @@ export default function SellerDashboard() {
     } catch (e) { console.error("Push subscription failed:", e); }
     setNotifLoading(false);
   };
-  const [notifEnabled, setNotifEnabled] = useState(false);
-  const [notifLoading, setNotifLoading] = useState(false);
 
   const enableNotifications = async () => {
     setNotifLoading(true);
