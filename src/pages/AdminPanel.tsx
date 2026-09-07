@@ -21,7 +21,9 @@ export default function AdminPanel() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories"|"applications">("overview");
+  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories"|"applications"|"forecast">("overview");
+  const [forecast, setForecast] = useState<any>(null);
+  const [forecastLoading, setForecastLoading] = useState(false);
   const [stats, setStats] = useState<any>(null);
   const [sellers, setSellers] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
@@ -239,6 +241,7 @@ export default function AdminPanel() {
           { key: "reviews",    label: isArabic ? `التقييمات${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}` : `Reviews${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}`, icon: "⭐" },
           { key: "categories", label: isArabic ? "الفئات" : "Categories", icon: "🏷️" },
           { key: "applications", label: (isArabic ? "الطلبات" : "Applications") + (applications.filter(a => a.status === "pending").length > 0 ? ` (${applications.filter(a => a.status === "pending").length})` : ""), icon: "📋" },
+          { key: "forecast", label: isArabic ? "توقعات الطلب" : "Demand Forecast", icon: "🔮" },
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
@@ -878,6 +881,83 @@ export default function AdminPanel() {
           </div>
         </div>
       )}
+
+      {/* Demand Forecast */}
+      {tab === "forecast" && (
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">
+              {isArabic ? "🔮 توقعات الطلب الموسمي" : "🔮 Seasonal Demand Forecast"}
+            </h2>
+            <button
+              onClick={async () => {
+                setForecastLoading(true);
+                try {
+                  const res = await api.get("/api/ai/demand-forecast");
+                  setForecast(res.data);
+                } catch (e) {
+                  console.error(e);
+                } finally {
+                  setForecastLoading(false);
+                }
+              }}
+              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
+              {forecastLoading ? (isArabic ? "جارٍ التحليل..." : "Analyzing...") : (isArabic ? "تحليل الطلب" : "Run Forecast")}
+            </button>
+          </div>
+          {!forecast && !forecastLoading && (
+            <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+              <div className="text-5xl mb-4">🔮</div>
+              <p className="text-gray-500 text-lg mb-2">{isArabic ? "توقعات الطلب الموسمي" : "UAE Seasonal Demand Forecasting"}</p>
+              <p className="text-gray-400 text-sm">{isArabic ? "اضغط على تحليل الطلب لرؤية توقعات كل فئة" : "Click Run Forecast to see demand predictions per category"}</p>
+            </div>
+          )}
+          {forecastLoading && (
+            <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+              <div className="animate-spin text-4xl mb-4">⏳</div>
+              <p className="text-gray-500">{isArabic ? "جارٍ تحليل البيانات الموسمية..." : "Analyzing seasonal patterns..."}</p>
+            </div>
+          )}
+          {forecast && !forecastLoading && (
+            <div className="grid gap-4">
+              {forecast.forecasts?.map((f: any) => (
+                <div key={f.category_id} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="font-bold text-gray-900 text-lg">{isArabic ? f.category_name_ar || f.category_name : f.category_name}</h3>
+                      <p className="text-orange-600 font-medium text-sm mt-1">
+                        🎯 {isArabic ? f.top_season_ar : f.top_season}
+                      </p>
+                    </div>
+                    <div className="bg-orange-50 border border-orange-200 rounded-xl px-3 py-2 text-right">
+                      <p className="text-xs text-orange-600 font-medium">{isArabic ? "نصيحة" : "Tip"}</p>
+                      <p className="text-xs text-orange-700 mt-1 max-w-48">{isArabic ? f.tip_ar : f.tip}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 mt-3">
+                    {f.monthly_demand?.map((m: any) => (
+                      <div key={`${m.month}-${m.year}`} className="flex-1 text-center">
+                        <div className="relative h-16 bg-gray-100 rounded-lg overflow-hidden">
+                          <div
+                            className="absolute bottom-0 left-0 right-0 rounded-lg transition-all"
+                            style={{
+                              height: `${m.demand_index}%`,
+                              backgroundColor: m.demand_index >= 80 ? '#FF5A1F' : m.demand_index >= 60 ? '#f97316' : m.demand_index >= 40 ? '#fb923c' : '#fed7aa'
+                            }}
+                          />
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">{new Date(m.year, m.month - 1).toLocaleString('default', { month: 'short' })}</p>
+                        {m.season_label && <p className="text-xs text-orange-600 font-medium">{isArabic ? m.season_label_ar : m.season_label}</p>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
     </div>
   );
 }
