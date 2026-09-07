@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/client";
@@ -51,6 +52,7 @@ export default function Landing() {
 
   return (
     <div className={`min-h-screen bg-white ${isArabic ? "rtl" : "ltr"}`} dir={isArabic ? "rtl" : "ltr"}>
+      <SEO title="Bayti | بيتي — حارتك، بين يديك" description="اكتشف منتجات محلية من بائعين في الإمارات — عبايات، عطور، حرف يدوية، وجبات منزلية وأكثر. Discover local UAE home sellers." />
 
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm">

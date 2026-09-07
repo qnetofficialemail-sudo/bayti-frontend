@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "../api/client";
+import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 import CookOfWeek from "../components/CookOfWeek";
 import AIPersonalShopper from "../components/AIPersonalShopper";

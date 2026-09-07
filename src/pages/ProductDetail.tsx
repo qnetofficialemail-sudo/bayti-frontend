@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 
 const EMIRATES = ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"];
@@ -139,6 +140,14 @@ export default function ProductDetail() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <SEO
+        title={displayName}
+        description={displayDesc || undefined}
+        image={product.image_url || undefined}
+        url={`/product/${product.id}`}
+        type="product"
+        price={product.price}
+      />
       <Link to="/" className="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
         {isArabic ? "→ رجوع" : "← Back"}
       </Link>
