@@ -37,7 +37,7 @@ export default function Landing() {
 
   useEffect(() => {
     api.get("/api/categories").then(r => setCategories(r.data.filter((c: any) => c.is_active !== false))).catch(() => setCategories([]));
-    Promise.all([api.get("/api/sellers/"), api.get("/api/products/")]).then(([s, p]) => {
+    Promise.all([api.get("/api/sellers"), api.get("/api/products")]).then(([s, p]) => {
       setStats({ sellers: s.data.length, products: p.data.length });
     }).catch(() => {});
   }, []);

@@ -38,7 +38,7 @@ export default function AIPersonalShopper() {
 
     try {
       // Fetch all products
-      const productsRes = await api.get("/api/products/");
+      const productsRes = await api.get("/api/products");
       const products: Product[] = productsRes.data;
 
       if (products.length === 0) {

@@ -114,7 +114,7 @@ export default function AddProduct() {
       if (images[3]) data.append("image_4", images[3]);
       if (images[4]) data.append("image_5", images[4]);
       data.append("primary_image_index", String(primaryIndex));
-      const res = await api.post("/api/products/", data, { headers: { "Content-Type": "multipart/form-data" } });
+      const res = await api.post("/api/products", data, { headers: { "Content-Type": "multipart/form-data" } });
       const productId = res.data.id;
       // Save variants
       for (const variant of variants) {

@@ -45,7 +45,7 @@ export default function ProductDetail() {
       if (p.data?.seller?.id) {
         api.get(`/api/sellers/${p.data.seller.id}/status`)
           .then(s => setSellerOpen(s.data)).catch(() => {});
-        api.get("/api/products/", { params: { seller_id: p.data.seller.id } })
+        api.get("/api/products", { params: { seller_id: p.data.seller.id } })
           .then(rel => {
             const filtered = rel.data.filter((r: any) => String(r.id) !== String(id));
             setRelated(filtered.slice(0, 3));
@@ -66,7 +66,7 @@ export default function ProductDetail() {
     setVariantError("");
     setOrdering(true); setError("");
     try {
-      await api.post("/api/orders/", {
+      await api.post("/api/orders", {
         seller_id: product.seller.id,
         delivery_address: address,
         delivery_area: buyerEmirate || area,

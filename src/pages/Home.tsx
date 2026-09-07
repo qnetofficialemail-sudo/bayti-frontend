@@ -31,7 +31,7 @@ export default function Home() {
     const params: any = {};
     if (selectedCategory) params.category_id = selectedCategory;
     if (search) params.search = search;
-    api.get("/api/products/", { params }).then(r => setProducts(r.data)).finally(() => setLoading(false));
+    api.get("/api/products", { params }).then(r => setProducts(r.data)).finally(() => setLoading(false));
   }, [selectedCategory, search]);
 
   const getStockBadge = (product: Product) => {
