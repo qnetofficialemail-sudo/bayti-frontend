@@ -70,7 +70,7 @@ export default function Home() {
         </Link>
       </div>
       <div className="mb-6">
-        <input type="text" placeholder={isArabic ? "ابحث عن أكلات، حلويات، منتجات..." : "Search for products, sellers, artisans..."} value={search} onChange={e => setSearch(e.target.value)}
+        <input type="text" placeholder={isArabic ? "ابحث عن منتجات، بائعين، حرف يدوية..." : "Search for products, sellers, artisans..."} value={search} onChange={e => setSearch(e.target.value)}
           className="w-full border border-gray-200 rounded-xl px-5 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white shadow-sm" />
       </div>
 
