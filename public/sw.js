@@ -1,4 +1,4 @@
-const CACHE_NAME = "bayti-v2";
+const CACHE_NAME = "bayti-v3";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
@@ -16,6 +16,8 @@ self.addEventListener("activate", event => {
 // Network first for everything - only use cache as fallback for images/fonts
 self.addEventListener("fetch", event => {
   const url = new URL(event.request.url);
+  // Skip non-HTTPS and extension requests
+  if (url.protocol !== "https:") return;
   
   // Always network-first for HTML, API calls, and navigation
   if (
