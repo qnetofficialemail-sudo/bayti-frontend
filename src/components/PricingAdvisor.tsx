@@ -5,10 +5,11 @@ interface Props {
   price: string;
   productName: string;
   categoryName: string;
+  categoryId?: number | string;
   isArabic: boolean;
 }
 
-export default function PricingAdvisor({ price, productName, categoryName, isArabic }: Props) {
+export default function PricingAdvisor({ price, productName, categoryName, categoryId, isArabic }: Props) {
   const [advice, setAdvice] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const debounceRef = useRef<any>(null);
@@ -28,6 +29,7 @@ export default function PricingAdvisor({ price, productName, categoryName, isAra
         const res = await api.post("/api/ai/pricing-advisor", {
           product_name: productName,
           category: categoryName,
+          category_id: categoryId ? Number(categoryId) : null,
           price: numPrice,
         });
         setAdvice(res.data);
