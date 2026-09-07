@@ -218,8 +218,6 @@ export default function AddProduct() {
           <PricingAdvisor
             price={form.price}
             productName={form.name}
-            categoryName={categories.find((c: any) => String(c.id) === form.category_id)?.name || ""}
-            categoryId={form.category_id}
             isArabic={isArabic}
           />
           <div>

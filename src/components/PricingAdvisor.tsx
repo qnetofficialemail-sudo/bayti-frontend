@@ -4,32 +4,28 @@ import api from "../api/client";
 interface Props {
   price: string;
   productName: string;
-  categoryName: string;
-  categoryId?: number | string;
   isArabic: boolean;
 }
 
-export default function PricingAdvisor({ price, productName, categoryName, categoryId, isArabic }: Props) {
+export default function PricingAdvisor({ price, productName, isArabic }: Props) {
   const [advice, setAdvice] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const debounceRef = useRef<any>(null);
 
   useEffect(() => {
     const numPrice = parseFloat(price);
-    if (!numPrice || numPrice <= 0 || !productName || !categoryName) {
+    if (!numPrice || numPrice <= 0 || !productName || productName.length < 2) {
       setAdvice(null);
       return;
     }
-
-    // Debounce — wait 1.5s after user stops typing
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       try {
         const res = await api.post("/api/ai/pricing-advisor", {
           product_name: productName,
-          category: categoryName,
-          category_id: categoryId ? Number(categoryId) : null,
+          category: "",
+          category_id: null,
           price: numPrice,
         });
         setAdvice(res.data);
@@ -39,9 +35,8 @@ export default function PricingAdvisor({ price, productName, categoryName, categ
         setLoading(false);
       }
     }, 1500);
-
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
-  }, [price, productName, categoryName]);
+  }, [price, productName]);
 
   if (!price || parseFloat(price) <= 0) return null;
 
