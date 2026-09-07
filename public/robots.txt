@@ -1,3 +1,9 @@
-# https://www.robotstxt.org/robotstxt.html
-User-agent: *
-Disallow:
+﻿User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /seller/dashboard
+Disallow: /seller/shop/edit
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://bayti-frontend-three.vercel.app/sitemap.xml
