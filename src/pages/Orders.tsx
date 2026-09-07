@@ -65,7 +65,21 @@ export default function Orders() {
     finally { setReviewSubmitting(false); }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-64 text-gray-400">{isArabic ? "جاري التحميل..." : "Loading..."}</div>;
+  if (loading) return (
+    <div className="max-w-3xl mx-auto px-4 py-8 animate-pulse">
+      <div className="h-8 bg-gray-100 rounded w-48 mb-6" />
+      {[1,2,3].map(i => (
+        <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 mb-4">
+          <div className="flex justify-between mb-3">
+            <div className="h-5 bg-gray-100 rounded w-32" />
+            <div className="h-5 bg-gray-100 rounded w-20" />
+          </div>
+          <div className="h-4 bg-gray-100 rounded w-48 mb-2" />
+          <div className="h-4 bg-gray-100 rounded w-24" />
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">

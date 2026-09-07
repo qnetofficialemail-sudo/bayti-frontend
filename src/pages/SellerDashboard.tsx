@@ -77,7 +77,25 @@ export default function SellerDashboard() {
     return <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">{isArabic ? `${qty} متاح` : `${qty} in stock`}</span>;
   };
 
-  if (loading) return <div className="flex items-center justify-center h-64 text-gray-400">{isArabic ? "جاري التحميل..." : "Loading..."}</div>;
+  if (loading) return (
+    <div className="max-w-5xl mx-auto px-4 py-8 animate-pulse">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        {[1,2,3,4].map(i => (
+          <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6">
+            <div className="h-8 bg-gray-100 rounded w-16 mb-2" />
+            <div className="h-4 bg-gray-100 rounded w-24" />
+          </div>
+        ))}
+      </div>
+      {[1,2,3].map(i => (
+        <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 mb-4">
+          <div className="h-5 bg-gray-100 rounded w-40 mb-3" />
+          <div className="h-4 bg-gray-100 rounded w-64 mb-2" />
+          <div className="h-4 bg-gray-100 rounded w-32" />
+        </div>
+      ))}
+    </div>
+  );
   const pendingCount = orders.filter(o => o.status === "pending").length;
 
   const deleteProduct = async (product: any) => {

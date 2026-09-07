@@ -131,7 +131,19 @@ export default function EditProduct() {
     } finally { setSaving(false); }
   };
 
-  if (loading) return <div className="flex items-center justify-center h-64 text-gray-400">Loading...</div>;
+  if (loading) return (
+    <div className="max-w-3xl mx-auto px-4 py-8 animate-pulse">
+      <div className="h-8 bg-gray-100 rounded w-48 mb-6" />
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-4">
+        <div className="h-5 bg-gray-100 rounded w-32 mb-4" />
+        <div className="h-10 bg-gray-100 rounded-xl w-full mb-4" />
+        <div className="h-5 bg-gray-100 rounded w-32 mb-4" />
+        <div className="h-24 bg-gray-100 rounded-xl w-full mb-4" />
+        <div className="h-5 bg-gray-100 rounded w-32 mb-4" />
+        <div className="h-10 bg-gray-100 rounded-xl w-full" />
+      </div>
+    </div>
+  );
 
   const imgUrl = (img: string) => img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`;
 
