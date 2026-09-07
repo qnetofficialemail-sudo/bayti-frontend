@@ -42,23 +42,7 @@ export default function SellerDashboard() {
     setNotifLoading(false);
   };
 
-  const enableNotifications = async () => {
-    setNotifLoading(true);
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") { setNotifLoading(false); return; }
-      const reg = await navigator.serviceWorker.ready;
-      const vapidResp = await api.get("/api/push/vapid-public-key");
-      const publicKey = vapidResp.data.public_key;
-      const sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: publicKey
-      });
-      await api.post("/api/push/subscribe", { subscription: sub.toJSON() });
-      setNotifEnabled(true);
-    } catch (e) { console.error("Push subscription failed:", e); }
-    setNotifLoading(false);
-  };
+  
 
   useEffect(() => {
     if (!user || user.role !== "seller") { navigate("/login"); return; }
