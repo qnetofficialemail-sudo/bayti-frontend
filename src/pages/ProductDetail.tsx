@@ -179,14 +179,42 @@ export default function ProductDetail() {
                 <div className="bg-gray-50 rounded-xl p-4 mb-4">
                   <p className="text-sm font-semibold text-gray-700 mb-3">📋 {isArabic ? "مواصفات المنتج" : "Product Specifications"}</p>
                   <div className="grid grid-cols-2 gap-2">
-                    {entries.map(([key, value]) => (
-                      <div key={key} className="text-sm">
-                        <span className="text-gray-500 capitalize">{key.replace(/_/g, " ")}: </span>
-                        <span className="text-gray-900 font-medium">
-                          {Array.isArray(value) ? value.join(", ") : String(value)}
-                        </span>
-                      </div>
-                    ))}
+                    {entries.map(([key, value]) => {
+                      const keyLabels: Record<string, {en: string, ar: string}> = {
+                        sizes_available: {en: "Sizes Available", ar: "المقاسات المتاحة"},
+                        colors_available: {en: "Colors Available", ar: "الألوان المتاحة"},
+                        material: {en: "Material", ar: "الخامة"},
+                        care_instructions: {en: "Care Instructions", ar: "تعليمات العناية"},
+                        custom_sizing: {en: "Custom Sizing", ar: "مقاس مخصص"},
+                        scent_family: {en: "Scent Family", ar: "عائلة العطر"},
+                        volume_ml: {en: "Volume", ar: "الحجم"},
+                        burn_time: {en: "Burn Time", ar: "مدة الاحتراق"},
+                        ingredients: {en: "Ingredients", ar: "المكونات"},
+                        key_ingredients: {en: "Key Ingredients", ar: "المكونات الرئيسية"},
+                        customizable: {en: "Customizable", ar: "قابل للتخصيص"},
+                        occasion: {en: "Occasion", ar: "المناسبة"},
+                        dimensions: {en: "Dimensions", ar: "الأبعاد"},
+                        skin_type: {en: "Skin Type", ar: "نوع البشرة"},
+                        natural: {en: "Natural/Organic", ar: "طبيعي/عضوي"},
+                        shade: {en: "Shades", ar: "الألوان"},
+                        finish: {en: "Finish", ar: "النهاية"},
+                        longevity: {en: "Longevity", ar: "مدة الثبات"},
+                        serves: {en: "Serves", ar: "عدد الأشخاص"},
+                        allergens: {en: "Allergens", ar: "مسببات الحساسية"},
+                        halal: {en: "Halal", ar: "حلال"},
+                        heating: {en: "Heating", ar: "طريقة التسخين"},
+                        dietary: {en: "Dietary", ar: "النظام الغذائي"},
+                      };
+                      const label = keyLabels[key] ? (isArabic ? keyLabels[key].ar : keyLabels[key].en) : key.replace(/_/g, " ");
+                      return (
+                        <div key={key} className="text-sm">
+                          <span className="text-gray-500">{label}: </span>
+                          <span className="text-gray-900 font-medium">
+                            {Array.isArray(value) ? value.join(", ") : String(value)}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
