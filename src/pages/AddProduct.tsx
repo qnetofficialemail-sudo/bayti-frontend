@@ -9,10 +9,56 @@ interface VariantOption { label: string; price_adj: number; }
 interface Variant { name: string; name_ar: string; options: VariantOption[]; is_required: boolean; }
 
 const VARIANT_PRESETS: Record<string, { name: string; name_ar: string; options: string[] }> = {
-  size:   { name: "Size",   name_ar: "المقاس",  options: ["XS", "S", "M", "L", "XL", "XXL"] },
-  color:  { name: "Color",  name_ar: "اللون",   options: ["Black", "White", "Beige", "Brown", "Navy", "Red", "Pink", "Green"] },
-  scent:  { name: "Scent",  name_ar: "العطر",   options: ["Rose", "Oud", "Musk", "Jasmine", "Vanilla", "Lavender"] },
-  material: { name: "Material", name_ar: "الخامة", options: ["Cotton", "Silk", "Linen", "Chiffon", "Satin"] },
+  size:     { name: "Size",     name_ar: "المقاس",  options: ["XS", "S", "M", "L", "XL", "XXL"] },
+  color:    { name: "Color",    name_ar: "اللون",   options: ["Black", "White", "Beige", "Brown", "Navy", "Red", "Pink", "Green"] },
+  scent:    { name: "Scent",    name_ar: "العطر",   options: ["Rose", "Oud", "Musk", "Jasmine", "Vanilla", "Lavender"] },
+  material: { name: "Material", name_ar: "الخامة",  options: ["Cotton", "Silk", "Linen", "Chiffon", "Satin"] },
+};
+
+// Category-specific specs config
+const CATEGORY_SPECS: Record<string, { key: string; label: string; label_ar: string; type: "select" | "text" | "multiselect"; options?: string[] }[]> = {
+  "Clothing & Abayas": [
+    { key: "sizes_available", label: "Available Sizes", label_ar: "المقاسات المتاحة", type: "multiselect", options: ["XS", "S", "M", "L", "XL", "XXL", "Custom"] },
+    { key: "colors_available", label: "Available Colors", label_ar: "الألوان المتاحة", type: "multiselect", options: ["Black", "White", "Beige", "Navy", "Brown", "Grey", "Other"] },
+    { key: "material", label: "Material", label_ar: "الخامة", type: "select", options: ["Nida", "Crepe", "Linen", "Chiffon", "Cotton", "Silk", "Satin", "Other"] },
+    { key: "care_instructions", label: "Care Instructions", label_ar: "تعليمات العناية", type: "select", options: ["Hand wash", "Machine wash", "Dry clean only"] },
+    { key: "custom_sizing", label: "Custom Sizing", label_ar: "مقاس مخصص", type: "select", options: ["Available", "Not available"] },
+  ],
+  "Perfumes & Candles": [
+    { key: "scent_family", label: "Scent Family", label_ar: "عائلة العطر", type: "select", options: ["Oud", "Floral", "Musk", "Citrus", "Woody", "Oriental", "Fresh"] },
+    { key: "volume_ml", label: "Volume / Weight", label_ar: "الحجم / الوزن", type: "text" },
+    { key: "burn_time", label: "Burn Time (candles)", label_ar: "مدة الاحتراق (شموع)", type: "text" },
+    { key: "ingredients", label: "Key Ingredients", label_ar: "المكونات الرئيسية", type: "text" },
+  ],
+  "Handmade Crafts": [
+    { key: "material", label: "Material", label_ar: "الخامة", type: "text" },
+    { key: "dimensions", label: "Dimensions", label_ar: "الأبعاد", type: "text" },
+    { key: "customizable", label: "Customizable", label_ar: "قابل للتخصيص", type: "select", options: ["Yes", "No"] },
+    { key: "occasion", label: "Occasion", label_ar: "المناسبة", type: "select", options: ["Gift", "Wedding", "Ramadan", "Eid", "Home Decor", "Other"] },
+  ],
+  "Accessories": [
+    { key: "material", label: "Material", label_ar: "الخامة", type: "select", options: ["Gold plated", "Silver", "Stainless steel", "Leather", "Fabric", "Other"] },
+    { key: "colors_available", label: "Available Colors", label_ar: "الألوان المتاحة", type: "multiselect", options: ["Gold", "Silver", "Black", "White", "Brown", "Other"] },
+    { key: "occasion", label: "Occasion", label_ar: "المناسبة", type: "select", options: ["Casual", "Formal", "Wedding", "Everyday"] },
+  ],
+  "Beauty & Skincare": [
+    { key: "skin_type", label: "Skin Type", label_ar: "نوع البشرة", type: "select", options: ["All skin types", "Dry", "Oily", "Combination", "Sensitive"] },
+    { key: "volume_ml", label: "Volume (ml)", label_ar: "الحجم (مل)", type: "text" },
+    { key: "key_ingredients", label: "Key Ingredients", label_ar: "المكونات الرئيسية", type: "text" },
+    { key: "natural", label: "Natural / Organic", label_ar: "طبيعي / عضوي", type: "select", options: ["Yes", "No"] },
+  ],
+  "Makeup & Beauty": [
+    { key: "shade", label: "Available Shades", label_ar: "الألوان المتاحة", type: "text" },
+    { key: "finish", label: "Finish", label_ar: "النهاية", type: "select", options: ["Matte", "Glossy", "Satin", "Natural"] },
+    { key: "longevity", label: "Longevity", label_ar: "مدة الثبات", type: "select", options: ["Up to 4 hrs", "4-8 hrs", "8-12 hrs", "24 hrs"] },
+  ],
+  "Home Cooked Meals": [
+    { key: "serves", label: "Serves", label_ar: "عدد الأشخاص", type: "select", options: ["1 person", "2 persons", "4 persons", "6 persons", "Family size"] },
+    { key: "allergens", label: "Allergens", label_ar: "مسببات الحساسية", type: "text" },
+    { key: "halal", label: "Halal Certified", label_ar: "حلال", type: "select", options: ["Yes", "No"] },
+    { key: "heating", label: "Heating Required", label_ar: "يحتاج تسخين", type: "select", options: ["Ready to eat", "Microwave", "Oven", "Stovetop"] },
+    { key: "dietary", label: "Dietary", label_ar: "النظام الغذائي", type: "select", options: ["Regular", "Vegetarian", "Vegan", "Gluten-free", "Dairy-free"] },
+  ],
 };
 
 export default function AddProduct() {
@@ -21,6 +67,7 @@ export default function AddProduct() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<any[]>([]);
   const [form, setForm] = useState({ name: "", name_ar: "", description: "", description_ar: "", price: "", category_id: "", processing_days: "3", time_unit: "days", stock_quantity: "10", track_stock: false });
+  const [specs, setSpecs] = useState<Record<string, string | string[]>>({});
   const [images, setImages] = useState<(File | null)[]>([null, null, null, null, null]);
   const [previews, setPreviews] = useState<(string | null)[]>([null, null, null, null, null]);
   const [primaryIndex, setPrimaryIndex] = useState(0);
@@ -36,6 +83,26 @@ export default function AddProduct() {
     if (!user || user.role !== "seller") { navigate("/login"); return; }
     api.get("/api/categories").then(r => setCategories(r.data));
   }, [user]);
+
+  // Get specs config for selected category
+  const selectedCategory = categories.find(c => String(c.id) === form.category_id);
+  const categorySpecsConfig = selectedCategory
+    ? CATEGORY_SPECS[selectedCategory.name] || CATEGORY_SPECS[selectedCategory.name_ar] || null
+    : null;
+
+  const handleSpecChange = (key: string, value: string) => {
+    setSpecs(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleSpecMultiselect = (key: string, option: string) => {
+    setSpecs(prev => {
+      const current = (prev[key] as string[]) || [];
+      const updated = current.includes(option)
+        ? current.filter(o => o !== option)
+        : [...current, option];
+      return { ...prev, [key]: updated };
+    });
+  };
 
   const handleImage = (index: number, file: File | null) => {
     const newImages = [...images];
@@ -66,18 +133,13 @@ export default function AddProduct() {
       } else {
         setError(isArabic ? "فشل الذكاء الاصطناعي." : "AI generation failed.");
       }
-    } catch (err: any) { setError(err.response?.data?.detail || "AI generation failed."); console.error("AI error:", err); }
+    } catch (err: any) { setError(err.response?.data?.detail || "AI generation failed."); }
     finally { setAiLoading(false); }
   };
 
   const applyPreset = (key: string) => {
     const preset = VARIANT_PRESETS[key];
-    setNewVariant({
-      name: preset.name,
-      name_ar: preset.name_ar,
-      options: preset.options.map(o => ({ label: o, price_adj: 0 })),
-      is_required: true,
-    });
+    setNewVariant({ name: preset.name, name_ar: preset.name_ar, options: preset.options.map(o => ({ label: o, price_adj: 0 })), is_required: true });
   };
 
   const addVariantOption = () => setNewVariant(v => ({ ...v, options: [...v.options, { label: "", price_adj: 0 }] }));
@@ -108,6 +170,8 @@ export default function AddProduct() {
       if (form.category_id) data.append("category_id", form.category_id);
       data.append("track_stock", String(form.track_stock));
       if (form.track_stock) data.append("stock_quantity", form.stock_quantity);
+      // Attach specs as JSON
+      if (Object.keys(specs).length > 0) data.append("specs", JSON.stringify(specs));
       if (images[0]) data.append("image", images[0]);
       if (images[1]) data.append("image_2", images[1]);
       if (images[2]) data.append("image_3", images[2]);
@@ -116,7 +180,6 @@ export default function AddProduct() {
       data.append("primary_image_index", String(primaryIndex));
       const res = await api.post("/api/products", data, { headers: { "Content-Type": "multipart/form-data" } });
       const productId = res.data.id;
-      // Save variants
       for (const variant of variants) {
         const vdata = new FormData();
         vdata.append("name", variant.name);
@@ -153,25 +216,18 @@ export default function AddProduct() {
                       : <div className="text-center text-gray-300"><div className="text-2xl">📷</div><div className="text-xs mt-1">{i === 0 ? (isArabic ? "رئيسية" : "Main") : i+1}</div></div>
                     }
                   </div>
-                  <input type="file" accept="image/*" className="hidden"
-                    onChange={e => handleImage(i, e.target.files?.[0] || null)} />
+                  <input type="file" accept="image/*" className="hidden" onChange={e => handleImage(i, e.target.files?.[0] || null)} />
                 </label>
                 {previews[i] && (
                   <div className="absolute top-1 right-1 flex flex-col gap-1">
                     <button type="button" onClick={() => setPrimaryIndex(i)}
-                      className={`w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-white" : "bg-white text-gray-400 hover:text-orange-500"}`}>
-                      ★
-                    </button>
+                      className={`w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-white" : "bg-white text-gray-400 hover:text-orange-500"}`}>★</button>
                     <button type="button" onClick={() => handleImage(i, null)}
-                      className="w-5 h-5 rounded-full bg-white text-gray-400 hover:text-red-500 text-xs flex items-center justify-center shadow">
-                      ✕
-                    </button>
+                      className="w-5 h-5 rounded-full bg-white text-gray-400 hover:text-red-500 text-xs flex items-center justify-center shadow">✕</button>
                   </div>
                 )}
                 {primaryIndex === i && previews[i] && (
-                  <div className="absolute bottom-1 left-1 bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-                    {isArabic ? "رئيسية" : "Main"}
-                  </div>
+                  <div className="absolute bottom-1 left-1 bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full">{isArabic ? "رئيسية" : "Main"}</div>
                 )}
               </div>
             ))}
@@ -192,7 +248,7 @@ export default function AddProduct() {
           </div>
         )}
 
-        {/* Name */}
+        {/* Product Name */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "اسم المنتج *" : "Product name *"}</label>
           <input type="text" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required
@@ -208,41 +264,83 @@ export default function AddProduct() {
             className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none ${aiSuggestion ? "border-purple-300 bg-purple-50" : "border-gray-200"}`} />
         </div>
 
-        {/* Price + Processing time */}
+        {/* Category — MOVED UP */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الفئة" : "Category"}</label>
+          <select value={form.category_id} onChange={e => { setForm(f => ({ ...f, category_id: e.target.value })); setSpecs({}); }}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+            <option value="">{isArabic ? "اختر فئة" : "Select a category"}</option>
+            {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.icon} {isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>)}
+          </select>
+        </div>
+
+        {/* Category-specific specs — appear after category selected */}
+        {categorySpecsConfig && (
+          <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-4">
+            <p className="text-sm font-semibold text-orange-700">
+              📋 {isArabic ? "مواصفات المنتج" : "Product Specifications"}
+            </p>
+            {categorySpecsConfig.map(spec => (
+              <div key={spec.key}>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {isArabic ? spec.label_ar : spec.label}
+                </label>
+                {spec.type === "select" && (
+                  <select value={(specs[spec.key] as string) || ""}
+                    onChange={e => handleSpecChange(spec.key, e.target.value)}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white text-sm">
+                    <option value="">{isArabic ? "اختر..." : "Select..."}</option>
+                    {spec.options?.map(o => <option key={o} value={o}>{o}</option>)}
+                  </select>
+                )}
+                {spec.type === "text" && (
+                  <input type="text" value={(specs[spec.key] as string) || ""}
+                    onChange={e => handleSpecChange(spec.key, e.target.value)}
+                    placeholder={isArabic ? spec.label_ar : spec.label}
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm" />
+                )}
+                {spec.type === "multiselect" && (
+                  <div className="flex flex-wrap gap-2">
+                    {spec.options?.map(o => {
+                      const selected = ((specs[spec.key] as string[]) || []).includes(o);
+                      return (
+                        <button key={o} type="button"
+                          onClick={() => handleSpecMultiselect(spec.key, o)}
+                          className={`text-xs px-3 py-1.5 rounded-full border transition ${selected ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
+                          {o}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Price + Pricing Advisor */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "السعر (درهم) *" : "Price (AED) *"}</label>
             <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required min="1" step="0.5"
               className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
           </div>
-          <PricingAdvisor
-            price={form.price}
-            productName={form.name}
-            isArabic={isArabic}
-          />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وقت التجهيز" : "Processing time"}</label>
-            <div className="flex gap-2">
-              <input type="number" value={form.processing_days} onChange={e => setForm(f => ({ ...f, processing_days: e.target.value }))} min="1" max="999"
-                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-              <select value={form.time_unit} onChange={e => setForm(f => ({ ...f, time_unit: e.target.value }))}
-                className="border border-gray-200 rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white text-sm">
-                <option value="minutes">{isArabic ? "دقيقة" : "mins"}</option>
-                <option value="hours">{isArabic ? "ساعة" : "hrs"}</option>
-                <option value="days">{isArabic ? "يوم" : "days"}</option>
-              </select>
-            </div>
-          </div>
+          <PricingAdvisor price={form.price} productName={form.name} isArabic={isArabic} />
         </div>
 
-        {/* Category */}
+        {/* Processing Time */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الفئة" : "Category"}</label>
-          <select value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
-            <option value="">{isArabic ? "اختر فئة" : "Select a category"}</option>
-            {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.icon} {isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>)}
-          </select>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وقت التجهيز" : "Processing time"}</label>
+          <div className="flex gap-2">
+            <input type="number" value={form.processing_days} onChange={e => setForm(f => ({ ...f, processing_days: e.target.value }))} min="1" max="999"
+              className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            <select value={form.time_unit} onChange={e => setForm(f => ({ ...f, time_unit: e.target.value }))}
+              className="border border-gray-200 rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white text-sm">
+              <option value="minutes">{isArabic ? "دقيقة" : "mins"}</option>
+              <option value="hours">{isArabic ? "ساعة" : "hrs"}</option>
+              <option value="days">{isArabic ? "يوم" : "days"}</option>
+            </select>
+          </div>
         </div>
 
         {/* Stock */}
@@ -295,8 +393,6 @@ export default function AddProduct() {
           {showVariantBuilder && (
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
               <p className="text-sm font-medium text-gray-700">{isArabic ? "بناء الخيار" : "Build Variant"}</p>
-
-              {/* Presets */}
               <div>
                 <p className="text-xs text-gray-500 mb-2">{isArabic ? "قوالب سريعة:" : "Quick presets:"}</p>
                 <div className="flex flex-wrap gap-2">
@@ -308,22 +404,18 @@ export default function AddProduct() {
                   ))}
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">{isArabic ? "اسم الخيار (EN)" : "Variant name (EN)"}</label>
                   <input type="text" value={newVariant.name} onChange={e => setNewVariant(v => ({ ...v, name: e.target.value }))}
-                    placeholder="e.g. Size"
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                    placeholder="e.g. Size" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">{isArabic ? "اسم الخيار (AR)" : "Variant name (AR)"}</label>
                   <input type="text" value={newVariant.name_ar} onChange={e => setNewVariant(v => ({ ...v, name_ar: e.target.value }))}
-                    placeholder="مثال: المقاس"
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                    placeholder="مثال: المقاس" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
                 </div>
               </div>
-
               <div>
                 <p className="text-xs font-medium text-gray-600 mb-2">{isArabic ? "الخيارات المتاحة:" : "Available options:"}</p>
                 <div className="space-y-2">
@@ -335,22 +427,18 @@ export default function AddProduct() {
                       <div className="flex items-center gap-1">
                         <span className="text-xs text-gray-400">+AED</span>
                         <input type="number" value={opt.price_adj} onChange={e => updateOption(i, "price_adj", e.target.value)}
-                          placeholder="0" step="0.5"
-                          className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                          placeholder="0" step="0.5" className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
                       </div>
                       {newVariant.options.length > 1 && (
-                        <button type="button" onClick={() => removeVariantOption(i)}
-                          className="text-gray-400 hover:text-red-500 transition">✕</button>
+                        <button type="button" onClick={() => removeVariantOption(i)} className="text-gray-400 hover:text-red-500 transition">✕</button>
                       )}
                     </div>
                   ))}
                 </div>
-                <button type="button" onClick={addVariantOption}
-                  className="text-xs text-orange-500 hover:underline mt-2">
+                <button type="button" onClick={addVariantOption} className="text-xs text-orange-500 hover:underline mt-2">
                   + {isArabic ? "إضافة خيار آخر" : "Add another option"}
                 </button>
               </div>
-
               <div className="flex items-center gap-2">
                 <input type="checkbox" checked={newVariant.is_required} onChange={e => setNewVariant(v => ({ ...v, is_required: e.target.checked }))}
                   className="rounded" id="required-check" />
@@ -358,7 +446,6 @@ export default function AddProduct() {
                   {isArabic ? "مطلوب (المشتري يجب أن يختار)" : "Required (buyer must choose)"}
                 </label>
               </div>
-
               <div className="flex gap-2">
                 <button type="button" onClick={() => setShowVariantBuilder(false)}
                   className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm transition">
