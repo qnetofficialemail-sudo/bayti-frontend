@@ -24,11 +24,13 @@ export default function SellerDashboard() {
 
   useEffect(() => {
     if (!user || user.role !== "seller") { navigate("/login"); return; }
-    Promise.all([api.get("/api/orders/my"), api.get("/api/sellers/me")]).then(([o, s]) => {
-      setOrders(o.data);
+    api.get("/api/sellers/me").then(s => {
       const myProfile = s.data;
       setProfile(myProfile);
-      if (myProfile) { api.get("/api/products").then(p => { setProducts(p.data.filter((prod: any) => prod.seller?.id === myProfile.id)); }); }
+      if (myProfile) {
+        api.get("/api/products").then(p => { setProducts(p.data.filter((prod: any) => prod.seller?.id === myProfile.id)); });
+        api.get("/api/orders/my").then(o => setOrders(o.data)).catch(() => {});
+      }
     }).finally(() => setLoading(false));
   }, [user]);
 
