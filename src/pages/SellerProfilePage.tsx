@@ -207,7 +207,7 @@ export default function SellerProfilePage() {
                   {product.image_url
                     ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`}
                         alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                    : <span className="text-5xl">{product.category?.icon || "🍽️"}</span>
+                    : <span className="text-5xl">{product.category?.icon || "🛍️"}</span>
                   }
                 </div>
                 <div className="p-4">

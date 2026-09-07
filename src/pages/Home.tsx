@@ -93,7 +93,7 @@ export default function Home() {
           {[...Array(6)].map((_, i) => (<div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse"><div className="h-48 bg-gray-100" /><div className="p-4 space-y-2"><div className="h-4 bg-gray-100 rounded w-3/4" /><div className="h-3 bg-gray-100 rounded w-1/2" /></div></div>))}
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-20 text-gray-400"><div className="text-5xl mb-4">🍽️</div><p className="text-lg">{isArabic ? "لا توجد منتجات" : "No products found"}</p></div>
+        <div className="text-center py-20 text-gray-400"><div className="text-5xl mb-4">🛍️</div><p className="text-lg">{isArabic ? "لا توجد منتجات" : "No products found"}</p></div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map(product => {
