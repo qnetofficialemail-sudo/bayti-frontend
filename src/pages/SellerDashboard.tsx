@@ -24,6 +24,17 @@ export default function SellerDashboard() {
   const [notifEnabled, setNotifEnabled] = useState(false);
   const [notifLoading, setNotifLoading] = useState(false);
 
+  // Check if already subscribed on mount
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.ready.then(reg => {
+        reg.pushManager.getSubscription().then(sub => {
+          if (sub) setNotifEnabled(true);
+        });
+      }).catch(() => {});
+    }
+  }, []);
+
   const enableNotifications = async () => {
     setNotifLoading(true);
     try {
