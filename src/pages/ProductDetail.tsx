@@ -148,9 +148,9 @@ export default function ProductDetail() {
         type="product"
         price={product.price}
       />
-      <Link to="/" className="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
+      <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
         {isArabic ? "→ رجوع" : "← Back"}
-      </Link>
+      </button>
       <div className="grid md:grid-cols-2 gap-8">
         {/* Product Info */}
         <div>
@@ -366,8 +366,14 @@ export default function ProductDetail() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                 {isArabic ? "رقم الهاتف *" : "Phone Number *"}
               </label>
-              <input type="tel" value={buyerPhone} onChange={e => setBuyerPhone(e.target.value)}
+              <input type="tel" value={buyerPhone} onChange={e => {
+                  let val = e.target.value.replace(/[^0-9+]/g, "");
+                  if (val && !val.startsWith("+")) val = "+971" + val;
+                  setBuyerPhone(val);
+                }}
                 required placeholder="+971 50 000 0000"
+                pattern="^\+[0-9]{10,15}$"
+                title={isArabic ? "أدخل رقم هاتف دولي صحيح مثل +971501234567" : "Enter a valid international phone number e.g. +971501234567"}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
 
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "ملاحظات (اختياري)" : "Notes (optional)"}</label>
