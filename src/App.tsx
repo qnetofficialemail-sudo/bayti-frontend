@@ -18,6 +18,7 @@ import CategoriesPage from "./pages/CategoriesPage";
 import Landing from "./pages/Landing";
 import SellerApplyPage from "./pages/SellerApplyPage";
 import SellerRegisterPage from "./pages/SellerRegisterPage";
+import NotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
 import { Navigate } from "react-router-dom";
 
@@ -54,6 +55,7 @@ export default function App() {
               <Route path="/shop/:id" element={<><Navbar /><main id="main-content"><SellerProfilePage /></main></>} />
               <Route path="/seller-apply" element={<><Navbar /><main id="main-content"><SellerApplyPage /></main></>} />
               <Route path="/seller-register" element={<><Navbar /><main id="main-content"><SellerRegisterPage /></main></>} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </BrowserRouter>
