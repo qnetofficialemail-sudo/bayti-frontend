@@ -154,7 +154,7 @@ export default function SellerSetup() {
                         ? "border-orange-500 bg-orange-50 text-orange-700"
                         : "border-gray-200 text-gray-600 hover:border-orange-300"
                     }`}>
-                    <span>{cat.icon}</span>
+                    {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt="" aria-hidden="true" className="w-6 h-6 object-contain" /> : <span>{cat.icon}</span>}
                     <span>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</span>
                   </button>
                 ))}

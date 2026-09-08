@@ -84,7 +84,7 @@ export default function Home() {
         {categories.map(cat => (
           <button key={cat.id} onClick={() => setSelectedCategory(selectedCategory === cat.id ? null : cat.id)}
             className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${selectedCategory === cat.id ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
-            {cat.icon} {isArabic && cat.name_ar ? cat.name_ar : cat.name}
+            {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt="" aria-hidden="true" className="w-4 h-4 object-contain inline-block mr-1" /> : <span className="mr-1">{cat.icon}</span>}{isArabic && cat.name_ar ? cat.name_ar : cat.name}
           </button>
         ))}
       </div>

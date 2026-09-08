@@ -578,7 +578,7 @@ export default function AdminPanel() {
           <p className="text-sm text-gray-500">{isArabic ? "تحكم في الفئات المعروضة للعملاء" : "Control which categories are visible to customers"}</p>
           {managedCategories.map((cat: any) => (
             <div key={cat.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center gap-4">
-              <span className="text-3xl">{cat.icon}</span>
+              {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt={cat.name} className="w-10 h-10 object-contain" /> : <span className="text-3xl">{cat.icon}</span>}
               <div className="flex-1">
                 <p className="font-medium text-gray-900">{cat.name}</p>
                 {cat.name_ar && <p className="text-sm text-gray-500">{cat.name_ar}</p>}

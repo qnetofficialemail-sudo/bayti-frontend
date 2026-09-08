@@ -128,7 +128,7 @@ export default function SellerProfilePage() {
             <div className="flex flex-wrap gap-2">
               {offeredCategories.map(cat => (
                 <span key={cat.id} className="text-xs bg-orange-50 text-orange-700 px-3 py-1 rounded-full">
-                  {cat.icon} {isArabic && cat.name_ar ? cat.name_ar : cat.name}
+                  {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : <span className="mr-1">{cat.icon}</span>}{isArabic && cat.name_ar ? cat.name_ar : cat.name}
                 </span>
               ))}
             </div>

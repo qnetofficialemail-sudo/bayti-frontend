@@ -159,7 +159,7 @@ export default function Landing() {
               {categories.map(cat => (
                 <Link key={cat.id} to={`/marketplace?category=${cat.id}`}
                   className="group bg-white rounded-2xl border-2 border-gray-100 hover:border-orange-400 hover:shadow-lg p-6 text-center transition-all duration-200 cursor-pointer">
-                  <div className="text-5xl mb-3 group-hover:scale-110 transition-transform duration-200">{cat.icon}</div>
+                  <div className="flex justify-center mb-3 group-hover:scale-110 transition-transform duration-200">{String(cat.icon).startsWith("/") ? <img src={cat.icon} alt={cat.name} className="w-16 h-16 object-contain" /> : <span className="text-5xl">{cat.icon}</span>}</div>
                   <h3 className="font-semibold text-gray-900 text-sm">
                     {isArabic && cat.name_ar ? cat.name_ar : cat.name}
                   </h3>

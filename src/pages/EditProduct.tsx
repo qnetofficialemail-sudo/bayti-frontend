@@ -242,7 +242,7 @@ export default function EditProduct() {
           <select value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}
             className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
             <option value="">{isArabic ? "\u0627\u062e\u062a\u0631 \u0641\u0626\u0629" : "Select category"}</option>
-            {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.icon} {isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>)}
+            {categories.map(cat => <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>)}
           </select>
         </div>
 

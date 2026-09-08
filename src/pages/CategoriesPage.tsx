@@ -59,7 +59,7 @@ export default function CategoriesPage() {
           {categories.map(cat => (
             <Link key={cat.id} to={`/marketplace?category=${cat.id}`}
               className="bg-white rounded-2xl border border-gray-100 p-6 text-center hover:border-orange-300 hover:shadow-md transition group">
-              <div className="text-5xl mb-3">{cat.icon}</div>
+              <div className="flex justify-center mb-3">{String(cat.icon).startsWith("/") ? <img src={cat.icon} alt={cat.name} className="w-16 h-16 object-contain" /> : <span className="text-5xl">{cat.icon}</span>}</div>
               <h3 className="font-semibold text-gray-900 text-sm mb-1">
                 {isArabic && cat.name_ar ? cat.name_ar : cat.name}
               </h3>
