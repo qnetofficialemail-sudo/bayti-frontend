@@ -107,6 +107,7 @@ export default function Landing() {
           <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8">
             <div className="flex gap-2 bg-white rounded-2xl shadow-lg p-2 border border-gray-100">
               <input value={search} onChange={e => setSearch(e.target.value)} type="text"
+                aria-label={isArabic ? "ابحث عن منتجات" : "Search products and sellers"}
                 placeholder={isArabic ? "ابحث عن منتجات، بائعين، حرفيين..." : "Search for products, sellers, artisans..."}
                 className="flex-1 px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
               <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-6 py-2 rounded-xl font-medium transition">
