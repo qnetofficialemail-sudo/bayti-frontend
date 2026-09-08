@@ -12,7 +12,7 @@ export default function CategoriesPage() {
 
   useEffect(() => {
     api.get("/api/categories")
-      .then(c => setCategories(c.data.filter((cat: any) => cat.is_active !== false)))
+      .then(c => setCategories(c.data.filter((cat: any) => cat.is_active !== false && cat.product_count > 0)))
       .catch(() => setCategories([]))
       .finally(() => setLoading(false));
     api.get("/api/products?limit=200")

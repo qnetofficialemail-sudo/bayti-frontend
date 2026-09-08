@@ -26,7 +26,7 @@ export default function Home() {
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { api.get("/api/categories").then(r => setCategories(r.data)).catch(() => {}); }, []);
+  useEffect(() => { api.get("/api/categories").then(r => setCategories(r.data.filter((c: any) => c.product_count > 0))).catch(() => {}); }, []);
   useEffect(() => {
     setLoading(true);
     const params: any = {};
