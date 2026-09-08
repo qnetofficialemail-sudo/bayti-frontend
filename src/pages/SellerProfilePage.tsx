@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/client";
 import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
@@ -11,6 +11,7 @@ const BADGE_CONFIG: Record<string, { label: string; labelAr: string; color: stri
 };
 
 export default function SellerProfilePage() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { isArabic } = useLanguage();
   const [seller, setSeller] = useState<any>(null);
@@ -76,9 +77,9 @@ export default function SellerProfilePage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link to="/" className="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
+      <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
         {isArabic ? "→ رجوع" : "← Back"}
-      </Link>
+      </button>
 
       {/* Shop header */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
