@@ -5,63 +5,63 @@ import SEO from "../components/SEO";
 const STEPS = [
   {
     num: "١", numEn: "1",
-    title: "سجّلي مجاناً", titleEn: "Register free",
-    desc: "أنشئي حسابك في دقيقتين. لا رسوم، لا عقود.", descEn: "Create your account in 2 minutes. No fees, no contracts.",
+    title: "سجّلي مجّاناً", titleEn: "Register free",
+    desc: "أنشئي حسابك في دقيقتين. بلا رسوم ولا عقود.", descEn: "Create your account in two minutes. No fees and no contracts.",
   },
   {
     num: "٢", numEn: "2",
     title: "أضيفي منتجاتك", titleEn: "Add your products",
-    desc: "صوّري منتجاتك والذكاء الاصطناعي يكتب لك الوصف تلقائياً.", descEn: "Photo your products and AI writes the description automatically.",
+    desc: "التقطي صور منتجاتك وسيكتب الذكاء الاصطناعي الوصف تلقائياً.", descEn: "Photograph your products and AI will automatically write the description.",
   },
   {
     num: "٣", numEn: "3",
     title: "استلمي طلباتك", titleEn: "Receive your orders",
-    desc: "تنبيه فوري عند كل طلب. تواصل مع الزبون عبر واتساب مباشرة.", descEn: "Instant alert for every order. Contact buyers via WhatsApp directly.",
+    desc: "ستتلقّين إشعاراً فورياً مع كل طلب. تواصلي مع العميل عبر واتساب مباشرةً.", descEn: "You will receive an instant notification for every order. Contact buyers via WhatsApp directly.",
   },
 ];
 
 const FEATURES = [
-  { icon: "🤖", title: "ذكاء اصطناعي يكتب عنك", titleEn: "AI writes for you", desc: "صوّري منتجك وبيتي يكتب الاسم والوصف والسعر المقترح تلقائياً بالعربي والانجليزي.", descEn: "Photo your product and Bayti auto-writes name, description and suggested price in Arabic and English." },
-  { icon: "📊", title: "لوحة تحكم كاملة", titleEn: "Full dashboard", desc: "شوفي طلباتك، منتجاتك، تقييماتك وأرباحك في مكان واحد.", descEn: "See your orders, products, reviews and earnings in one place." },
-  { icon: "🗓", title: "حددي أوقات عملك", titleEn: "Set your schedule", desc: "اختاري الأيام والأوقات اللي تناسبك. لا طلبات خارج أوقاتك.", descEn: "Choose the days and hours that suit you. No orders outside your hours." },
-  { icon: "💬", title: "تواصل مباشر بالواتساب", titleEn: "Direct WhatsApp contact", desc: "كل طلب فيه زر واتساب للتواصل مع الزبون مباشرة بدون وسيط.", descEn: "Every order has a WhatsApp button to contact the buyer directly." },
-  { icon: "⭐", title: "تقييمات تبني ثقتك", titleEn: "Reviews build your trust", desc: "الزباين يقيّمون وتقييماتك تظهر على متجرك وتجيب زباين جدد.", descEn: "Customers review you and your ratings appear on your store to attract new buyers." },
-  { icon: "🇦🇪", title: "عربي وإنجليزي", titleEn: "Arabic & English", desc: "الموقع بالكامل باللغتين. منتجاتك تظهر للعرب والأجانب في الإمارات.", descEn: "The entire site is bilingual. Your products appear to both Arabic and English speakers in the UAE." },
+  { icon: "🤖", title: "ذكاء اصطناعي يكتب عنك", titleEn: "AI writes for you", desc: "التقطي صورة منتجك وستكتب بيتي الاسم والوصف والسعر المقترح تلقائياً بالعربية والإنجليزية.", descEn: "Photograph your product and Bayti automatically writes the name, description and suggested price in Arabic and English." },
+  { icon: "📊", title: "لوحة تحكم كاملة", titleEn: "Full dashboard", desc: "اطّلعي على طلباتك ومنتجاتك وتقييماتك وأرباحك في مكان واحد.", descEn: "View your orders, products, reviews and earnings all in one place." },
+  { icon: "🗓", title: "حددي أوقات عملك", titleEn: "Set your schedule", desc: "اختاري الأيام والأوقات التي تناسبك. لن تتلقّي طلبات خارج أوقات عملك.", descEn: "Choose the days and hours that suit you. No orders will be received outside your working hours." },
+  { icon: "💬", title: "تواصل مباشر بالواتساب", titleEn: "Direct WhatsApp contact", desc: "يتضمّن كل طلب زر واتساب للتواصل مع العميل مباشرةً دون وسيط.", descEn: "Every order includes a WhatsApp button to contact the buyer directly without intermediaries." },
+  { icon: "⭐", title: "تقييمات تبني ثقتك", titleEn: "Reviews build your trust", desc: "يقيّم العملاء تجربتهم وتظهر تقييماتهم على متجرك لاستقطاب عملاء جدد.", descEn: "Customers rate their experience and reviews appear on your store to attract new buyers." },
+  { icon: "🇦🇪", title: "عربي وإنجليزي", titleEn: "Arabic & English", desc: "الموقع بالكامل باللغتين. تظهر منتجاتك للناطقين بالعربية والإنجليزية في الإمارات.", descEn: "The entire site is bilingual. Your products appear to both Arabic and English speakers in the UAE." },
 ];
 
 const HOW_IT_WORKS = [
   {
     icon: "🛍️",
-    title: "الزبون يطلب", titleEn: "Customer orders",
-    desc: "الزبون يختار منتجك ويملأ بياناته (الاسم، رقم الهاتف، منطقة التوصيل) ويضغط طلب.",
-    descEn: "The customer selects your product, fills in their details (name, phone, delivery area) and places the order.",
+    title: "العميل يطلب", titleEn: "The customer places an order",
+    desc: "يختار العميل منتجك ويُدخل بياناته (الاسم ورقم الهاتف ومنطقة التوصيل) ثم يؤكّد الطلب.",
+    descEn: "The customer selects your product, enters their details (name, phone number, delivery area) and confirms the order.",
   },
   {
     icon: "🔔",
-    title: "تنبيه فوري لك", titleEn: "Instant alert to you",
-    desc: "تصلك رسالة فورية بتفاصيل الطلب. تقدرين تتواصلين مع الزبون عبر واتساب لتأكيد الموعد.",
-    descEn: "You get an instant message with order details. You can contact the buyer via WhatsApp to confirm timing.",
+    title: "إشعار فوري", titleEn: "Instant alert to you",
+    desc: "تصلكِ رسالة فورية بتفاصيل الطلب. يمكنكِ التواصل مع العميل عبر واتساب لتأكيد موعد التسليم.",
+    descEn: "You receive an instant message with order details and can contact the buyer via WhatsApp to confirm the delivery time.",
   },
   {
     icon: "🚗",
     title: "التوصيل", titleEn: "Delivery",
-    desc: "أنتِ تحددين طريقة التوصيل — إما توصّلين بنفسك أو الزبون يمر يستلم. تحددين رسوم التوصيل لكل إمارة بنفسك.",
-    descEn: "You decide delivery — either you deliver yourself or the buyer picks up. You set your own delivery fees per emirate.",
+    desc: "تحدّدين طريقة التوصيل بنفسك — إما توصيل من قِبلك أو استلام مباشر من العميل. كما تحدّدين رسوم التوصيل لكل إمارة.",
+    descEn: "You decide the delivery method — either you deliver yourself or the buyer collects. You also set your own delivery fees per emirate.",
   },
   {
     icon: "💵",
     title: "الدفع", titleEn: "Payment",
-    desc: "الدفع نقداً عند الاستلام. الزبون يدفع لك مباشرة. بيتي تأخذ عمولة صغيرة فقط على الطلبات المكتملة.",
-    descEn: "Payment is cash on delivery. The buyer pays you directly. Bayti takes a small commission only on completed orders.",
+    desc: "الدفع نقداً عند الاستلام. يدفع العميل لكِ مباشرةً. تأخذ بيتي عمولةً صغيرةً فقط على الطلبات المكتملة.",
+    descEn: "Payment is cash on delivery. The buyer pays you directly. Bayti takes a small commission only on successfully completed orders.",
   },
 ];
 
 const FAQS = [
-  { q: "هل التسجيل مجاني؟", qEn: "Is registration free?", a: "نعم تماماً. لا رسوم شهرية ولا رسوم إدراج منتجات. نأخذ فقط عمولة صغيرة على كل طلب مكتمل.", aEn: "Yes completely. No monthly fees, no listing fees. We only take a small commission on each completed order." },
-  { q: "هل أحتاج سجل تجاري؟", qEn: "Do I need a trade license?", a: "لا. بيتي للبائعات المنزليات. لا نشترط سجل تجاري للبدء.", aEn: "No. Bayti is for home sellers. We don't require a trade license to start." },
-  { q: "من يوصّل الطلبات؟", qEn: "Who delivers the orders?", a: "أنتِ تختارين — إما توصّلين بنفسك أو الزبون يمر يستلم. تحددين رسوم التوصيل لكل إمارة.", aEn: "You choose — either you deliver yourself or the buyer picks up. You set delivery fees per emirate." },
-  { q: "كيف أستلم فلوسي؟", qEn: "How do I receive my money?", a: "الدفع نقداً عند الاستلام مباشرة. الزبون يدفع لك عند وصول المنتج.", aEn: "Cash on delivery directly. The buyer pays you when the product arrives." },
-  { q: "متى يصير اللانش الرسمي؟", qEn: "When is the official launch?", a: "الموقع حالياً في مرحلة تجريبية. اللانش الرسمي قريباً. اللي تسجّل الآن يكون من أوائل البائعات ويحصل على ميزات إضافية.", aEn: "The site is currently in beta. Official launch is coming soon. Those who register now will be among the first sellers and get extra benefits." },
+  { q: "هل التسجيل مجّاني؟", qEn: "Is registration free?", a: "نعم، تماماً. لا توجد رسوم شهرية ولا رسوم لإدراج المنتجات. نأخذ فقط عمولةً صغيرةً على كل طلب مكتمل.", aEn: "Yes completely. No monthly fees, no listing fees. We only take a small commission on each completed order." },
+  { q: "هل أحتاج إلى ترخيص تجاري؟", qEn: "Do I need a trade license?", a: "لا. بيتي مخصّصة للبائعات المنزليات ولا نشترط ترخيصاً تجارياً للبدء.", aEn: "No. Bayti is designed for home sellers and we do not require a trade license to get started." },
+  { q: "من يتولّى توصيل الطلبات؟", qEn: "Who delivers the orders?", a: "تختارين أنتِ — إما أن توصّلي بنفسك أو يستلم العميل مباشرةً. كما تحدّدين رسوم التوصيل لكل إمارة.", aEn: "The choice is yours — either deliver yourself or have the buyer collect. You set your own delivery fees per emirate." },
+  { q: "كيف أستلم مبالغي؟", qEn: "How do I receive my money?", a: "الدفع نقداً عند الاستلام مباشرةً. يدفع العميل لكِ عند استلام المنتج.", aEn: "Payment is cash on delivery. The buyer pays you directly upon receiving the product." },
+  { q: "متى سيكون الإطلاق الرسمي؟", qEn: "When is the official launch?", a: "الموقع حالياً في مرحلة تجريبية والإطلاق الرسمي قريب. من تسجّل الآن ستكون من أوائل البائعات وستحصل على مزايا إضافية.", aEn: "The site is currently in beta and the official launch is approaching. Those who register now will be among the first sellers and will receive additional benefits." },
 ];
 
 export default function SellPage() {
@@ -72,15 +72,15 @@ export default function SellPage() {
     <div dir={dir} className="min-h-screen bg-white">
       <SEO
         title={isArabic ? "بيعي من البيت — بيتي" : "Sell from Home — Bayti"}
-        description={isArabic ? "حوّلي موهبتك إلى دخل. سجّلي مجاناً وابدأي البيع لزباين في كل الإمارات." : "Turn your talent into income. Register free and start selling to customers across the UAE."}
+        description={isArabic ? "حوّلي موهبتك إلى دخل. سجّلي مجّاناً وابدأي البيع لزباين في كل الإمارات." : "Turn your talent into income. Register free and start selling to customers across the UAE."}
       />
 
       {/* Beta Banner */}
       <div className="bg-amber-50 border-b border-amber-200 py-3 px-4 text-center">
         <p className="text-amber-800 text-sm font-medium">
           {isArabic
-            ? "🚀 بيتي حالياً في مرحلة تجريبية — اللانش الرسمي قريباً. سجّلي الآن وكوني من أوائل البائعات وأحصلي على مميزات حصرية!"
-            : "🚀 Bayti is currently in beta — official launch coming soon. Register now and be among the first sellers for exclusive benefits!"}
+            ? "🚀 بيتي حالياً في مرحلة تجريبية — الإطلاق الرسمي قريباً. سجّلي الآن لتكوني من أوائل البائعات وتحصلي على مزايا حصرية!"
+            : "🚀 Bayti is currently in beta — the official launch is coming soon. Register now to be among the first sellers and receive exclusive benefits!"}
         </p>
       </div>
 
@@ -88,24 +88,24 @@ export default function SellPage() {
       <section className="bg-gradient-to-b from-orange-50 to-white pt-14 pb-20 px-4">
         <div className="max-w-2xl mx-auto text-center">
           <div className="inline-block bg-orange-100 text-orange-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-            {isArabic ? "للبائعات المنزليات في الإمارات" : "For UAE home sellers"}
+            {isArabic ? "للبائعات المنزليات في الإمارات العربية المتحدة" : "For UAE home sellers"}
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-            {isArabic ? (<>موهبتك تستحق<br /><span className="text-orange-500">أكثر من الانستقرام</span></>) : (<>Your talent deserves<br /><span className="text-orange-500">more than Instagram</span></>)}
+            {isArabic ? (<>موهبتك تستحقّ<br /><span className="text-orange-500">أكثر من الانستقرام</span></>) : (<>Your talent deserves<br /><span className="text-orange-500">more than Instagram</span></>)}
           </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto">
-            {isArabic ? "بيتي سوق إماراتي للبائعات المنزليات — بدون رسوم شهرية، بدون سجل تجاري، بدون تعقيد." : "Bayti is a UAE marketplace for home sellers — no monthly fees, no trade license, no complexity."}
+            {isArabic ? "بيتي سوق إماراتي للبائعات المنزليات — بلا رسوم شهرية، بلا تعقيد." : "Bayti is a UAE marketplace for home sellers — no monthly fees, no complexity."}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/seller-apply" className="bg-orange-500 text-white font-bold px-8 py-4 rounded-2xl text-lg hover:bg-orange-600 transition shadow-lg shadow-orange-200">
-              {isArabic ? "سجّلي الآن — مجاناً" : "Register Now — Free"}
+              {isArabic ? "سجّلي الآن — مجّاناً" : "Register Now — Free"}
             </Link>
             <Link to="/marketplace" className="bg-white text-gray-700 font-medium px-8 py-4 rounded-2xl text-lg border border-gray-200 hover:border-orange-300 transition">
-              {isArabic ? "تصفّحي السوق أولاً" : "Browse marketplace first"}
+              {isArabic ? "تصفّحي السوق أولاً" : "Browse the marketplace first"}
             </Link>
           </div>
           <p className="text-sm text-gray-400 mt-5">
-            {isArabic ? "✨ من تسجّل الآن تحصل على أولوية في الظهور عند اللانش الرسمي" : "✨ Early registrants get priority visibility at official launch"}
+            {isArabic ? "✨ من تسجّل الآن ستحصل على الأولوية في الظهور عند الإطلاق الرسمي" : "✨ Early registrants will receive priority visibility at the official launch"}
           </p>
         </div>
       </section>
@@ -114,8 +114,8 @@ export default function SellPage() {
       <section className="py-14 px-4 bg-gray-900">
         <div className="max-w-3xl mx-auto grid grid-cols-3 gap-6 text-center">
           {[
-            { num: "٠ رسوم", numEn: "0 Fees", label: isArabic ? "تسجيل وإدراج منتجات" : "registration & listing" },
-            { num: "24 ساعة", numEn: "24 hrs", label: isArabic ? "من التسجيل للبدء" : "from signup to live" },
+            { num: "بلا رسوم", numEn: "0 Fees", label: isArabic ? "تسجيل وإدراج منتجات" : "registration & listing" },
+            { num: "24 ساعة", numEn: "24 hrs", label: isArabic ? "من التسجيل حتى البداية" : "from signup to live" },
             { num: "١١ فئة", numEn: "11 cats", label: isArabic ? "منتج تقدرين تبيعينه" : "product categories" },
           ].map((s, i) => (
             <div key={i}>
@@ -130,10 +130,10 @@ export default function SellPage() {
       <section className="py-20 px-4">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
-            {isArabic ? "إيش تحصلين عليه؟" : "What do you get?"}
+            {isArabic ? "ما الذي ستحصلين عليه؟" : "What do you get?"}
           </h2>
           <p className="text-center text-gray-500 mb-12">
-            {isArabic ? "كل ما تحتاجينه لتبيعي بثقة" : "Everything you need to sell with confidence"}
+            {isArabic ? "كل ما تحتاجينه لتبيعي بثقة واطمئنان" : "Everything you need to sell with confidence"}
           </p>
           <div className="grid md:grid-cols-2 gap-5">
             {FEATURES.map((f, i) => (
@@ -153,10 +153,10 @@ export default function SellPage() {
       <section className="py-20 px-4 bg-orange-50">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
-            {isArabic ? "كيف يشتغل السوق؟" : "How does it work?"}
+            {isArabic ? "كيف يعمل السوق؟" : "How does it work?"}
           </h2>
           <p className="text-center text-gray-500 mb-12">
-            {isArabic ? "من الطلب إلى الدفع — كل شي واضح" : "From order to payment — everything clear"}
+            {isArabic ? "من الطلب إلى الدفع — كل شيء واضح" : "From order to payment — everything clear"}
           </p>
           <div className="space-y-6">
             {HOW_IT_WORKS.map((step, i) => (
@@ -176,7 +176,7 @@ export default function SellPage() {
       <section className="py-20 px-4">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
-            {isArabic ? "ثلاث خطوات وتبدأين" : "Three steps and you're live"}
+            {isArabic ? "ثلاث خطوات وتنطلقين" : "Three steps and you are live"}
           </h2>
           <div className="space-y-8">
             {STEPS.map((step, i) => (
@@ -203,10 +203,10 @@ export default function SellPage() {
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-3">
-            {isArabic ? "إيش تقدرين تبيعين؟" : "What can you sell?"}
+            {isArabic ? "ما الذي يمكنكِ بيعه؟" : "What can you sell?"}
           </h2>
           <p className="text-gray-500 mb-8">
-            {isArabic ? "كل ما تصنعينه بيديكِ أو تبيعينه من البيت" : "Anything you make by hand or sell from home"}
+            {isArabic ? "كل ما تصنعينه بيديكِ أو تبيعينه من المنزل" : "Anything you make by hand or sell from home"}
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
@@ -250,16 +250,16 @@ export default function SellPage() {
       <section className="py-20 px-4 bg-orange-500">
         <div className="max-w-lg mx-auto text-center">
           <p className="text-orange-200 text-sm mb-3">
-            {isArabic ? "🚀 مرحلة تجريبية — اللانش الرسمي قريباً" : "🚀 Beta phase — official launch coming soon"}
+            {isArabic ? "🚀 مرحلة تجريبية — الإطلاق الرسمي قريباً" : "🚀 Beta phase — the official launch is coming soon"}
           </p>
           <h2 className="text-3xl font-bold text-white mb-3">
-            {isArabic ? "سجّلي الآن وكوني من الأوائل" : "Register now and be among the first"}
+            {isArabic ? "سجّلي الآن لتكوني من الأوائل" : "Register now to be among the first"}
           </h2>
           <p className="text-orange-100 mb-8">
-            {isArabic ? "التسجيل مجاني. أضيفي منتجاتك اليوم. لما نطلق رسمياً تكونين جاهزة." : "Free registration. Add your products today. When we officially launch you'll be ready."}
+            {isArabic ? "التسجيل مجّاني. أضيفي منتجاتك اليوم. وحين نُطلق رسمياً ستكونين جاهزة تماماً." : "Registration is free. Add your products today and when we officially launch, you will be ready."}
           </p>
           <Link to="/seller-apply" className="inline-block bg-white text-orange-500 font-bold px-10 py-4 rounded-2xl text-lg hover:bg-orange-50 transition">
-            {isArabic ? "ابدأي الآن — مجاناً" : "Start Now — Free"}
+            {isArabic ? "ابدأي الآن — مجّاناً" : "Start Now — Free"}
           </Link>
         </div>
       </section>
