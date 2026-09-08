@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/client";
+import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function CategoriesPage() {
@@ -29,6 +30,7 @@ export default function CategoriesPage() {
 
   if (loading) return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <SEO title={isArabic ? 'الفئات | بيتي' : 'Categories | Bayti'} description={isArabic ? 'اكتشف جميع فئات المنتجات المحلية' : 'Discover all local product categories in UAE'} />
       <div className="h-8 bg-gray-100 rounded-xl w-48 mb-2 animate-pulse" />
       <div className="h-4 bg-gray-100 rounded-xl w-64 mb-8 animate-pulse" />
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../api/client";
+import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 
 const BADGE_CONFIG: Record<string, { label: string; labelAr: string; color: string; icon: string }> = {
@@ -39,6 +40,7 @@ export default function SellerProfilePage() {
 
   if (loading) return (
     <div className="max-w-4xl mx-auto px-4 py-8 animate-pulse">
+      <SEO title={isArabic ? 'متجر البائع | بيتي' : 'Seller Shop | Bayti'} description={isArabic ? 'تصفح منتجات البائع المحلي' : 'Browse products from this local UAE seller'} />
       <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-6">
         <div className="flex gap-6">
           <div className="w-24 h-24 bg-gray-100 rounded-full" />

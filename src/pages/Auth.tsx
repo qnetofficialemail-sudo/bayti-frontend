@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 
 export function LoginPage() {
@@ -26,6 +27,7 @@ export function LoginPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
+      <SEO title={isArabic ? 'تسجيل الدخول | بيتي' : 'Login | Bayti'} description={isArabic ? 'سجل دخولك إلى حسابك في بيتي' : 'Sign in to your Bayti account'} />
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">🏠</div>
