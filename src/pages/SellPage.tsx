@@ -58,7 +58,7 @@ const HOW_IT_WORKS = [
 
 const FAQS = [
   { q: "هل التسجيل مجّاني؟", qEn: "Is registration free?", a: "نعم، تماماً. لا توجد رسوم شهرية ولا رسوم لإدراج المنتجات. نأخذ فقط عمولةً صغيرةً على كل طلب مكتمل.", aEn: "Yes completely. No monthly fees, no listing fees. We only take a small commission on each completed order." },
-  { q: "هل أحتاج إلى ترخيص تجاري؟", qEn: "Do I need a trade license?", a: "لا. بيتي مخصّصة للبائعات المنزليات ولا نشترط ترخيصاً تجارياً للبدء.", aEn: "No. Bayti is designed for home sellers and we do not require a trade license to get started." },
+
   { q: "من يتولّى توصيل الطلبات؟", qEn: "Who delivers the orders?", a: "تختارين أنتِ — إما أن توصّلي بنفسك أو يستلم العميل مباشرةً. كما تحدّدين رسوم التوصيل لكل إمارة.", aEn: "The choice is yours — either deliver yourself or have the buyer collect. You set your own delivery fees per emirate." },
   { q: "كيف أستلم مبالغي؟", qEn: "How do I receive my money?", a: "الدفع نقداً عند الاستلام مباشرةً. يدفع العميل لكِ عند استلام المنتج.", aEn: "Payment is cash on delivery. The buyer pays you directly upon receiving the product." },
   { q: "متى سيكون الإطلاق الرسمي؟", qEn: "When is the official launch?", a: "الموقع حالياً في مرحلة تجريبية والإطلاق الرسمي قريب. من تسجّل الآن ستكون من أوائل البائعات وستحصل على مزايا إضافية.", aEn: "The site is currently in beta and the official launch is approaching. Those who register now will be among the first sellers and will receive additional benefits." },
