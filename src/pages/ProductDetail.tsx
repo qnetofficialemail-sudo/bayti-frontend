@@ -128,7 +128,7 @@ export default function ProductDetail() {
       <h2 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "تم الطلب بنجاح!" : "Order placed!"}</h2>
       <p className="text-gray-500 mb-6">{isArabic ? `استلم ${product.seller.shop_name} طلبك وسيؤكده قريباً.` : `${product.seller.shop_name} has received your order.`}</p>
       <div className="flex gap-3 justify-center">
-        <Link to="/orders" className="bg-orange-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-orange-600 transition">
+        <Link to="/orders" className="bg-orange-500 text-gray-900 px-6 py-3 rounded-xl font-medium hover:bg-orange-600 transition">
           {isArabic ? "تتبع الطلب" : "Track Order"}
         </Link>
         <Link to="/" className="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
@@ -392,7 +392,7 @@ export default function ProductDetail() {
               </div>
 
               <button type="submit" disabled={!user || ordering || (sellerOpen && !sellerOpen.is_open)}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition disabled:opacity-60">
+                className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
                 {ordering
                   ? (isArabic ? "جاري تقديم الطلب..." : "Placing order...")
                   : (isArabic ? `اطلب بـ AED ${total}` : `Order for AED ${total}`)

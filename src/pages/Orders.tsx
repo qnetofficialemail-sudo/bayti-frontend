@@ -88,7 +88,7 @@ export default function Orders() {
         <div className="text-center py-20 text-gray-400">
           <div className="text-5xl mb-4">📦</div>
           <p className="text-lg mb-4">{isArabic ? "لا توجد طلبات بعد" : "No orders yet"}</p>
-          <Link to="/" className="bg-orange-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-orange-600 transition">{isArabic ? "تصفح المنتجات" : "Browse Products"}</Link>
+          <Link to="/" className="bg-orange-500 text-gray-900 px-6 py-3 rounded-xl font-medium hover:bg-orange-600 transition">{isArabic ? "تصفح المنتجات" : "Browse Products"}</Link>
         </div>
       ) : (
         <div className="space-y-6">
@@ -111,7 +111,7 @@ export default function Orders() {
                     <div className="flex items-center gap-1">
                       {STATUS_STEPS.slice(0, -1).map((step, i) => (
                         <React.Fragment key={step}>
-                          <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i <= stepIndex ? "bg-orange-500 text-white" : "bg-gray-200 text-gray-400"}`}>{i < stepIndex ? "✓" : i + 1}</div>
+                          <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i <= stepIndex ? "bg-orange-500 text-gray-900" : "bg-gray-200 text-gray-400"}`}>{i < stepIndex ? "✓" : i + 1}</div>
                           {i < STATUS_STEPS.length - 2 && <div className={`flex-1 h-1 rounded ${i < stepIndex ? "bg-orange-500" : "bg-gray-200"}`} />}
                         </React.Fragment>
                       ))}
@@ -187,7 +187,7 @@ export default function Orders() {
               {isArabic ? "إلغاء" : "Cancel"}
             </button>
             <button onClick={submitReview} disabled={reviewSubmitting}
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-medium transition disabled:opacity-60">
+              className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl text-sm font-medium transition disabled:opacity-60">
               {reviewSubmitting ? "..." : (isArabic ? "إرسال" : "Submit")}
             </button>
           </div>

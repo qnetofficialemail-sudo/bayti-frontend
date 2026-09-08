@@ -244,7 +244,7 @@ export default function AdminPanel() {
           { key: "forecast", label: isArabic ? "توقعات الطلب" : "Demand Forecast", icon: "🔮" },
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
             {t.icon} {t.label}
           </button>
         ))}
@@ -352,7 +352,7 @@ export default function AdminPanel() {
                   <div className="text-xs text-gray-400">{isArabic ? "النسبة الحالية" : "Current rate"}</div>
                 </div>
                 <button onClick={() => { setCommissionModal(seller); setNewRate(String(seller.commission_rate)); }}
-                  className="text-sm bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl transition font-medium">
+                  className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
                   {isArabic ? "تغيير" : "Change"}
                 </button>
               </div>
@@ -371,7 +371,7 @@ export default function AdminPanel() {
               { key: "approved", label: isArabic ? "موافق" : "Approved" },
             ].map(f => (
               <button key={f.key} onClick={() => setSellerFilter(f.key)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${sellerFilter === f.key ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200"}`}>
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${sellerFilter === f.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200"}`}>
                 {f.label}
               </button>
             ))}
@@ -420,7 +420,7 @@ export default function AdminPanel() {
                       🏅 {isArabic ? "شارة" : "Badge"}
                     </button>
                     <button onClick={() => { setCommissionModal(seller); setNewRate(String(seller.commission_rate)); }}
-                      className="text-xs bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg transition font-medium">
+                      className="text-xs bg-orange-500 hover:bg-orange-600 text-gray-900 px-3 py-2 rounded-lg transition font-medium">
                       💰 {isArabic ? "عمولة" : "Commission"}
                     </button>
                     <button onClick={() => deleteSeller(seller)}
@@ -706,7 +706,7 @@ export default function AdminPanel() {
               { key: "all", label: isArabic ? "الكل" : "All" },
             ].map(f => (
               <button key={f.key} onClick={() => setAppFilter(f.key)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${appFilter === f.key ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200"}`}>
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${appFilter === f.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200"}`}>
                 {f.label}
               </button>
             ))}
@@ -852,7 +852,7 @@ export default function AdminPanel() {
               <div className="flex gap-2 mt-3 flex-wrap">
                 {[5, 8, 10, 12, 15, 20].map(r => (
                   <button key={r} onClick={() => setNewRate(String(r))}
-                    className={`px-3 py-1 rounded-lg text-xs font-medium transition ${newRate === String(r) ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+                    className={`px-3 py-1 rounded-lg text-xs font-medium transition ${newRate === String(r) ? "bg-orange-500 text-gray-900" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
                     {r}%
                   </button>
                 ))}
@@ -874,7 +874,7 @@ export default function AdminPanel() {
                 {isArabic ? "إلغاء" : "Cancel"}
               </button>
               <button onClick={() => updateCommission(commissionModal.id)}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl text-sm font-medium transition">
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl text-sm font-medium transition">
                 {isArabic ? "حفظ" : "Save"}
               </button>
             </div>
@@ -901,7 +901,7 @@ export default function AdminPanel() {
                   setForecastLoading(false);
                 }
               }}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
+              className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition">
               {forecastLoading ? (isArabic ? "جارٍ التحليل..." : "Analyzing...") : (isArabic ? "تحليل الطلب" : "Run Forecast")}
             </button>
           </div>

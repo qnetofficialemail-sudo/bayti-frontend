@@ -167,7 +167,7 @@ export default function EditProduct() {
                 <div key={i} className="relative">
                   <img src={imgUrl(img)} alt={`Image ${i+1}`} className={`w-16 h-16 object-cover rounded-xl border-2 ${primaryIndex === i ? "border-orange-500" : "border-gray-200"}`} />
                   <button type="button" onClick={() => setPrimaryIndex(i)}
-                    className={`absolute top-0.5 right-0.5 w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-white" : "bg-white text-gray-400"}`}>
+                    className={`absolute top-0.5 right-0.5 w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-gray-900" : "bg-white text-gray-400"}`}>
                     ★
                   </button>
                   <button type="button" onClick={() => {
@@ -177,7 +177,7 @@ export default function EditProduct() {
                   }} className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow hover:bg-red-600 transition">
                     ✕
                   </button>
-                  {primaryIndex === i && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-orange-500 text-white rounded-b-xl py-0.5">{isArabic ? "\u0631\u0626\u064a\u0633\u064a\u0629" : "Main"}</span>}
+                  {primaryIndex === i && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-orange-500 text-gray-900 rounded-b-xl py-0.5">{isArabic ? "\u0631\u0626\u064a\u0633\u064a\u0629" : "Main"}</span>}
                 </div>
               ))}
             </div>
@@ -253,7 +253,7 @@ export default function EditProduct() {
               <p className="text-sm font-medium text-gray-900">🎨 {isArabic ? "\u0627\u0644\u062e\u064a\u0627\u0631\u0627\u062a (\u0645\u0642\u0627\u0633\u060c \u0644\u0648\u0646\u060c \u0639\u0637\u0631...)" : "Variants (size, color, scent...)"}</p>
             </div>
             <button type="button" onClick={() => setShowVariantBuilder(true)}
-              className="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-lg hover:bg-orange-600 transition">
+              className="text-xs bg-orange-500 text-gray-900 px-3 py-1.5 rounded-lg hover:bg-orange-600 transition">
               + {isArabic ? "\u0625\u0636\u0627\u0641\u0629" : "Add"}
             </button>
           </div>
@@ -314,7 +314,7 @@ export default function EditProduct() {
                   {isArabic ? "\u0625\u0644\u063a\u0627\u0621" : "Cancel"}
                 </button>
                 <button type="button" onClick={saveVariant}
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg text-sm transition">
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-2 rounded-lg text-sm transition">
                   {isArabic ? "\u062d\u0641\u0638" : "Save"}
                 </button>
               </div>
@@ -337,7 +337,7 @@ export default function EditProduct() {
             {isArabic ? "\u0625\u0644\u063a\u0627\u0621" : "Cancel"}
           </button>
           <button type="submit" disabled={saving}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-medium transition disabled:opacity-60">
+            className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
             {saving ? (isArabic ? "\u062c\u0627\u0631\u064a \u0627\u0644\u062d\u0641\u0638..." : "Saving...") : (isArabic ? "\u062d\u0641\u0638 \u0627\u0644\u062a\u063a\u064a\u064a\u0631\u0627\u062a" : "Save Changes")}
           </button>
         </div>

@@ -161,7 +161,7 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
       <button
         onClick={save}
         disabled={saving}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-medium transition disabled:opacity-60"
+        className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60"
       >
         {saving
           ? (isArabic ? "جاري الحفظ..." : "Saving...")

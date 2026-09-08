@@ -200,7 +200,7 @@ export default function EditShop() {
             {isArabic ? "إلغاء" : "Cancel"}
           </button>
           <button type="submit" disabled={saving}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-medium transition disabled:opacity-60">
+            className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
             {saving ? (isArabic ? "جاري الحفظ..." : "Saving...") : (isArabic ? "حفظ" : "Save Changes")}
           </button>
         </div>

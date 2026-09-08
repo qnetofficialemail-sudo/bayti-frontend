@@ -77,7 +77,7 @@ export default function Landing() {
             <Link to="/login" className="text-sm text-gray-600 hover:text-orange-500 px-3 py-2 rounded-lg transition">
               {isArabic ? "تسجيل الدخول" : "Login"}
             </Link>
-            <Link to="/register" className="text-sm bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl transition font-medium">
+            <Link to="/register" className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
               {isArabic ? "انضم إلينا" : "Join Us"}
             </Link>
           </div>
@@ -109,7 +109,7 @@ export default function Landing() {
               <input value={search} onChange={e => setSearch(e.target.value)} type="text"
                 placeholder={isArabic ? "ابحث عن منتجات، بائعين، حرفيين..." : "Search for products, sellers, artisans..."}
                 className="flex-1 px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
-              <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-xl font-medium transition">
+              <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-6 py-2 rounded-xl font-medium transition">
                 {isArabic ? "بحث" : "Search"}
               </button>
             </div>
@@ -184,7 +184,7 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-block bg-orange-500 text-white text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+              <div className="inline-block bg-orange-500 text-gray-900 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
                 {isArabic ? "للبائعين المنزليين" : "For Home Sellers"}
               </div>
               <h2 className="text-3xl font-bold mb-6">
@@ -204,7 +204,7 @@ export default function Landing() {
                 ))}
               </div>
               <Link to="/register"
-                className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-2xl text-lg transition">
+                className="inline-block bg-orange-500 hover:bg-orange-600 text-gray-900 font-semibold px-8 py-4 rounded-2xl text-lg transition">
                 {isArabic ? "ابدأ الآن — مجاناً" : "Start Now — Free"}
               </Link>
             </div>

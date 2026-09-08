@@ -60,7 +60,7 @@ export default function SellerSpotlight() {
           <div className="flex gap-2 flex-shrink-0">
             {cook.best_product && (
               <Link to={`/product/${cook.best_product.id}`}
-                className="bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold px-3 py-2 rounded-xl transition">
+                className="bg-orange-500 hover:bg-orange-600 text-gray-900 text-xs font-semibold px-3 py-2 rounded-xl transition">
                 {isArabic ? "اطلب" : "Order"}
               </Link>
             )}

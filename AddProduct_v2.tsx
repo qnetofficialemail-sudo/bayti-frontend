@@ -214,13 +214,13 @@ export default function AddProduct() {
                 {previews[i] && (
                   <div className="absolute top-1 right-1 flex flex-col gap-1">
                     <button type="button" onClick={() => setPrimaryIndex(i)}
-                      className={`w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-gray-900" : "bg-white text-gray-400 hover:text-orange-500"}`}>★</button>
+                      className={`w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-white" : "bg-white text-gray-400 hover:text-orange-500"}`}>★</button>
                     <button type="button" onClick={() => handleImage(i, null)}
                       className="w-5 h-5 rounded-full bg-white text-gray-400 hover:text-red-500 text-xs flex items-center justify-center shadow">✕</button>
                   </div>
                 )}
                 {primaryIndex === i && previews[i] && (
-                  <div className="absolute bottom-1 left-1 bg-orange-500 text-gray-900 text-xs px-1.5 py-0.5 rounded-full">{isArabic ? "رئيسية" : "Main"}</div>
+                  <div className="absolute bottom-1 left-1 bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full">{isArabic ? "رئيسية" : "Main"}</div>
                 )}
               </div>
             ))}
@@ -294,7 +294,7 @@ export default function AddProduct() {
                       const selected = ((specs[spec.key] as string[]) || []).includes(o);
                       return (
                         <button key={o} type="button" onClick={() => handleSpecMultiselect(spec.key, o)}
-                          className={`text-xs px-3 py-1.5 rounded-full border transition ${selected ? "bg-orange-500 text-gray-900 border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
+                          className={`text-xs px-3 py-1.5 rounded-full border transition ${selected ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
                           {o}
                         </button>
                       );
@@ -358,7 +358,7 @@ export default function AddProduct() {
               <p className="text-xs text-gray-500 mt-0.5">{isArabic ? "أضف خيارات للمشتري يختار منها" : "Let buyers choose from options"}</p>
             </div>
             <button type="button" onClick={() => setShowVariantBuilder(true)}
-              className="text-xs bg-orange-500 text-gray-900 px-3 py-1.5 rounded-lg hover:bg-orange-600 transition">
+              className="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-lg hover:bg-orange-600 transition">
               + {isArabic ? "إضافة خيار" : "Add Variant"}
             </button>
           </div>
@@ -438,7 +438,7 @@ export default function AddProduct() {
                   {isArabic ? "إلغاء" : "Cancel"}
                 </button>
                 <button type="button" onClick={saveVariant}
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-2 rounded-lg text-sm transition">
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-lg text-sm transition">
                   {isArabic ? "حفظ الخيار" : "Save Variant"}
                 </button>
               </div>
@@ -452,7 +452,7 @@ export default function AddProduct() {
             {isArabic ? "إلغاء" : "Cancel"}
           </button>
           <button type="submit" disabled={loading}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
+            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-medium transition disabled:opacity-60">
             {loading ? (isArabic ? "جارٍ الإضافة..." : "Adding...") : (isArabic ? "إضافة المنتج" : "Add Product")}
           </button>
         </div>

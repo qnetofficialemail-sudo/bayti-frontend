@@ -167,7 +167,7 @@ export default function SellerApplyPage() {
           </div>
 
           <button type="submit" disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition disabled:opacity-60 mt-2">
+            className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60 mt-2">
             {loading
               ? (isArabic ? "جارٍ الإرسال..." : "Submitting...")
               : (isArabic ? "إرسال الطلب" : "Submit Application")}

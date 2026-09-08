@@ -68,7 +68,7 @@ export default function Navbar() {
               <Link to="/login" className="text-sm text-gray-600 hover:text-orange-500 px-3 py-2 rounded-lg transition">
                 {isArabic ? "تسجيل الدخول" : "Login"}
               </Link>
-              <Link to="/register" className="text-sm bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition font-medium">
+              <Link to="/register" className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-lg transition font-medium">
                 {isArabic ? "انضم إلينا" : "Join Us"}
               </Link>
             </>

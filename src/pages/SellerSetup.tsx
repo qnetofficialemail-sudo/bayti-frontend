@@ -133,7 +133,7 @@ export default function SellerSetup() {
             </div>
 
             <button type="button" onClick={() => { if (!form.shop_name || !form.area) { setError(isArabic ? "يرجى ملء اسم المتجر والمنطقة" : "Please fill shop name and area"); return; } setError(""); setStep(2); }}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition">
+              className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition">
               {isArabic ? "التالي ←" : "Next →"}
             </button>
           </div>
@@ -190,7 +190,7 @@ export default function SellerSetup() {
                 {isArabic ? "→ السابق" : "← Back"}
               </button>
               <button type="button" onClick={() => setStep(3)}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition">
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition">
                 {isArabic ? "التالي ←" : "Next →"}
               </button>
             </div>
@@ -233,7 +233,7 @@ export default function SellerSetup() {
                 {isArabic ? "→ السابق" : "← Back"}
               </button>
               <button type="submit" disabled={loading}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-xl transition disabled:opacity-60">
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
                 {loading ? (isArabic ? "جاري الإرسال..." : "Submitting...") : (isArabic ? "إرسال للمراجعة" : "Submit for Approval")}
               </button>
             </div>

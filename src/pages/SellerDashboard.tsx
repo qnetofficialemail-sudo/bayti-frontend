@@ -174,7 +174,7 @@ export default function SellerDashboard() {
         <Link to="/seller/shop/edit" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition">
             {isArabic ? "✏️ تعديل المتجر" : "✏️ Edit Shop"}
           </Link>
-          <Link to="/seller/products/new" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition">
+          <Link to="/seller/products/new" className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition">
             {isArabic ? "+ إضافة منتج" : "+ Add Product"}
           </Link>
         </div>
@@ -196,7 +196,7 @@ export default function SellerDashboard() {
 
       <div className="flex gap-2 mb-6">
         {(["orders", "products", "schedule"] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} className={`px-5 py-2 rounded-xl text-sm font-medium capitalize transition ${tab === t ? "bg-orange-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
+          <button key={t} onClick={() => setTab(t)} className={`px-5 py-2 rounded-xl text-sm font-medium capitalize transition ${tab === t ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
             {t === "orders"
               ? (isArabic ? `الطلبات${pendingCount > 0 ? ` (${pendingCount})` : ""}` : `Orders${pendingCount > 0 ? ` (${pendingCount})` : ""}`)
               : t === "products"
@@ -230,7 +230,7 @@ export default function SellerDashboard() {
                   </button>
                 )}
                 {NEXT_STATUS[order.status] && (
-                <button onClick={() => advanceOrder(order.id, NEXT_STATUS[order.status])} className="text-sm bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl transition font-medium">
+                <button onClick={() => advanceOrder(order.id, NEXT_STATUS[order.status])} className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
                   {isArabic ? `تحديد كـ ${NEXT_STATUS_AR[order.status]}` : `Mark as ${NEXT_STATUS[order.status]}`}
                 </button>
               )}
