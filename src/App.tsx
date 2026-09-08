@@ -17,6 +17,7 @@ import EditShop from "./pages/EditShop";
 import CategoriesPage from "./pages/CategoriesPage";
 import Landing from "./pages/Landing";
 import SellerApplyPage from "./pages/SellerApplyPage";
+import SellPage from "./pages/SellPage";
 import SellerRegisterPage from "./pages/SellerRegisterPage";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
@@ -54,6 +55,7 @@ export default function App() {
               <Route path="/categories" element={<><Navbar /><main id="main-content"><CategoriesPage /></main></>} />
               <Route path="/shop/:id" element={<><Navbar /><main id="main-content"><SellerProfilePage /></main></>} />
               <Route path="/seller-apply" element={<><Navbar /><main id="main-content"><SellerApplyPage /></main></>} />
+              <Route path="/sell" element={<><Navbar /><main id="main-content"><SellPage /></main></>} />
               <Route path="/seller-register" element={<><Navbar /><main id="main-content"><SellerRegisterPage /></main></>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
