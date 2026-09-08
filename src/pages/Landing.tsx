@@ -195,11 +195,11 @@ export default function Landing() {
                 {[
                   { icon: "📸", text: isArabic ? "أضف صور منتجاتك والذكاء الاصطناعي يكتب لك الوصف" : "Upload photos and AI writes your listing" },
                   { icon: "⏰", text: isArabic ? "حدد أوقات عملك وأيامك المناسبة" : "Set your own working hours and days" },
-                  { icon: "📦", text: isArabic ? "تتبع الطلبات من لوحة تحكم سهلة" : "Track orders from a simple dashboard" },
+                  { icon: "/icons/bayti/ui/orders-box.png", text: isArabic ? "تتبع الطلبات من لوحة تحكم سهلة" : "Track orders from a simple dashboard" },
                   { icon: "💰", text: isArabic ? "استلم مدفوعاتك بعد كل طلب" : "Get paid after every order" },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-3">
-                    <span className="text-2xl">{item.icon}</span>
+                    {String(item.icon).startsWith("/") ? <img src={item.icon} alt="" aria-hidden="true" className="w-6 h-6 object-contain flex-shrink-0" /> : <span className="text-2xl flex-shrink-0">{item.icon}</span>}
                     <p className="text-gray-300">{item.text}</p>
                   </div>
                 ))}
@@ -211,15 +211,15 @@ export default function Landing() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { icon: "🎨", label: isArabic ? "مشغولات يدوية" : "Handmade Crafts" },
-                { icon: "🕯️", label: isArabic ? "شموع وعطور" : "Candles & Perfumes" },
-                { icon: "👗", label: isArabic ? "أزياء وإكسسوار" : "Fashion & Accessories" },
-                { icon: "🍰", label: isArabic ? "حلويات" : "Sweets" },
-                { icon: "🍛", label: isArabic ? "بين يديك." : "Local Products" },
-                { icon: "✨", label: isArabic ? "عناية بالبشرة" : "Skincare" },
+                { icon: "/icons/bayti/categories/handmade-crafts.png", label: isArabic ? "مشغولات يدوية" : "Handmade Crafts" },
+                { icon: "/icons/bayti/categories/perfumes-candles.png", label: isArabic ? "شموع وعطور" : "Candles & Perfumes" },
+                { icon: "/icons/bayti/categories/clothing-abayas.png", label: isArabic ? "أزياء وإكسسوار" : "Fashion & Accessories" },
+                { icon: "/icons/bayti/categories/desserts-sweets.png", label: isArabic ? "حلويات" : "Sweets" },
+                { icon: "/icons/bayti/ui/shopping-bag.png", label: isArabic ? "بين يديك." : "Local Products" },
+                { icon: "/icons/bayti/categories/beauty-skincare.png", label: isArabic ? "عناية بالبشرة" : "Skincare" },
               ].map((item, i) => (
                 <div key={i} className="bg-gray-700 rounded-2xl p-4 text-center">
-                  <div className="text-3xl mb-2">{item.icon}</div>
+                  <div className="flex justify-center mb-2">{String(item.icon).startsWith("/") ? <img src={item.icon} alt={item.label} className="w-10 h-10 object-contain" /> : <span className="text-3xl">{item.icon}</span>}</div>
                   <p className="text-sm text-gray-300">{item.label}</p>
                 </div>
               ))}
@@ -238,10 +238,10 @@ export default function Landing() {
             {[
               { icon: "✔️", title: isArabic ? "بائعون موثوقون" : "Verified Sellers", desc: isArabic ? "كل بائع يمر بمراجعة قبل القبول" : "Every seller is reviewed before approval" },
               { icon: "🌍", title: isArabic ? "عربي وإنجليزي" : "Arabic & English", desc: isArabic ? "المنصة تدعم اللغتين بالكامل" : "Full bilingual support for UAE" },
-              { icon: "📍", title: isArabic ? "كل الإمارات" : "All UAE", desc: isArabic ? "دبي، الشارقة، أبوظبي وأكثر" : "Dubai, Sharjah, Abu Dhabi and more" },
+              { icon: "/icons/bayti/ui/location.png", title: isArabic ? "كل الإمارات" : "All UAE", desc: isArabic ? "دبي، الشارقة، أبوظبي وأكثر" : "Dubai, Sharjah, Abu Dhabi and more" },
             ].map((item, i) => (
               <div key={i} className="p-6 rounded-2xl border border-gray-100 bg-gray-50">
-                <div className="text-3xl mb-3">{item.icon}</div>
+                <div className="flex justify-center mb-3">{String(item.icon).startsWith("/") ? <img src={item.icon} alt="" aria-hidden="true" className="w-8 h-8 object-contain" /> : <span className="text-3xl">{item.icon}</span>}</div>
                 <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
                 <p className="text-sm text-gray-500">{item.desc}</p>
               </div>

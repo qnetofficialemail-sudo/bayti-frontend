@@ -182,12 +182,12 @@ export default function SellerDashboard() {
 
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[
-          { label: isArabic ? "إجمالي الطلبات" : "Total Orders", value: profile?.total_orders || 0, icon: "📦" },
-          { label: isArabic ? "طلبات جديدة" : "New Orders", value: pendingCount, icon: "🔔", highlight: pendingCount > 0 },
+          { label: isArabic ? "إجمالي الطلبات" : "Total Orders", value: profile?.total_orders || 0, icon: "/icons/bayti/ui/orders-box.png" },
+          { label: isArabic ? "طلبات جديدة" : "New Orders", value: pendingCount, icon: "/icons/bayti/ui/notifications.png", highlight: pendingCount > 0 },
           { label: isArabic ? "التقييم" : "Rating", value: `${profile?.rating || 0} ⭐`, icon: "⭐" },
         ].map(stat => (
           <div key={stat.label} className={`bg-white rounded-2xl p-5 border ${(stat as any).highlight ? "border-orange-300" : "border-gray-100"} shadow-sm`}>
-            <div className="text-2xl mb-1">{stat.icon}</div>
+            <div className="w-8 h-8 mb-1 flex items-center justify-center">{stat.icon.startsWith("/") ? <img src={stat.icon} alt="" aria-hidden="true" className="w-8 h-8 object-contain" /> : <span className="text-2xl">{stat.icon}</span>}</div>
             <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
             <div className="text-sm text-gray-500">{stat.label}</div>
           </div>
@@ -264,7 +264,7 @@ export default function SellerDashboard() {
             <div key={product.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 text-3xl overflow-hidden">
-                  {product.image_url ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} alt={product.name} className="w-full h-full object-cover rounded-xl" /> : product.category?.icon || "🛍️"}
+                  {product.image_url ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} alt={product.name} className="w-full h-full object-cover rounded-xl" /> : <img src={product.category?.icon || "/icons/bayti/ui/shopping-bag.png"} alt="" aria-hidden="true" className="w-10 h-10 object-contain" />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 truncate">{isArabic && product.name_ar ? product.name_ar : product.name}</p>

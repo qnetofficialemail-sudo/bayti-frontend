@@ -6,7 +6,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const BADGE_CONFIG: Record<string, { label: string; labelAr: string; color: string; icon: string }> = {
   verified:  { label: "Verified",  labelAr: "موثق",  color: "bg-blue-50 text-blue-700 border-blue-200",     icon: "✓"  },
-  inspected: { label: "Inspected", labelAr: "مفتش",  color: "bg-purple-50 text-purple-700 border-purple-200", icon: "🔍" },
+  inspected: { label: "Inspected", labelAr: "مفتش",  color: "bg-purple-50 text-purple-700 border-purple-200", icon: "/icons/bayti/ui/search.png" },
   certified: { label: "Certified", labelAr: "معتمد", color: "bg-green-50 text-green-700 border-green-200",   icon: "🏅" },
 };
 
@@ -211,16 +211,16 @@ export default function AdminPanel() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             { label: isArabic ? "بائعون معلقون" : "Pending Sellers", value: stats.pending_sellers, icon: "⏳", color: "border-yellow-200 bg-yellow-50", alert: stats.pending_sellers > 0 },
-            { label: isArabic ? "بائعون نشطون" : "Active Sellers", value: stats.approved_sellers, icon: "🏪", color: "border-green-200 bg-green-50" },
-            { label: isArabic ? "إجمالي الطلبات" : "Total Orders", value: stats.total_orders, icon: "📦", color: "border-blue-200 bg-blue-50" },
+            { label: isArabic ? "بائعون نشطون" : "Active Sellers", value: stats.approved_sellers, icon: "/icons/bayti/ui/seller-store.png", color: "border-green-200 bg-green-50" },
+            { label: isArabic ? "إجمالي الطلبات" : "Total Orders", value: stats.total_orders, icon: "/icons/bayti/ui/orders-box.png", color: "border-blue-200 bg-blue-50" },
             { label: isArabic ? "عمولة المنصة" : "Platform Commission", value: `AED ${stats.platform_commission}`, icon: "💰", color: "border-orange-200 bg-orange-50" },
-            { label: isArabic ? "إجمالي المشترين" : "Total Buyers", value: stats.total_buyers, icon: "🛍️", color: "border-purple-200 bg-purple-50" },
-            { label: isArabic ? "إجمالي المنتجات" : "Total Products", value: stats.total_products, icon: "🍽️", color: "border-pink-200 bg-pink-50" },
+            { label: isArabic ? "إجمالي المشترين" : "Total Buyers", value: stats.total_buyers, icon: "/icons/bayti/ui/shopping-bag.png", color: "border-purple-200 bg-purple-50" },
+            { label: isArabic ? "إجمالي المنتجات" : "Total Products", value: stats.total_products, icon: "/icons/bayti/categories/home-cooked-meals.png", color: "border-pink-200 bg-pink-50" },
             { label: isArabic ? "إجمالي الإيرادات" : "Total Revenue", value: `AED ${stats.total_revenue}`, icon: "📈", color: "border-teal-200 bg-teal-50" },
             { label: isArabic ? "إجمالي البائعين" : "Total Sellers", value: stats.total_sellers, icon: "👨‍🍳", color: "border-gray-200 bg-gray-50" },
           ].map(stat => (
             <div key={stat.label} className={`rounded-2xl p-4 border ${stat.color} ${(stat as any).alert ? "ring-2 ring-yellow-400" : ""}`}>
-              <div className="text-2xl mb-1">{stat.icon}</div>
+              <div className="w-7 h-7 mb-1 flex items-center justify-center">{String(stat.icon).startsWith("/") ? <img src={stat.icon} alt="" aria-hidden="true" className="w-7 h-7 object-contain" /> : <span className="text-2xl">{stat.icon}</span>}</div>
               <div className="text-xl font-bold text-gray-900">{stat.value}</div>
               <div className="text-xs text-gray-500">{stat.label}</div>
             </div>
@@ -232,11 +232,11 @@ export default function AdminPanel() {
       <div className="flex gap-2 mb-6 flex-wrap">
         {([
           { key: "overview",   label: isArabic ? "نظرة عامة" : "Overview",   icon: "📊" },
-          { key: "sellers",    label: isArabic ? `البائعون (${stats?.pending_sellers || 0} معلق)` : `Sellers (${stats?.pending_sellers || 0} pending)`, icon: "🏪" },
+          { key: "sellers",    label: isArabic ? `البائعون (${stats?.pending_sellers || 0} معلق)` : `Sellers (${stats?.pending_sellers || 0} pending)`, icon: "/icons/bayti/ui/seller-store.png" },
           { key: "commission", label: isArabic ? "العمولات" : "Commissions",  icon: "💰" },
-          { key: "orders",     label: isArabic ? "الطلبات" : "Orders",        icon: "📦" },
+          { key: "orders",     label: isArabic ? "الطلبات" : "Orders",        icon: "/icons/bayti/ui/orders-box.png" },
           { key: "users",      label: isArabic ? "المستخدمون" : "Users",      icon: "👥" },
-          { key: "products",   label: isArabic ? "المنتجات" : "Products",    icon: "🍽️" },
+          { key: "products",   label: isArabic ? "المنتجات" : "Products",    icon: "/icons/bayti/categories/home-cooked-meals.png" },
           { key: "revenue",    label: isArabic ? "الإيرادات" : "Revenue",    icon: "📈" },
           { key: "reviews",    label: isArabic ? `التقييمات${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}` : `Reviews${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}`, icon: "⭐" },
           { key: "categories", label: isArabic ? "الفئات" : "Categories", icon: "🏷️" },
@@ -818,7 +818,7 @@ export default function AdminPanel() {
             <div className="space-y-3 mb-4">
               {[
                 { key: "verified",  icon: "✓",  label: "Verified",      labelAr: "موثق",        desc: "ID confirmed, phone verified",          descAr: "هوية مؤكدة، هاتف موثق" },
-                { key: "inspected", icon: "🔍", label: "Inspected",     labelAr: "مفتش",         desc: "Food safety certificate uploaded",       descAr: "شهادة سلامة غذائية مرفوعة" },
+                { key: "inspected", icon: "/icons/bayti/ui/search.png", label: "Inspected",     labelAr: "مفتش",         desc: "Food safety certificate uploaded",       descAr: "شهادة سلامة غذائية مرفوعة" },
                 { key: "certified", icon: "🏅", label: "Certified",     labelAr: "معتمد",        desc: "Passed mystery order quality test",      descAr: "اجتازت اختبار الجودة السري" },
                 { key: "none",      icon: "✕",  label: "Remove Badge",  labelAr: "إزالة الشارة", desc: "Remove current badge",                  descAr: "إزالة الشارة الحالية" },
               ].map(b => (

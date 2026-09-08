@@ -6,7 +6,7 @@ import { useLanguage } from "../context/LanguageContext";
 
 const BADGE_CONFIG: Record<string, { label: string; labelAr: string; color: string; icon: string }> = {
   verified:  { label: "Verified",  labelAr: "موثق",  color: "bg-blue-50 text-blue-700 border-blue-200",     icon: "✔" },
-  inspected: { label: "Inspected", labelAr: "مفتش",  color: "bg-purple-50 text-purple-700 border-purple-200", icon: "🔍" },
+  inspected: { label: "Inspected", labelAr: "مفتش",  color: "bg-purple-50 text-purple-700 border-purple-200", icon: "/icons/bayti/ui/search.png" },
   certified: { label: "Certified", labelAr: "معتمد", color: "bg-green-50 text-green-700 border-green-200",   icon: "🏅" },
 };
 
@@ -210,7 +210,7 @@ export default function SellerProfilePage() {
                   {product.image_url
                     ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`}
                         alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-                    : <span className="text-5xl">{product.category?.icon || "🛍️"}</span>
+                    : <img src={product.category?.icon || "/icons/bayti/ui/shopping-bag.png"} alt="" aria-hidden="true" className="w-12 h-12 object-contain" />
                   }
                 </div>
                 <div className="p-4">

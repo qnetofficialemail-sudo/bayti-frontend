@@ -423,7 +423,7 @@ export default function ProductDetail() {
                 <Link key={p.id} to={`/product/${p.id}`}
                   className="flex gap-3 bg-white rounded-xl border border-gray-100 p-3 hover:border-orange-300 transition shadow-sm">
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-orange-50 flex-shrink-0 flex items-center justify-center">
-                    {imgUrl ? <img src={imgUrl} alt={name} className="w-full h-full object-cover" /> : <span className="text-2xl">{p.category?.icon || "🛍️"}</span>}
+                    {imgUrl ? <img src={imgUrl} alt={name} className="w-full h-full object-cover" /> : <img src={p.category?.icon || "/icons/bayti/ui/shopping-bag.png"} alt="" aria-hidden="true" className="w-8 h-8 object-contain" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm truncate">{name}</p>
