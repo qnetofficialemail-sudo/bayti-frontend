@@ -230,7 +230,7 @@ export default function SellerDashboard() {
                   </button>
                 )}
                 {(order.buyer_phone || order.buyer?.phone) && (
-                  
+                  <a
                     href={`https://wa.me/${(order.buyer_phone || order.buyer?.phone || "").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(isArabic ? `مرحباً، شكراً لطلبك رقم #${order.id} من ${profile?.shop_name}. نرجو تأكيد تفاصيل طلبك.` : `Hello! Thank you for your order #${order.id} from ${profile?.shop_name}. Please confirm your order details.`)}`}
                     target="_blank" rel="noopener noreferrer"
                     className="text-sm bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 px-4 py-2 rounded-xl transition font-medium flex items-center gap-1">
