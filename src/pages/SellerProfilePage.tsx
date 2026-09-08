@@ -220,7 +220,7 @@ export default function SellerProfilePage() {
                   </div>
                   <p className="text-gray-500 text-xs line-clamp-2">{displayDesc}</p>
                   <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
-                    <span>{product.category?.icon} {isArabic && product.category?.name_ar ? product.category.name_ar : product.category?.name}</span>
+                    <span>{product.category?.icon && String(product.category.icon).startsWith("/") ? <img src={product.category.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : null}{isArabic && product.category?.name_ar ? product.category.name_ar : product.category?.name}</span>
                     <span>⏱ {product.preparation_time}{isArabic ? "د" : "min"}</span>
                   </div>
                 </div>

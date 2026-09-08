@@ -145,7 +145,7 @@ export default function Home() {
                     <span>⏱ {product.preparation_time}{isArabic ? "د" : "min"}</span>
                   </div>
                   {displayCat && (
-                    <div className="mt-2"><span className="inline-block bg-orange-50 text-orange-600 text-xs px-2 py-1 rounded-full">{product.category?.icon} {displayCat}</span></div>
+                    <div className="mt-2"><span className="inline-block bg-orange-50 text-orange-600 text-xs px-2 py-1 rounded-full">{product.category?.icon && String(product.category.icon).startsWith("/") ? <img src={product.category.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : null}{displayCat}</span></div>
                   )}
                 </div>
               </Link>

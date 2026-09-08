@@ -25,7 +25,7 @@ export default function SellerSpotlight() {
             <div className="w-12 h-12 rounded-xl overflow-hidden bg-white flex-shrink-0 border border-orange-100">
               {img
                 ? <img src={img} alt={cook.shop_name} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center text-2xl">🏠</div>}
+                : <div className="w-full h-full flex items-center justify-center bg-orange-50"><img src="/icons/bayti/ui/seller-store.png" alt="" aria-hidden="true" className="w-10 h-10 object-contain" /></div>}
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">

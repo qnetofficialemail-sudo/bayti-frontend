@@ -232,7 +232,7 @@ export default function ProductDetail() {
 
           <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
             <span>⏱ {product.preparation_time} {product.time_unit === "days" ? (isArabic ? "يوم" : "days") : product.time_unit === "hours" ? (isArabic ? "ساعة" : "hrs") : (isArabic ? "د" : "min")}</span>
-            {product.category && <span>{product.category.icon} {displayCat}</span>}
+            {product.category && <span>{product.category.icon && String(product.category.icon).startsWith("/") ? <img src={product.category.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : null}{displayCat}</span>}
           </div>
           <div className="bg-gray-50 rounded-xl p-4">
             <Link to={`/shop/${product.seller.id}`} className="text-sm text-gray-600 font-medium mb-1 hover:text-orange-500 transition block">🏠 {product.seller.shop_name}</Link>
