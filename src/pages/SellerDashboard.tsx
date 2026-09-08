@@ -229,6 +229,14 @@ export default function SellerDashboard() {
                     {isArabic ? "✕ رفض" : "✕ Reject"}
                   </button>
                 )}
+                {(order.buyer_phone || order.buyer?.phone) && (
+                  
+                    href={`https://wa.me/${(order.buyer_phone || order.buyer?.phone || "").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(isArabic ? `مرحباً، شكراً لطلبك رقم #${order.id} من ${profile?.shop_name}. نرجو تأكيد تفاصيل طلبك.` : `Hello! Thank you for your order #${order.id} from ${profile?.shop_name}. Please confirm your order details.`)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="text-sm bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 px-4 py-2 rounded-xl transition font-medium flex items-center gap-1">
+                    💬 {isArabic ? "واتساب" : "WhatsApp"}
+                  </a>
+                )}
                 {NEXT_STATUS[order.status] && (
                 <button onClick={() => advanceOrder(order.id, NEXT_STATUS[order.status])} className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
                   {isArabic ? `تحديد كـ ${NEXT_STATUS_AR[order.status]}` : `Mark as ${NEXT_STATUS[order.status]}`}
