@@ -37,7 +37,7 @@ export default function PricingAdvisor({ price, productName, isArabic }: Props) 
       }
     }, 1500);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
-  }, [price, productName]);
+  }, [price, productName, isArabic]);
 
   if (!price || parseFloat(price) <= 0) return null;
 
