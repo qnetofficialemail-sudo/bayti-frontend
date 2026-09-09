@@ -249,7 +249,7 @@ export default function AdminPanel() {
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
-            {t.icon} {t.label}
+            {String(t.icon).startsWith("/") ? <img src={t.icon} alt="" aria-hidden="true" className="w-4 h-4 object-contain inline-block mr-1" /> : <span className="mr-1">{t.icon}</span>}{t.label}
           </button>
         ))}
       </div>
