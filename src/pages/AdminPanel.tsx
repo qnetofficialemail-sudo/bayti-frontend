@@ -21,8 +21,11 @@ export default function AdminPanel() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories"|"applications"|"forecast">("overview");
+  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories"|"applications"|"forecast"|"content">("overview");
   const [forecast, setForecast] = useState<any>(null);
+  const [contentPost, setContentPost] = useState<{caption: string; hashtags: string; imageUrl: string | null} | null>(null);
+  const [contentLoading, setContentLoading] = useState(false);
+  const [contentCopied, setContentCopied] = useState(false);
   const [forecastLoading, setForecastLoading] = useState(false);
   const [stats, setStats] = useState<any>(null);
   const [sellers, setSellers] = useState<any[]>([]);
@@ -242,6 +245,7 @@ export default function AdminPanel() {
           { key: "categories", label: isArabic ? "الفئات" : "Categories", icon: "🏷️" },
           { key: "applications", label: (isArabic ? "الطلبات" : "Applications") + (applications.filter(a => a.status === "pending").length > 0 ? ` (${applications.filter(a => a.status === "pending").length})` : ""), icon: "📋" },
           { key: "forecast", label: isArabic ? "توقعات الطلب" : "Demand Forecast", icon: "🔮" },
+          { key: "content", label: isArabic ? "محتوى إنستقرام" : "Instagram Content", icon: "📸" },
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
