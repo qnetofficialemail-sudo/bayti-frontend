@@ -23,9 +23,10 @@ export default function AdminPanel() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories"|"applications"|"forecast"|"content">("overview");
   const [forecast, setForecast] = useState<any>(null);
-  const [contentPost, setContentPost] = useState<{caption: string; hashtags: string; imageUrl: string | null} | null>(null);
+  const [contentPost, setContentPost] = useState<{caption: string; hashtags: string; imageUrl: string | null; contentType?: string} | null>(null);
   const [contentLoading, setContentLoading] = useState(false);
   const [contentCopied, setContentCopied] = useState(false);
+  const [imageLoading, setImageLoading] = useState(false);
   const [forecastLoading, setForecastLoading] = useState(false);
   const [stats, setStats] = useState<any>(null);
   const [sellers, setSellers] = useState<any[]>([]);
@@ -990,7 +991,7 @@ export default function AdminPanel() {
                         body: JSON.stringify({ type: btn.type })
                       });
                       const data = await res.json();
-                      setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null });
+                      setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null, contentType: btn.type });
                     } catch {
                       alert(isArabic ? "حدث خطأ في توليد المحتوى" : "Error generating content");
                     } finally {
