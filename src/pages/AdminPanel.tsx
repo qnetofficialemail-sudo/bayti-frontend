@@ -962,6 +962,100 @@ export default function AdminPanel() {
         </div>
       )}
 
+      {/* Instagram Content Tab */}
+      {tab === "content" && (
+        <div className="max-w-2xl mx-auto space-y-6">
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">
+              {isArabic ? "🎨 مولّد محتوى إنستقرام" : "🎨 Instagram Content Generator"}
+            </h3>
+            <p className="text-gray-500 text-sm mb-6">
+              {isArabic ? "يولّد نص + صورة احترافية جاهزة للنشر على @baytimarketplace" : "Generate caption + AI image ready for @baytimarketplace"}
+            </p>
+            <button
+              onClick={async () => {
+                setContentLoading(true);
+                setContentPost(null);
+                setContentCopied(false);
+                try {
+                  const topics = [
+                    "دعوة البائعات المنزليات للانضمام إلى بيتي قبل الإطلاق الرسمي",
+                    "مميزات البيع عبر بيتي — الذكاء الاصطناعي يكتب عنك",
+                    "نصيحة للبائعة المبتدئة: كيف تصوّرين منتجك باحترافية",
+                    "استطلاع: أي فئة تفضلين؟ شموع، عبايات، حلويات؟",
+                    "كوني من الأوائل — مميزات حصرية لمن تسجّل الآن",
+                    "بيتي والبائعات: قصة نبنيها معاً",
+                    "رحلة من البيت إلى الزبون — كيف يعمل بيتي",
+                    "لماذا بيتي أفضل من الانستقرام للبيع؟",
+                    "منتجات إماراتية بأيدٍ محلية",
+                    "خلف الكواليس: كيف نبني بيتي",
+                  ];
+                  const topic = topics[Math.floor(Math.random() * topics.length)];
+                  const res = await fetch("https://web-production-63685.up.railway.app/api/ai/instagram-content", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ topic })
+                  });
+                  const data = await res.json();
+                  setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null });
+                } catch {
+                  alert(isArabic ? "حدث خطأ في توليد المحتوى" : "Error generating content");
+                } finally {
+                  setContentLoading(false);
+                }
+              }}
+              disabled={contentLoading}
+              className="w-full bg-orange-500 text-white font-bold py-4 rounded-2xl hover:bg-orange-600 transition disabled:opacity-50 text-lg"
+            >
+              {contentLoading ? (isArabic ? "⏳ جاري التوليد..." : "⏳ Generating...") : (isArabic ? "✨ ولّد منشور جديد" : "✨ Generate New Post")}
+            </button>
+          </div>
+
+          {contentPost && (
+            <>
+              {contentPost.imageUrl && (
+                <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="font-semibold text-gray-900">{isArabic ? "الصورة" : "Image"}</p>
+                    <a href={contentPost.imageUrl} download="bayti_post.png" className="text-sm text-orange-500 font-medium hover:text-orange-600">
+                      {isArabic ? "⬇️ تنزيل" : "⬇️ Download"}
+                    </a>
+                  </div>
+                  <img src={contentPost.imageUrl} alt="Generated" className="w-full rounded-xl" />
+                </div>
+              )}
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="font-semibold text-gray-900">{isArabic ? "الكابشن" : "Caption"}</p>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(contentPost.caption + "
+
+" + contentPost.hashtags);
+                      setContentCopied(true);
+                      setTimeout(() => setContentCopied(false), 2000);
+                    }}
+                    className="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg font-medium transition"
+                  >
+                    {contentCopied ? "✅ " + (isArabic ? "تم النسخ!" : "Copied!") : (isArabic ? "📋 نسخ الكل" : "📋 Copy All")}
+                  </button>
+                </div>
+                <div dir="rtl" className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
+                  {contentPost.caption}
+                </div>
+                <div className="mt-3 bg-gray-50 rounded-xl p-3 text-xs text-gray-500 leading-relaxed">
+                  {contentPost.hashtags}
+                </div>
+              </div>
+              <a href="https://publish.buffer.com" target="_blank" rel="noopener noreferrer"
+                className="block w-full bg-gray-900 text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition text-center text-lg">
+                {isArabic ? "📤 افتح Buffer للنشر" : "📤 Open Buffer to Publish"}
+              </a>
+            </>
+          )}
+        </div>
+      )}
+
     </div>
   );
 }
