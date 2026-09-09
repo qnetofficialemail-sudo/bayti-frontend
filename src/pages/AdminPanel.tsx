@@ -972,43 +972,44 @@ export default function AdminPanel() {
             <p className="text-gray-500 text-sm mb-6">
               {isArabic ? "يولّد نص + صورة احترافية جاهزة للنشر على @baytimarketplace" : "Generate caption + AI image ready for @baytimarketplace"}
             </p>
-            <button
-              onClick={async () => {
-                setContentLoading(true);
-                setContentPost(null);
-                setContentCopied(false);
-                try {
-                  const topics = [
-                    "دعوة البائعات المنزليات للانضمام إلى بيتي قبل الإطلاق الرسمي",
-                    "مميزات البيع عبر بيتي — الذكاء الاصطناعي يكتب عنك",
-                    "نصيحة للبائعة المبتدئة: كيف تصوّرين منتجك باحترافية",
-                    "استطلاع: أي فئة تفضلين؟ شموع، عبايات، حلويات؟",
-                    "كوني من الأوائل — مميزات حصرية لمن تسجّل الآن",
-                    "بيتي والبائعات: قصة نبنيها معاً",
-                    "رحلة من البيت إلى الزبون — كيف يعمل بيتي",
-                    "لماذا بيتي أفضل من الانستقرام للبيع؟",
-                    "منتجات إماراتية بأيدٍ محلية",
-                    "خلف الكواليس: كيف نبني بيتي",
-                  ];
-                  const topic = topics[Math.floor(Math.random() * topics.length)];
-                  const res = await fetch("https://web-production-63685.up.railway.app/api/ai/instagram-content", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ topic })
-                  });
-                  const data = await res.json();
-                  setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null });
-                } catch {
-                  alert(isArabic ? "حدث خطأ في توليد المحتوى" : "Error generating content");
-                } finally {
-                  setContentLoading(false);
-                }
-              }}
-              disabled={contentLoading}
-              className="w-full bg-orange-500 text-white font-bold py-4 rounded-2xl hover:bg-orange-600 transition disabled:opacity-50 text-lg"
-            >
-              {contentLoading ? (isArabic ? "⏳ جاري التوليد..." : "⏳ Generating...") : (isArabic ? "✨ ولّد منشور جديد" : "✨ Generate New Post")}
-            </button>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { type: "sellers", label: isArabic ? "👩‍💼 للبائعات" : "👩‍💼 Sellers", desc: isArabic ? "دعوة وتسجيل" : "Recruitment", color: "bg-orange-500 hover:bg-orange-600" },
+                { type: "events",  label: isArabic ? "🎉 فعاليات وترندات" : "🎉 Events & Trends", desc: isArabic ? "أحداث الإمارات" : "UAE Events", color: "bg-purple-500 hover:bg-purple-600" },
+                { type: "value",   label: isArabic ? "💡 محتوى قيمة" : "💡 Value Content", desc: isArabic ? "نصائح وأفكار" : "Tips & Ideas", color: "bg-teal-500 hover:bg-teal-600" },
+              ].map(btn => (
+                <button key={btn.type}
+                  onClick={async () => {
+                    setContentLoading(true);
+                    setContentPost(null);
+                    setContentCopied(false);
+                    try {
+                      const res = await fetch("https://web-production-63685.up.railway.app/api/ai/instagram-content-v2", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ type: btn.type })
+                      });
+                      const data = await res.json();
+                      setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null });
+                    } catch {
+                      alert(isArabic ? "حدث خطأ في توليد المحتوى" : "Error generating content");
+                    } finally {
+                      setContentLoading(false);
+                    }
+                  }}
+                  disabled={contentLoading}
+                  className={`${btn.color} text-white font-bold py-3 px-2 rounded-2xl transition disabled:opacity-50 text-sm flex flex-col items-center gap-1`}
+                >
+                  <span className="text-lg">{btn.label}</span>
+                  <span className="text-xs opacity-80">{btn.desc}</span>
+                </button>
+              ))}
+            </div>
+            {contentLoading && (
+              <div className="text-center py-4 text-gray-500">
+                {isArabic ? "⏳ جاري التوليد... قد يستغرق ٣٠ ثانية" : "⏳ Generating... may take 30 seconds"}
+              </div>
+            )}
           </div>
 
           {contentPost && (
