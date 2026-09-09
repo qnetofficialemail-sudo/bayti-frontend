@@ -1029,9 +1029,7 @@ export default function AdminPanel() {
                   <p className="font-semibold text-gray-900">{isArabic ? "الكابشن" : "Caption"}</p>
                   <button
                     onClick={() => {
-                      navigator.clipboard.writeText(contentPost.caption + "
-
-" + contentPost.hashtags);
+                      navigator.clipboard.writeText(contentPost.caption + "\n\n" + contentPost.hashtags);
                       setContentCopied(true);
                       setTimeout(() => setContentCopied(false), 2000);
                     }}
