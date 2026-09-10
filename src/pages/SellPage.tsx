@@ -216,6 +216,7 @@ export default function SellPage() {
               { icon: "/icons/bayti/categories/accessories.png", label: isArabic ? "إكسسوارات" : "Accessories" },
               { icon: "/icons/bayti/categories/beauty-skincare.png", label: isArabic ? "عناية بالبشرة" : "Skincare" },
               { icon: "/icons/bayti/categories/makeup-beauty.png", label: isArabic ? "مكياج" : "Makeup" },
+              { icon: "/icons/bayti/categories/home-decor.png", label: isArabic ? "لمسات منزلية" : "Home Decor" },
               { icon: "/icons/bayti/categories/desserts-sweets.png", label: isArabic ? "حلويات" : "Sweets" },
               { icon: "/icons/bayti/categories/home-cooked-meals.png", label: isArabic ? "وجبات منزلية" : "Home Meals" },
               { icon: "/icons/bayti/categories/baked-goods.png", label: isArabic ? "مخبوزات" : "Baked Goods" },
