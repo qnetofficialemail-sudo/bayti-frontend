@@ -20,6 +20,7 @@ import SellerApplyPage from "./pages/SellerApplyPage";
 import SellPage from "./pages/SellPage";
 import SellerRegisterPage from "./pages/SellerRegisterPage";
 import NotFound from "./pages/NotFound";
+import StudioPage from './pages/StudioPage';
 import { useAuth } from "./context/AuthContext";
 import { Navigate } from "react-router-dom";
 
