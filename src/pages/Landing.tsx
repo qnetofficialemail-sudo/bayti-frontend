@@ -217,6 +217,7 @@ export default function Landing() {
                 { icon: "/icons/bayti/categories/desserts-sweets.png", label: isArabic ? "حلويات" : "Sweets" },
                 { icon: "/icons/bayti/ui/shopping-bag.png", label: isArabic ? "بين يديك." : "Local Products" },
                 { icon: "/icons/bayti/categories/beauty-skincare.png", label: isArabic ? "عناية بالبشرة" : "Skincare" },
+              { icon: "/icons/bayti/categories/home-decor.png", label: isArabic ? "لمسات منزلية" : "Home Decor" },
               ].map((item, i) => (
                 <div key={i} className="bg-gray-700 rounded-2xl p-4 text-center">
                   <div className="flex justify-center mb-2">{String(item.icon).startsWith("/") ? <img src={item.icon} alt={item.label} className="w-10 h-10 object-contain" /> : <span className="text-3xl">{item.icon}</span>}</div>

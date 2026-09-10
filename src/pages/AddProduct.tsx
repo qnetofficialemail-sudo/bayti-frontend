@@ -58,6 +58,12 @@ const CATEGORY_SPECS: Record<string, { key: string; label: string; label_ar: str
     { key: "heating", label: "Heating Required", label_ar: "يحتاج تسخين", type: "select", options: ["جاهز للأكل / Ready to eat", "ميكروويف / Microwave", "فرن / Oven", "موقد / Stovetop"] },
     { key: "dietary", label: "Dietary", label_ar: "النظام الغذائي", type: "select", options: ["عادي / Regular", "نباتي / Vegetarian", "نباتي صرف / Vegan", "خالي من الجلوتين / Gluten-free", "خالي من الألبان / Dairy-free"] },
   ],
+  "Home Decor & Touches": [
+    { key: "item_type", label: "Item Type", label_ar: "نوع القطعة", type: "select", options: ["Vase / مزهرية", "Candle Holder / شمعدان", "Picture Frame / إطار صورة", "Cushion / وسادة", "Plant Pot / أصيص نبات", "Wall Art / لوحة جدارية", "Tray / صينية", "Other / أخرى"] },
+    { key: "material", label: "Material", label_ar: "المادة", type: "text" },
+    { key: "dimensions", label: "Dimensions", label_ar: "الأبعاد", type: "text" },
+    { key: "color_style", label: "Color / Style", label_ar: "اللون / الطراز", type: "text" },
+  ],
 };
 
 export default function AddProduct() {
