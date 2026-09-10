@@ -174,6 +174,9 @@ export default function SellerDashboard() {
         <Link to="/seller/shop/edit" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition">
             {isArabic ? "✏️ تعديل المتجر" : "✏️ Edit Shop"}
           </Link>
+          <Link to="/studio" className="flex items-center gap-1.5 bg-gradient-to-r from-purple-500 to-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition hover:opacity-90 shadow-sm">
+            ✨ {isArabic ? "استوديو بيتي" : "Bayti Studio"}
+          </Link>
           <Link to="/seller/products/new" className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition">
             {isArabic ? "+ إضافة منتج" : "+ Add Product"}
           </Link>
