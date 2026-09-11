@@ -31,6 +31,30 @@ const FORMATS = [
   { value: "product_square",  label: "مربع 1:1" },
   { value: "story_vertical",  label: "ستوري 9:16" },
 ];
+const MODEL_SIZES = [
+  { value: "slim",    label: "نحيف" },
+  { value: "regular", label: "متوسط" },
+  { value: "curvy",   label: "ممتلئ" },
+];
+const LIGHTING = [
+  { value: "soft_natural",  label: "☀️ طبيعي ناعم" },
+  { value: "golden_hour",   label: "🌅 ذهبي — غروب" },
+  { value: "studio_bright", label: "💡 استوديو ساطع" },
+  { value: "moody_dark",    label: "🌙 درامي — داكن" },
+];
+const SEASON = [
+  { value: "none",   label: "بدون تحديد" },
+  { value: "summer", label: "☀️ صيف" },
+  { value: "winter", label: "❄️ شتاء" },
+  { value: "ramadan", label: "🌙 رمضان" },
+  { value: "eid",    label: "🎉 عيد" },
+];
+const POSE = [
+  { value: "standing_neutral", label: "وقوف — محايد" },
+  { value: "walking",          label: "مشي — ديناميكي" },
+  { value: "sitting_elegant",  label: "جلوس — أنيق" },
+  { value: "looking_side",     label: "نظرة جانبية" },
+];
 
 interface Result {
   prompt: string;
@@ -50,6 +74,11 @@ export default function StudioPage() {
   const [background, setBackground]   = useState("white_studio");
   const [framing, setFraming]         = useState("full_body");
   const [outputFormat, setOutputFormat] = useState("product_square");
+  const [modelSize, setModelSize]     = useState("regular");
+  const [lighting, setLighting]       = useState("soft_natural");
+  const [season, setSeason]           = useState("none");
+  const [pose, setPose]               = useState("standing_neutral");
+  const [extraNotes, setExtraNotes]   = useState("");
   const [result, setResult]           = useState<Result | null>(null);
   const [error, setError]             = useState<string | null>(null);
   const [copied, setCopied]           = useState(false);
@@ -76,6 +105,11 @@ export default function StudioPage() {
       form.append("background",    background);
       form.append("framing",       framing);
       form.append("output_format", outputFormat);
+      form.append("model_size",    modelSize);
+      form.append("lighting",      lighting);
+      form.append("season",        season);
+      form.append("pose",          pose);
+      if (extraNotes) form.append("extra_notes", extraNotes);
 
       const res = await fetch(`${BACKEND}/api/studio/analyze`, {
         method: "POST",
@@ -237,6 +271,76 @@ export default function StudioPage() {
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Model Size + Pose */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl p-4 border border-orange-100">
+                <h3 className="font-bold text-gray-800 mb-2 text-sm">مقاس الموديل</h3>
+                <div className="space-y-2">
+                  {MODEL_SIZES.map(s => (
+                    <button key={s.value} onClick={() => setModelSize(s.value)}
+                      className={`w-full text-right px-3 py-2 rounded-xl border-2 transition text-xs font-medium
+                        ${modelSize === s.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl p-4 border border-orange-100">
+                <h3 className="font-bold text-gray-800 mb-2 text-sm">الوضعية</h3>
+                <div className="space-y-2">
+                  {POSE.map(p => (
+                    <button key={p.value} onClick={() => setPose(p.value)}
+                      className={`w-full text-right px-3 py-2 rounded-xl border-2 transition text-xs font-medium
+                        ${pose === p.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Lighting */}
+            <div className="bg-white rounded-2xl p-5 border border-orange-100">
+              <h3 className="font-bold text-gray-800 mb-3">الإضاءة</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {LIGHTING.map(l => (
+                  <button key={l.value} onClick={() => setLighting(l.value)}
+                    className={`text-right px-4 py-2.5 rounded-xl border-2 transition text-sm font-medium
+                      ${lighting === l.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+                    {l.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Season / Occasion */}
+            <div className="bg-white rounded-2xl p-5 border border-orange-100">
+              <h3 className="font-bold text-gray-800 mb-3">المناسبة <span className="text-gray-400 font-normal text-sm">(اختياري)</span></h3>
+              <div className="grid grid-cols-3 gap-2">
+                {SEASON.map(s => (
+                  <button key={s.value} onClick={() => setSeason(s.value)}
+                    className={`text-center px-3 py-2.5 rounded-xl border-2 transition text-sm font-medium
+                      ${season === s.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Extra Notes */}
+            <div className="bg-white rounded-2xl p-5 border border-orange-100">
+              <h3 className="font-bold text-gray-800 mb-1">ملاحظات إضافية <span className="text-gray-400 font-normal text-sm">(اختياري)</span></h3>
+              <p className="text-xs text-gray-400 mb-3">أي تفاصيل تريد إضافتها — مثال: "مع إكسسوار ذهبي"، "أريد الكم يظهر بوضوح"</p>
+              <textarea
+                value={extraNotes}
+                onChange={e => setExtraNotes(e.target.value)}
+                placeholder="اكتب ملاحظاتك هنا..."
+                rows={2}
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none transition resize-none"
+                dir="rtl"
+              />
             </div>
 
             <button onClick={analyze}
