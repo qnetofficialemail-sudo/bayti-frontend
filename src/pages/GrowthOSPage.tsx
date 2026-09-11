@@ -113,6 +113,29 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
 
   const filtered = filterStatus === "all" ? accounts : accounts.filter(a => a.status === filterStatus);
 
+  if (!unlocked) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center" dir="rtl">
+        <div className="bg-white rounded-2xl p-8 border border-orange-100 shadow-lg w-full max-w-sm text-center">
+          <div className="text-5xl mb-4">🔐</div>
+          <h1 className="text-xl font-bold text-gray-800 mb-1">Bayti Growth OS</h1>
+          <p className="text-gray-400 text-sm mb-6">???? ??? ??????</p>
+          <input type="password" value={pin}
+            onChange={e => { setPin(e.target.value); setPinError(false); }}
+            onKeyDown={e => { if (e.key === "Enter") { if (pin === "bayti2026") { setUnlocked(true); } else { setPinError(true); setPin(""); } } }}
+            placeholder="????????"
+            className="w-full text-center text-lg border-2 rounded-xl px-4 py-3 focus:outline-none mb-3 border-gray-200 focus:border-orange-400"
+            autoFocus />
+          {pinError && <p className="text-red-500 text-sm mb-3">??? ?????? ??? ????</p>}
+          <button onClick={() => { if (pin === "bayti2026") { setUnlocked(true); } else { setPinError(true); setPin(""); } }}
+            className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-bold">
+            ????
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={embedded ? "" : "min-h-screen bg-gray-50"} dir="rtl">
       {/* Header â€” hidden when embedded in Admin Panel */}
