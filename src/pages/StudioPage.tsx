@@ -161,7 +161,7 @@ export default function StudioPage() {
           <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-lg">✨</div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">استوديو بيتي الذكي</h1>
-            <p className="text-sm text-gray-500">Claude يحلل منتجك ويولّد prompt احترافي لـ Gemini مجاناً</p>
+            <p className="text-sm text-gray-500">بيتي يحلل منتجك ويولّد prompt احترافي لـ Gemini مجاناً</p>
           </div>
         </div>
       </div>
@@ -192,7 +192,7 @@ export default function StudioPage() {
               <div className="space-y-3">
                 {[
                   { n: "١", text: "ارفع صورة منتجك واختر الخيارات" },
-                  { n: "٢", text: "Claude يحلل المنتج ويولّد prompt مخصص" },
+                  { n: "٢", text: "بيتي يحلل المنتج ويولّد prompt مخصص" },
                   { n: "٣", text: "انسخ الـ prompt وافتح Gemini مجاناً" },
                   { n: "٤", text: "الصق الـ prompt وارفع صورة المنتج → صورة احترافية!" },
                 ].map(s => (
@@ -372,7 +372,7 @@ export default function StudioPage() {
               <div className="w-20 h-20 rounded-full border-4 border-purple-200 border-t-purple-500 animate-spin"></div>
               <div className="absolute inset-0 flex items-center justify-center text-2xl">🔍</div>
             </div>
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Claude يحلل منتجك...</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">بيتي يحلل منتجك...</h2>
             <p className="text-gray-500 text-sm">يستخرج اللون والتصميم والتفاصيل</p>
             <p className="text-gray-400 text-xs mt-4">~10 ثوانٍ</p>
           </div>
