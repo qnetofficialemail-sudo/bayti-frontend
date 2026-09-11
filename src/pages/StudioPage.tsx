@@ -136,10 +136,13 @@ export default function StudioPage() {
 
   function openGemini() {
     if (!result) return;
-    navigator.clipboard.writeText(result.prompt).then(() => {
-      setAutoCopied(true);
-      setTimeout(() => window.open("https://gemini.google.com", "_blank"), 300);
-    });
+    // Try deep link first (works on desktop + some mobile)
+    const encodedPrompt = encodeURIComponent(result.prompt);
+    const geminiUrl = `https://gemini.google.com/app?q=${encodedPrompt}`;
+    // Also copy to clipboard as fallback
+    navigator.clipboard.writeText(result.prompt).catch(() => {});
+    setAutoCopied(true);
+    window.open(geminiUrl, "_blank");
   }
 
   function reset() {
@@ -436,24 +439,23 @@ export default function StudioPage() {
             <button onClick={openGemini}
               className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
               <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
-              {autoCopied ? "✅ تم النسخ — جارٍ فتح Gemini..." : "انسخ الـ Prompt وافتح Gemini ✨"}
+              {autoCopied ? "✅ Gemini مفتوح — ارفع صورتك!" : "افتح Gemini مع الـ Prompt جاهزاً ✨"}
             </button>
 
             {autoCopied && (
               <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 text-sm text-center">
-                ✅ تم نسخ الـ Prompt تلقائياً!<br/>
-                <span className="font-bold">الصقه في Gemini (Ctrl+V) وارفع صورة منتجك</span>
+                ✅ فُتح Gemini مع الـ Prompt جاهزاً!<br/>
+                <span className="font-bold">ارفع صورة المنتج واضغط إرسال فقط 🎉</span>
               </div>
             )}
 
             {!autoCopied && (
               <div className="bg-blue-50 rounded-xl p-4 text-sm text-blue-700 border border-blue-100">
-                <p className="font-bold mb-1">📌 بعد الضغط على الزر:</p>
+                <p className="font-bold mb-1">📌 بضغطة واحدة فقط:</p>
                 <ol className="space-y-1 list-decimal list-inside">
-                  <li>سيُنسخ الـ prompt تلقائياً</li>
-                  <li>سيفتح Gemini في تاب جديد</li>
-                  <li>ارفع صورة منتجك والصق الـ prompt (Ctrl+V)</li>
-                  <li>احفظ الصورة واستخدمها في بيتي! 🎉</li>
+                  <li>يفتح Gemini مع الـ prompt مكتوباً تلقائياً</li>
+                  <li>ارفع صورة منتجك</li>
+                  <li>اضغط إرسال ← صورة احترافية! 🎉</li>
                 </ol>
               </div>
             )}
