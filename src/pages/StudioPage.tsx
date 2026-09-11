@@ -381,29 +381,15 @@ export default function StudioPage() {
         {/* Step 4: Result */}
         {step === "result" && result && (
           <div className="space-y-4">
-            {/* What Claude detected */}
-            <div className="bg-white rounded-2xl p-5 border border-purple-100">
-              <h3 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
-                <span className="text-purple-500">🔍</span> ما اكتشفه Claude
-              </h3>
-              <div className="grid grid-cols-3 gap-3 text-center text-sm">
-                <div className="bg-gray-50 rounded-xl p-3">
-                  <p className="text-gray-400 text-xs mb-1">اللون</p>
-                  <p className="font-semibold text-gray-800">{result.detected_color || "—"}</p>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-3">
-                  <p className="text-gray-400 text-xs mb-1">القماش</p>
-                  <p className="font-semibold text-gray-800">{result.detected_fabric || "—"}</p>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-3">
-                  <p className="text-gray-400 text-xs mb-1">التصميم</p>
-                  <p className="font-semibold text-gray-800 text-xs">{result.detected_details || "—"}</p>
-                </div>
+            {/* Arabic description only — no raw detection data */}
+            {result.arabic_description && (
+              <div className="bg-white rounded-2xl p-4 border border-purple-100">
+                <p className="text-sm text-gray-600 flex items-start gap-2">
+                  <span className="text-purple-400 mt-0.5">✨</span>
+                  {result.arabic_description}
+                </p>
               </div>
-              {result.arabic_description && (
-                <p className="text-sm text-gray-600 mt-3 bg-orange-50 rounded-xl p-3">{result.arabic_description}</p>
-              )}
-            </div>
+            )}
 
             {/* The Prompt — hidden by default, show on demand */}
             <details className="bg-white rounded-2xl border border-orange-100 overflow-hidden">
@@ -469,7 +455,7 @@ export default function StudioPage() {
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">٣</span>
-                    <p>ارفع صورة منتجك واضغط إرسال 🎉</p>
+                    <p>اضغط إرسال ← صورة احترافية! 🎉</p>
                   </div>
                 </div>
                 <button onClick={copyPrompt}
@@ -485,7 +471,7 @@ export default function StudioPage() {
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-2"><span className="text-blue-400">١.</span> ينسخ الـ prompt تلقائياً</div>
                   <div className="flex items-center gap-2"><span className="text-blue-400">٢.</span> يفتح Gemini في تاب جديد</div>
-                  <div className="flex items-center gap-2"><span className="text-blue-400">٣.</span> الصق (Paste) + ارفع صورتك = صورة احترافية 🎉</div>
+                  <div className="flex items-center gap-2"><span className="text-blue-400">٣.</span> الصق (Paste) واضغط إرسال = صورة احترافية 🎉</div>
                 </div>
               </div>
             )}
