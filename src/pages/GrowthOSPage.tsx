@@ -50,28 +50,31 @@ export default function GrowthOSPage() {
   const [expandedObj, setExpandedObj]   = useState<number | null>(null);
   const [objection, setObjection]   = useState("");
 
-  const token = localStorage.getItem("token");
-  const headers = { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
+  const getHeaders = () => {
+    const token = localStorage.getItem("token");
+    return { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
+  };
+  const headers = getHeaders();
 
   useEffect(() => { loadAccounts(); loadStats(); }, []);
 
   async function loadAccounts() {
-    const res = await fetch(`${BACKEND}/api/growth/accounts`, { headers });
+    const res = await fetch(`${BACKEND}/api/growth/accounts`, { headers: getHeaders() });
     if (res.ok) setAccounts(await res.json());
   }
   async function loadStats() {
-    const res = await fetch(`${BACKEND}/api/growth/stats`, { headers });
+    const res = await fetch(`${BACKEND}/api/growth/stats`, { headers: getHeaders() });
     if (res.ok) setStats(await res.json());
   }
   async function loadBrief() {
     setBriefLoading(true);
-    const res = await fetch(`${BACKEND}/api/growth/daily-brief`, { method: "POST", headers });
+    const res = await fetch(`${BACKEND}/api/growth/daily-brief`, { method: "POST", headers: getHeaders() });
     if (res.ok) { const d = await res.json(); setBrief(d.brief); }
     setBriefLoading(false);
   }
   async function updateStatus(id: number, status: string) {
     setStatusLoading(id);
-    await fetch(`${BACKEND}/api/growth/accounts/${id}`, { method: "PATCH", headers, body: JSON.stringify({ status }) });
+    await fetch(`${BACKEND}/api/growth/accounts/${id}`, { method: "PATCH", headers: getHeaders(), body: JSON.stringify({ status }) });
     await loadAccounts(); await loadStats();
     setStatusLoading(null);
   }
@@ -79,7 +82,7 @@ export default function GrowthOSPage() {
     if (!selectedAcc) return;
     setGenLoading(true); setGeneratedMsg("");
     const res = await fetch(`${BACKEND}/api/growth/generate-message`, {
-      method: "POST", headers,
+      method: "POST", headers: getHeaders(),
       body: JSON.stringify({ username: selectedAcc.username, display_name: selectedAcc.display_name, category: selectedAcc.category, product_note: selectedAcc.product_note, msg_type: msgType, objection }),
     });
     if (res.ok) { const d = await res.json(); setGeneratedMsg(d.message); }
@@ -87,18 +90,20 @@ export default function GrowthOSPage() {
   }
   async function seedAccounts() {
     setSeeding(true);
-    await fetch(`${BACKEND}/api/growth/seed-accounts`, { method: "POST", headers });
+    const res = await fetch(`${BACKEND}/api/growth/seed-accounts`, { method: "POST", headers: getHeaders() });
+    const data = await res.json().catch(() => ({}));
+    console.log("Seed result:", data);
     await loadAccounts(); await loadStats();
     setSeeding(false);
   }
   async function addAccount() {
-    await fetch(`${BACKEND}/api/growth/accounts`, { method: "POST", headers, body: JSON.stringify(newAcc) });
+    await fetch(`${BACKEND}/api/growth/accounts`, { method: "POST", headers: getHeaders(), body: JSON.stringify(newAcc) });
     setShowAddForm(false); setNewAcc({ username: "", display_name: "", category: "", emirate: "", product_note: "" });
     await loadAccounts(); await loadStats();
   }
   async function deleteAccount(id: number) {
     if (!confirm("حذف هذا الحساب؟")) return;
-    await fetch(`${BACKEND}/api/growth/accounts/${id}`, { method: "DELETE", headers });
+    await fetch(`${BACKEND}/api/growth/accounts/${id}`, { method: "DELETE", headers: getHeaders() });
     await loadAccounts(); await loadStats();
   }
   function copyMsg(msg: string) {
