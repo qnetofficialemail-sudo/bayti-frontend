@@ -1,24 +1,15 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const BACKEND = "https://web-production-63685.up.railway.app";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; dot: string }> = {
-  new:           { label: "Ø¬Ø¯ÙŠØ¯",        color: "text-gray-600",   bg: "bg-gray-100",   dot: "bg-gray-400" },
-  contacted:     { label: "ØªÙ… Ø§Ù„ØªÙˆØ§ØµÙ„",  color: "text-blue-600",   bg: "bg-blue-100",   dot: "bg-blue-500" },
-  replied:       { label: "Ø±Ø¯Ù‘",          color: "text-purple-600", bg: "bg-purple-100", dot: "bg-purple-500" },
-  interested:    { label: "Ù…Ù‡ØªÙ…",        color: "text-orange-600", bg: "bg-orange-100", dot: "bg-orange-500" },
-  confirmed:     { label: "Ù…Ø¤ÙƒØ¯ âœ…",     color: "text-green-700",  bg: "bg-green-100",  dot: "bg-green-500" },
-  not_interested:{ label: "ØºÙŠØ± Ù…Ù‡ØªÙ…",   color: "text-red-500",    bg: "bg-red-50",     dot: "bg-red-400" },
+  new:           { label: "جديد",        color: "text-gray-600",   bg: "bg-gray-100",   dot: "bg-gray-400" },
+  contacted:     { label: "تم التواصل",  color: "text-blue-600",   bg: "bg-blue-100",   dot: "bg-blue-500" },
+  replied:       { label: "ردّ",          color: "text-purple-600", bg: "bg-purple-100", dot: "bg-purple-500" },
+  interested:    { label: "مهتم",        color: "text-orange-600", bg: "bg-orange-100", dot: "bg-orange-500" },
+  confirmed:     { label: "مؤكد ✅",     color: "text-green-700",  bg: "bg-green-100",  dot: "bg-green-500" },
+  not_interested:{ label: "غير مهتم",   color: "text-red-500",    bg: "bg-red-50",     dot: "bg-red-400" },
 };
-
-const OBJECTIONS = [
-  { q: "Ù…Ø§ Ø§Ù„Ø±Ø³ÙˆÙ… Ø£Ùˆ Ø§Ù„Ø¹Ù…ÙˆÙ„Ø©ØŸ",                 a: "Ù†Ø­Ù† ÙÙŠ Ù…Ø±Ø­Ù„Ø© Ø§Ù„Ø§Ø³ØªÙƒØ´Ø§Ù Ø­Ø§Ù„ÙŠØ§Ù‹ØŒ ÙˆØ§Ù„Ø§Ù†Ø¶Ù…Ø§Ù… Ø§Ù„Ù…Ø¨ÙƒØ± Ù…Ø¬Ø§Ù†ÙŠ ØªÙ…Ø§Ù…Ø§Ù‹. Ù‡Ø¯ÙÙ†Ø§ Ø¨Ù†Ø§Ø¡ Ø§Ù„ØªØ¬Ø±Ø¨Ø© Ù…Ø¹ÙƒÙ… ÙˆØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ø±Ø³ÙˆÙ… Ø§Ù„Ø¹Ø§Ø¯Ù„Ø© Ù„Ø§Ø­Ù‚Ø§Ù‹." },
-  { q: "Ø£Ø¨ÙŠØ¹ Ø¬ÙŠØ¯Ø§Ù‹ Ø¹Ø¨Ø± Ø¥Ù†Ø³ØªÙ‚Ø±Ø§Ù…ØŒ Ù„Ù…Ø§Ø°Ø§ Ø£Ø­ØªØ§Ø¬ÙƒÙ…ØŸ", a: "Ø¨ÙŠØªÙŠ Ù„ÙŠØ³Øª Ø¨Ø¯ÙŠÙ„Ø§Ù‹ Ù„Ø¥Ù†Ø³ØªÙ‚Ø±Ø§Ù…ØŒ Ø¨Ù„ Ù‚Ù†Ø§Ø© Ø§ÙƒØªØ´Ø§Ù Ø¥Ø¶Ø§ÙÙŠØ© ØªØ¶Ø¹ Ù…Ù†ØªØ¬Ø§ØªÙƒÙ… Ø£Ù…Ø§Ù… Ø¬Ù…Ù‡ÙˆØ± ÙŠØ¨Ø­Ø« Ø®ØµÙŠØµØ§Ù‹ Ø¹Ù† Ø§Ù„Ù…Ø­Ù„ÙŠ." },
-  { q: "Ù„ÙŠØ³ Ù„Ø¯ÙŠ ÙˆÙ‚Øª Ù„Ø¥Ø¯Ø§Ø±Ø© Ù…Ù†ØµØ© Ø£Ø®Ø±Ù‰.",        a: "ØµÙ…Ù…Ù†Ø§ Ø¹Ù…Ù„ÙŠØ© Ø§Ù„Ø§Ù†Ø¶Ù…Ø§Ù… Ù„ØªÙƒÙˆÙ† Ø¨Ø³ÙŠØ·Ø© Ø¬Ø¯Ø§Ù‹. Ù†Ø­Ù† Ù†ØªÙˆÙ„Ù‰ Ø§Ù„Ø¬Ø²Ø¡ Ø§Ù„ØªÙ‚Ù†ÙŠØŒ ÙˆÙƒÙ„ Ù…Ø§ ØªØ­ØªØ§Ø¬ÙˆÙ†Ù‡ Ù‡Ùˆ Ø§Ù„Ù…ÙˆØ§ÙÙ‚Ø© Ø¹Ù„Ù‰ Ø¹Ø±Ø¶ Ù…Ù†ØªØ¬Ø§ØªÙƒÙ…." },
-  { q: "Ù‡Ù„ ØªØ¶Ù…Ù†ÙˆÙ† Ù„ÙŠ Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§ØªØŸ",               a: "Ù„Ø§ Ù†Ø¹Ø¯ Ø¨Ù…Ø¨ÙŠØ¹Ø§Øª Ù…Ø¶Ù…ÙˆÙ†Ø©ØŒ Ù„ÙƒÙ†Ù†Ø§ Ù†ÙˆÙØ± Ù‚Ù†Ø§Ø© Ø§ÙƒØªØ´Ø§Ù ÙˆØ¸Ù‡ÙˆØ±Ø§Ù‹ Ø§Ø­ØªØ±Ø§ÙÙŠØ§Ù‹ Ø£Ù…Ø§Ù… Ø¬Ù…Ù‡ÙˆØ± Ù…Ù†Ø§Ø³Ø¨." },
-  { q: "Ù‡Ù„ Ø§Ù„Ù…Ù†ØµØ© Ø¬Ø§Ù‡Ø²Ø©ØŸ",                      a: "Ù†Ø­Ù† Ù†Ø¨Ù†ÙŠ Ø§Ù„Ù†Ø³Ø®Ø© Ø§Ù„Ø£ÙˆÙ„Ù‰ Ù…Ø¹ Ù…Ø¬Ù…ÙˆØ¹Ø© Ù…Ø­Ø¯ÙˆØ¯Ø© Ù…Ù† Ø§Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ†ØŒ ÙˆÙ„Ù‡Ø°Ø§ Ù†Ø¨Ø­Ø« Ø¹Ù† Ø´Ø±ÙƒØ§Ø¡ ÙŠØ´Ø§Ø±ÙƒÙˆÙ†Ù†Ø§ Ø§Ù„Ù…Ù„Ø§Ø­Ø¸Ø§Øª Ù‚Ø¨Ù„ Ø§Ù„ØªÙˆØ³Ø¹." },
-  { q: "Ù‡Ù„ Ø£Ø­ØªØ§Ø¬ ØªØºÙŠÙŠØ± Ø·Ø±ÙŠÙ‚Ø© Ø¹Ù…Ù„ÙŠØŸ",           a: "Ù„Ø§. Ù†Ø¨Ø¯Ø£ Ø¨Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ÙˆØ§Ù„ØµÙˆØ± ÙˆØ§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø£Ø³Ø§Ø³ÙŠØ©ØŒ ÙˆÙ†Ø­Ø§ÙˆÙ„ Ø¬Ø¹Ù„ Ø§Ù„Ù…Ø´Ø§Ø±ÙƒØ© Ø¨Ø£Ù‚Ù„ Ø¬Ù‡Ø¯ Ù…Ù…ÙƒÙ†." },
-];
 
 interface Account {
   id: number; username: string; display_name: string; category: string;
@@ -32,32 +23,31 @@ interface Stats {
 }
 
 export default function GrowthOSPage({ embedded = false }: { embedded?: boolean }) {
-  const [tab, setTab]               = useState<"brief"|"accounts"|"compose"|"objections">("brief");
-  const [accounts, setAccounts]     = useState<Account[]>([]);
-  const [stats, setStats]           = useState<Stats | null>(null);
-  const [unlocked, setUnlocked] = useState(false);
-  const [pin, setPin] = useState("");
-  const [pinError, setPinError] = useState(false);
-  const [brief, setBrief]           = useState<string>("");
+  const [unlocked, setUnlocked]       = useState(false);
+  const [pin, setPin]                 = useState("");
+  const [pinError, setPinError]       = useState(false);
+  const [tab, setTab]                 = useState<"brief"|"accounts"|"compose"|"objections">("brief");
+  const [accounts, setAccounts]       = useState<Account[]>([]);
+  const [stats, setStats]             = useState<Stats | null>(null);
+  const [brief, setBrief]             = useState<string>("");
   const [briefLoading, setBriefLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedAcc, setSelectedAcc]   = useState<Account | null>(null);
-  const [msgType, setMsgType]       = useState("first");
-  const [genLoading, setGenLoading] = useState(false);
+  const [msgType, setMsgType]         = useState("first");
+  const [genLoading, setGenLoading]   = useState(false);
   const [generatedMsg, setGeneratedMsg] = useState("");
-  const [copied, setCopied]         = useState(false);
+  const [copied, setCopied]           = useState(false);
   const [statusLoading, setStatusLoading] = useState<number | null>(null);
-  const [showAddForm, setShowAddForm]   = useState(false);
-  const [newAcc, setNewAcc]         = useState({ username: "", display_name: "", category: "", emirate: "", product_note: "" });
-  const [seeding, setSeeding]       = useState(false);
-  const [expandedObj, setExpandedObj]   = useState<number | null>(null);
-  const [objection, setObjection]   = useState("");
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newAcc, setNewAcc]           = useState({ username: "", display_name: "", category: "", emirate: "", product_note: "" });
+  const [seeding, setSeeding]         = useState(false);
+  const [expandedObj, setExpandedObj] = useState<number | null>(null);
+  const [objection, setObjection]     = useState("");
 
   const getHeaders = () => {
     const token = localStorage.getItem("token");
     return { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
   };
-  const headers = getHeaders();
 
   useEffect(() => { loadAccounts(); loadStats(); }, []);
 
@@ -105,7 +95,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
     await loadAccounts(); await loadStats();
   }
   async function deleteAccount(id: number) {
-    if (!confirm("Ø­Ø°Ù Ù‡Ø°Ø§ Ø§Ù„Ø­Ø³Ø§Ø¨ØŸ")) return;
+    if (!confirm("حذف هذا الحساب؟")) return;
     await fetch(`${BACKEND}/api/growth/accounts/${id}`, { method: "DELETE", headers: getHeaders() });
     await loadAccounts(); await loadStats();
   }
@@ -114,8 +104,19 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
     setCopied(true); setTimeout(() => setCopied(false), 2000);
   }
 
+  const OBJECTIONS = [
+    { q: "ما الرسوم أو العمولة؟",                   a: "نحن في مرحلة الاستكشاف حالياً، والانضمام المبكر مجاني تماماً. هدفنا بناء التجربة معكم وتحديد الرسوم العادلة لاحقاً." },
+    { q: "أبيع جيداً عبر إنستقرام، لماذا أحتاجكم؟", a: "بيتي ليست بديلاً لإنستقرام، بل قناة اكتشاف إضافية تضع منتجاتكم أمام جمهور يبحث خصيصاً عن المحلي." },
+    { q: "ليس لدي وقت لإدارة منصة أخرى.",           a: "صممنا عملية الانضمام لتكون بسيطة جداً. نحن نتولى الجزء التقني، وكل ما تحتاجونه هو الموافقة على عرض منتجاتكم." },
+    { q: "هل تضمنون لي المبيعات؟",                   a: "لا نعد بمبيعات مضمونة، لكننا نوفر قناة اكتشاف وظهوراً احترافياً أمام جمهور مناسب." },
+    { q: "هل المنصة جاهزة؟",                          a: "نحن نبني النسخة الأولى مع مجموعة محدودة من البائعين، ولهذا نبحث عن شركاء يشاركوننا الملاحظات قبل التوسع." },
+    { q: "هل أحتاج تغيير طريقة عملي؟",               a: "لا. نبدأ بمعلومات المنتجات والصور والبيانات الأساسية، ونحاول جعل المشاركة بأقل جهد ممكن." },
+    { q: "لست مهتمة الآن.",                           a: "نحترم ذلك تماماً. يسعدنا التواصل معكم مستقبلاً عندما يكون الوقت مناسباً." },
+  ];
+
   const filtered = filterStatus === "all" ? accounts : accounts.filter(a => a.status === filterStatus);
 
+  // PIN Protection
   if (!unlocked) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center" dir="rtl">
@@ -126,13 +127,13 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
           <input type="password" value={pin}
             onChange={e => { setPin(e.target.value); setPinError(false); }}
             onKeyDown={e => { if (e.key === "Enter") { if (pin === "bayti2026") { setUnlocked(true); } else { setPinError(true); setPin(""); } } }}
-            placeholder="????????"
-            className="w-full text-center text-lg border-2 rounded-xl px-4 py-3 focus:outline-none mb-3 border-gray-200 focus:border-orange-400"
+            placeholder="••••••••"
+            className={`w-full text-center text-lg border-2 rounded-xl px-4 py-3 focus:outline-none mb-3 transition ${pinError ? "border-red-400 bg-red-50" : "border-gray-200 focus:border-orange-400"}`}
             autoFocus />
-          {pinError && <p className="text-red-500 text-sm mb-3">??? ?????? ??? ????</p>}
+          {pinError && <p className="text-red-500 text-sm mb-3">رمز الوصول غير صحيح</p>}
           <button onClick={() => { if (pin === "bayti2026") { setUnlocked(true); } else { setPinError(true); setPin(""); } }}
-            className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-bold">
-            ????
+            className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
+            دخول
           </button>
         </div>
       </div>
@@ -140,65 +141,43 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
   }
 
   return (
-    <div className={embedded ? "" : "min-h-screen bg-gray-50"} dir="rtl">
-      {/* Header â€” hidden when embedded in Admin Panel */}
-      {!embedded && (
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-5">
-          <div className="max-w-5xl mx-auto">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-white">ðŸš€ Bayti Growth OS</h1>
-                <p className="text-orange-100 text-sm mt-0.5">Ù†Ø¸Ø§Ù… ØªØ´ØºÙŠÙ„ Ø§Ù„Ù†Ù…Ùˆ â€” Ø§Ø³ØªÙ‚Ø·Ø§Ø¨ Ø§Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ†</p>
-              </div>
-              {stats && (
-                <div className="flex items-center gap-6 text-white">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">{stats.confirmed}</div>
-                    <div className="text-xs text-orange-100">Ù…Ø¤ÙƒØ¯ÙˆÙ†</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">{stats.goal}</div>
-                    <div className="text-xs text-orange-100">Ø§Ù„Ù‡Ø¯Ù</div>
-                  </div>
-                  <div className="bg-white/20 rounded-xl px-4 py-2 text-center">
-                    <div className="text-xl font-bold">{stats.progress_pct}%</div>
-                    <div className="text-xs text-orange-100">Ø§Ù„ØªÙ‚Ø¯Ù…</div>
-                  </div>
-                </div>
-              )}
+    <div className="min-h-screen bg-gray-50" dir="rtl">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-5">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-white">🚀 Bayti Growth OS</h1>
+              <p className="text-orange-100 text-sm mt-0.5">نظام تشغيل النمو — استقطاب البائعين</p>
             </div>
+            {stats && (
+              <div className="flex items-center gap-6 text-white">
+                <div className="text-center"><div className="text-2xl font-bold">{stats.confirmed}</div><div className="text-xs text-orange-100">مؤكدون</div></div>
+                <div className="text-center"><div className="text-2xl font-bold">{stats.goal}</div><div className="text-xs text-orange-100">الهدف</div></div>
+                <div className="bg-white/20 rounded-xl px-4 py-2 text-center"><div className="text-xl font-bold">{stats?.progress_pct ?? 0}%</div><div className="text-xs text-orange-100">التقدم</div></div>
+              </div>
+            )}
+          </div>
+          {stats && (
             <div className="mt-4 bg-white/20 rounded-full h-2">
               <div className="bg-white rounded-full h-2 transition-all duration-500" style={{ width: `${stats?.progress_pct ?? 0}%` }} />
             </div>
-          </div>
+          )}
         </div>
-      )}
-      {/* Embedded stats strip */}
-      {embedded && stats && (
-        <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-4 mb-4 flex items-center justify-between">
-          <div>
-            <h2 className="text-white font-bold text-lg">ðŸš€ Growth OS</h2>
-            <p className="text-orange-100 text-xs">Ù†Ø¸Ø§Ù… Ø§Ø³ØªÙ‚Ø·Ø§Ø¨ Ø§Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ†</p>
-          </div>
-          <div className="flex items-center gap-4 text-white">
-            <div className="text-center"><div className="text-xl font-bold">{stats.confirmed}/{stats.goal}</div><div className="text-xs text-orange-100">Ø§Ù„Ù…Ø¤ÙƒØ¯ÙˆÙ†</div></div>
-            <div className="bg-white/20 rounded-xl px-3 py-1.5 text-center"><div className="text-lg font-bold">{stats.progress_pct}%</div><div className="text-xs text-orange-100">Ø§Ù„ØªÙ‚Ø¯Ù…</div></div>
-          </div>
-        </div>
-      )}
+      </div>
 
-      {/* Stats strip â€” only on standalone page */}
-      {!embedded && stats && (
+      {/* Stats strip */}
+      {stats && (
         <div className="bg-white border-b border-gray-100 px-6 py-3">
           <div className="max-w-5xl mx-auto flex items-center gap-6 overflow-x-auto">
             {[
-              { label: "Ø§Ù„ÙƒÙ„",       val: stats.total,         color: "text-gray-700" },
-              { label: "Ø¬Ø¯Ø¯",        val: stats.new,           color: "text-gray-500" },
-              { label: "ØªÙˆØ§ØµÙ„Ù†Ø§",    val: stats.contacted,     color: "text-blue-600" },
-              { label: "Ø±Ø¯ÙˆØ§",       val: stats.replied,       color: "text-purple-600" },
-              { label: "Ù…Ù‡ØªÙ…ÙˆÙ†",     val: stats.interested,    color: "text-orange-600" },
-              { label: "Ù…Ø¤ÙƒØ¯ÙˆÙ†",     val: stats.confirmed,     color: "text-green-600" },
-              { label: "â° Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ÙŠÙˆÙ…", val: stats.due_today, color: "text-red-500" },
+              { label: "الكل",       val: stats.total,         color: "text-gray-700" },
+              { label: "جدد",        val: stats.new,           color: "text-gray-500" },
+              { label: "تواصلنا",    val: stats.contacted,     color: "text-blue-600" },
+              { label: "ردوا",       val: stats.replied,       color: "text-purple-600" },
+              { label: "مهتمون",     val: stats.interested,    color: "text-orange-600" },
+              { label: "مؤكدون",     val: stats.confirmed,     color: "text-green-600" },
+              { label: "⏰ متابعة اليوم", val: stats.due_today, color: "text-red-500" },
             ].map(s => (
               <div key={s.label} className="flex items-center gap-1.5 flex-shrink-0">
                 <span className={`text-lg font-bold ${s.color}`}>{s.val}</span>
@@ -210,13 +189,13 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
       )}
 
       {/* Tabs */}
-      <div className={embedded ? "bg-white rounded-2xl mb-4 px-4 border border-gray-100" : "bg-white border-b border-gray-100 px-6"}>
+      <div className="bg-white border-b border-gray-100 px-6">
         <div className="max-w-5xl mx-auto flex gap-1">
           {[
-            { id: "brief",      label: "ðŸ§  Ø§Ù„ØªÙ‚Ø±ÙŠØ± Ø§Ù„ÙŠÙˆÙ…ÙŠ" },
-            { id: "accounts",   label: "ðŸŽ¯ ØºØ±ÙØ© Ø§Ù„Ø¹Ù…Ù„ÙŠØ§Øª" },
-            { id: "compose",    label: "âœï¸ Ù…ØµÙ†Ø¹ Ø§Ù„Ø±Ø³Ø§Ø¦Ù„" },
-            { id: "objections", label: "ðŸ’¬ Ø±Ø¯ÙˆØ¯ Ø§Ù„Ø§Ø¹ØªØ±Ø§Ø¶Ø§Øª" },
+            { id: "brief",      label: "🧠 التقرير اليومي" },
+            { id: "accounts",   label: "🎯 غرفة العمليات" },
+            { id: "compose",    label: "✍️ مصنع الرسائل" },
+            { id: "objections", label: "💬 ردود الاعتراضات" },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id as any)}
               className={`px-4 py-3 text-sm font-medium border-b-2 transition ${tab === t.id ? "border-orange-500 text-orange-600" : "border-transparent text-gray-500 hover:text-gray-700"}`}>
@@ -226,64 +205,44 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
         </div>
       </div>
 
-      <div className={embedded ? "py-2" : "max-w-5xl mx-auto px-4 py-6"}>
+      <div className="max-w-5xl mx-auto px-4 py-6">
 
-        {/* â”€â”€ Tab 1: Daily Brief â”€â”€ */}
+        {/* Tab 1: Daily Brief */}
         {tab === "brief" && (
           <div className="space-y-4">
             <div className="bg-white rounded-2xl p-6 border border-orange-100">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-gray-800">ðŸ§  Ø§Ù„ØªÙ‚Ø±ÙŠØ± Ø§Ù„ÙŠÙˆÙ…ÙŠ Ø§Ù„Ø°ÙƒÙŠ</h2>
-                <button onClick={loadBrief} disabled={briefLoading}
-                  className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-orange-600 transition disabled:opacity-50">
-                  {briefLoading ? "â³ Ø¬Ø§Ø±Ù Ø§Ù„ØªØ­Ù„ÙŠÙ„..." : "âœ¨ ÙˆÙ„Ù‘Ø¯ Ø§Ù„ØªÙ‚Ø±ÙŠØ±"}
+                <h2 className="text-lg font-bold text-gray-800">🧠 التقرير اليومي الذكي</h2>
+                <button onClick={loadBrief} disabled={briefLoading} className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-orange-600 transition disabled:opacity-50">
+                  {briefLoading ? "⏳ جارٍ التحليل..." : "✨ ولّد التقرير"}
                 </button>
               </div>
               {brief ? (
-                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-5 text-gray-700 leading-relaxed whitespace-pre-line border border-orange-100">
-                  {brief}
-                </div>
+                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-5 text-gray-700 leading-relaxed whitespace-pre-line border border-orange-100">{brief}</div>
               ) : (
                 <div className="text-center py-12 text-gray-400">
-                  <div className="text-4xl mb-3">ðŸ§ </div>
-                  <p>Ø§Ø¶ØºØ· "ÙˆÙ„Ù‘Ø¯ Ø§Ù„ØªÙ‚Ø±ÙŠØ±" Ù„Ù„Ø­ØµÙˆÙ„ Ø¹Ù„Ù‰ ØªÙˆØµÙŠØ§Øª Claude Ø§Ù„ÙŠÙˆÙ…ÙŠØ©</p>
+                  <div className="text-4xl mb-3">🧠</div>
+                  <p>اضغط "ولّد التقرير" للحصول على توصيات Claude اليومية</p>
                 </div>
               )}
             </div>
-
-            {/* Quick actions */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-2xl p-5 border border-gray-100">
-                <h3 className="font-bold text-gray-800 mb-3">â° ØªØ­ØªØ§Ø¬ Ù…ØªØ§Ø¨Ø¹Ø© Ø§Ù„ÙŠÙˆÙ…</h3>
+                <h3 className="font-bold text-gray-800 mb-3">⏰ تحتاج متابعة اليوم</h3>
                 {accounts.filter(a => a.status === "contacted").slice(0,5).map(a => (
                   <div key={a.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                    <div>
-                      <p className="text-sm font-medium text-gray-800">@{a.username}</p>
-                      <p className="text-xs text-gray-400">{a.category}</p>
-                    </div>
-                    <button onClick={() => { setSelectedAcc(a); setMsgType("followup1"); setTab("compose"); }}
-                      className="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-lg hover:bg-orange-200 transition">
-                      ØªØ§Ø¨Ø¹
-                    </button>
+                    <div><p className="text-sm font-medium text-gray-800">@{a.username}</p><p className="text-xs text-gray-400">{a.category}</p></div>
+                    <button onClick={() => { setSelectedAcc(a); setMsgType("followup1"); setTab("compose"); }} className="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-lg hover:bg-orange-200 transition">تابع</button>
                   </div>
                 ))}
-                {accounts.filter(a => a.status === "contacted").length === 0 && (
-                  <p className="text-sm text-gray-400 text-center py-4">Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ù…ØªØ§Ø¨Ø¹Ø§Øª Ø§Ù„ÙŠÙˆÙ… âœ…</p>
-                )}
+                {accounts.filter(a => a.status === "contacted").length === 0 && <p className="text-sm text-gray-400 text-center py-4">لا يوجد متابعات اليوم ✅</p>}
               </div>
-
               <div className="bg-white rounded-2xl p-5 border border-gray-100">
-                <h3 className="font-bold text-gray-800 mb-3">ðŸŽ¯ Ø§Ù‚ØªØ±Ø§Ø­Ø§Øª Ù„Ù„ØªÙˆØ§ØµÙ„ Ø§Ù„ÙŠÙˆÙ…</h3>
+                <h3 className="font-bold text-gray-800 mb-3">🎯 اقتراحات للتواصل اليوم</h3>
                 {accounts.filter(a => a.status === "new").slice(0,5).map(a => (
                   <div key={a.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
-                    <div>
-                      <p className="text-sm font-medium text-gray-800">@{a.username}</p>
-                      <p className="text-xs text-gray-400">{a.category}</p>
-                    </div>
-                    <button onClick={() => { setSelectedAcc(a); setMsgType("first"); setTab("compose"); }}
-                      className="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-200 transition">
-                      Ø£Ø±Ø³Ù„
-                    </button>
+                    <div><p className="text-sm font-medium text-gray-800">@{a.username}</p><p className="text-xs text-gray-400">{a.category}</p></div>
+                    <button onClick={() => { setSelectedAcc(a); setMsgType("first"); setTab("compose"); }} className="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-200 transition">أرسل</button>
                   </div>
                 ))}
               </div>
@@ -291,65 +250,54 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
           </div>
         )}
 
-        {/* â”€â”€ Tab 2: Accounts â”€â”€ */}
+        {/* Tab 2: Accounts */}
         {tab === "accounts" && (
           <div className="space-y-4">
-            {/* Filter + Add */}
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex gap-2 flex-wrap">
                 {["all", "new", "contacted", "replied", "interested", "confirmed", "not_interested"].map(s => (
                   <button key={s} onClick={() => setFilterStatus(s)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${filterStatus === s ? "bg-orange-500 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"}`}>
-                    {s === "all" ? "Ø§Ù„ÙƒÙ„" : STATUS_CONFIG[s]?.label}
+                    {s === "all" ? "الكل" : STATUS_CONFIG[s]?.label}
                   </button>
                 ))}
               </div>
               <div className="flex gap-2">
-                <button onClick={seedAccounts} disabled={seeding}
-                  className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-xl hover:bg-gray-200 transition">
-                  {seeding ? "â³" : "ðŸ“¥ Ø§Ø³ØªÙŠØ±Ø§Ø¯ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø©"}
-                </button>
-                <button onClick={() => setShowAddForm(!showAddForm)}
-                  className="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-xl hover:bg-orange-600 transition">
-                  + Ø¥Ø¶Ø§ÙØ© Ø­Ø³Ø§Ø¨
-                </button>
+                <button onClick={seedAccounts} disabled={seeding} className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-xl hover:bg-gray-200 transition">{seeding ? "⏳" : "📥 استيراد القائمة"}</button>
+                <button onClick={() => setShowAddForm(!showAddForm)} className="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-xl hover:bg-orange-600 transition">+ إضافة حساب</button>
               </div>
             </div>
 
-            {/* Add form */}
             {showAddForm && (
               <div className="bg-white rounded-2xl p-5 border border-orange-200">
-                <h3 className="font-bold text-gray-800 mb-3">Ø¥Ø¶Ø§ÙØ© Ø­Ø³Ø§Ø¨ Ø¬Ø¯ÙŠØ¯</h3>
+                <h3 className="font-bold text-gray-800 mb-3">إضافة حساب جديد</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    { key: "username", placeholder: "Ø§Ø³Ù… Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… (Ø¨Ø¯ÙˆÙ† @)" },
-                    { key: "display_name", placeholder: "Ø§Ø³Ù… Ø§Ù„Ø¹Ù„Ø§Ù…Ø©" },
-                    { key: "category", placeholder: "Ø§Ù„ÙØ¦Ø© (Ø´Ù…ÙˆØ¹ØŒ Ø¹Ø¨Ø§ÙŠØ§Øª...)" },
-                    { key: "emirate", placeholder: "Ø§Ù„Ø¥Ù…Ø§Ø±Ø©" },
+                    { key: "username", placeholder: "اسم المستخدم (بدون @)" },
+                    { key: "display_name", placeholder: "اسم العلامة" },
+                    { key: "category", placeholder: "الفئة (شموع، عبايات...)" },
+                    { key: "emirate", placeholder: "الإمارة" },
                   ].map(f => (
                     <input key={f.key} value={(newAcc as any)[f.key]} onChange={e => setNewAcc({...newAcc, [f.key]: e.target.value})}
                       placeholder={f.placeholder} className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-orange-400 focus:outline-none" />
                   ))}
                   <input value={newAcc.product_note} onChange={e => setNewAcc({...newAcc, product_note: e.target.value})}
-                    placeholder="Ù…Ù„Ø§Ø­Ø¸Ø© Ø¹Ù† Ø§Ù„Ù…Ù†ØªØ¬" className="col-span-2 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-orange-400 focus:outline-none" />
+                    placeholder="ملاحظة عن المنتج" className="col-span-2 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-orange-400 focus:outline-none" />
                 </div>
                 <div className="flex gap-2 mt-3">
-                  <button onClick={addAccount} className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium">Ø¥Ø¶Ø§ÙØ©</button>
-                  <button onClick={() => setShowAddForm(false)} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-sm">Ø¥Ù„ØºØ§Ø¡</button>
+                  <button onClick={addAccount} className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium">إضافة</button>
+                  <button onClick={() => setShowAddForm(false)} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-sm">إلغاء</button>
                 </div>
               </div>
             )}
 
-            {/* Accounts list */}
             <div className="space-y-2">
               {filtered.map(acc => (
                 <div key={acc.id} className="bg-white rounded-2xl border border-gray-100 hover:border-orange-200 transition overflow-hidden">
                   <div className="p-4 flex items-center gap-4">
-                    {/* Avatar */}
                     <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                       {acc.username[0].toUpperCase()}
                     </div>
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-bold text-gray-800">@{acc.username}</span>
@@ -359,30 +307,21 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                         </span>
                       </div>
                       <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-400">
-                        {acc.category && <span>ðŸ“‚ {acc.category}</span>}
-                        {acc.emirate && <span>ðŸ“ {acc.emirate}</span>}
-                        {acc.product_note && <span className="truncate max-w-xs">ðŸ’¡ {acc.product_note}</span>}
+                        {acc.category && <span>📂 {acc.category}</span>}
+                        {acc.emirate && <span>📍 {acc.emirate}</span>}
+                        {acc.product_note && <span className="truncate max-w-xs">💡 {acc.product_note}</span>}
                       </div>
                     </div>
-                    {/* Actions */}
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <a href={`https://instagram.com/${acc.username}`} target="_blank" rel="noopener noreferrer"
-                        className="text-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-lg">
-                        ðŸ“± Ø¥Ù†Ø³ØªÙ‚Ø±Ø§Ù…
-                      </a>
+                      <a href={`https://www.instagram.com/${acc.username}/`} target="_blank" rel="noopener noreferrer"
+                        className="text-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-lg">📱 إنستقرام</a>
                       <button onClick={() => { setSelectedAcc(acc); setMsgType("first"); setTab("compose"); }}
-                        className="text-xs bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg hover:bg-orange-200 transition">
-                        âœï¸ Ø±Ø³Ø§Ù„Ø©
-                      </button>
-                      <button onClick={() => deleteAccount(acc.id)}
-                        className="text-xs text-red-400 hover:text-red-600 px-2 py-1.5 rounded-lg hover:bg-red-50 transition">
-                        ðŸ—‘
-                      </button>
+                        className="text-xs bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg hover:bg-orange-200 transition">✍️ رسالة</button>
+                      <button onClick={() => deleteAccount(acc.id)} className="text-xs text-red-400 hover:text-red-600 px-2 py-1.5 rounded-lg hover:bg-red-50 transition">🗑</button>
                     </div>
                   </div>
-                  {/* Status changer */}
                   <div className="px-4 pb-3 flex items-center gap-2">
-                    <span className="text-xs text-gray-400">Ø§Ù„Ø­Ø§Ù„Ø©:</span>
+                    <span className="text-xs text-gray-400">الحالة:</span>
                     <div className="flex gap-1 flex-wrap">
                       {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
                         <button key={key} onClick={() => updateStatus(acc.id, key)} disabled={statusLoading === acc.id}
@@ -396,44 +335,36 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
               ))}
               {filtered.length === 0 && (
                 <div className="text-center py-12 text-gray-400">
-                  <div className="text-4xl mb-3">ðŸ“­</div>
-                  <p>Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ø­Ø³Ø§Ø¨Ø§Øª ÙÙŠ Ù‡Ø°Ù‡ Ø§Ù„ÙØ¦Ø©</p>
-                  <button onClick={seedAccounts} className="mt-3 text-sm text-orange-500 underline">Ø§Ø³ØªÙŠØ±Ø§Ø¯ Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø£ÙˆÙ„ÙŠØ©</button>
+                  <div className="text-4xl mb-3">📭</div>
+                  <p>لا يوجد حسابات في هذه الفئة</p>
+                  <button onClick={seedAccounts} className="mt-3 text-sm text-orange-500 underline">استيراد القائمة الأولية</button>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* â”€â”€ Tab 3: Compose â”€â”€ */}
+        {/* Tab 3: Compose */}
         {tab === "compose" && (
           <div className="space-y-4">
             <div className="bg-white rounded-2xl p-6 border border-gray-100">
-              <h2 className="text-lg font-bold text-gray-800 mb-4">âœï¸ Ù…ØµÙ†Ø¹ Ø§Ù„Ø±Ø³Ø§Ø¦Ù„ Ø§Ù„Ø°ÙƒÙŠ</h2>
-
-              {/* Account selector */}
+              <h2 className="text-lg font-bold text-gray-800 mb-4">✍️ مصنع الرسائل الذكي</h2>
               <div className="mb-4">
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Ø§Ø®ØªØ± Ø§Ù„Ø­Ø³Ø§Ø¨</label>
-                <select value={selectedAcc?.id || ""} onChange={e => {
-                    const acc = accounts.find(a => a.id === parseInt(e.target.value));
-                    setSelectedAcc(acc || null); setGeneratedMsg("");
-                  }} className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none">
-                  <option value="">-- Ø§Ø®ØªØ± Ø­Ø³Ø§Ø¨Ø§Ù‹ --</option>
-                  {accounts.map(a => (
-                    <option key={a.id} value={a.id}>@{a.username} â€” {a.category}</option>
-                  ))}
+                <label className="text-sm font-medium text-gray-700 mb-2 block">اختر الحساب</label>
+                <select value={selectedAcc?.id || ""} onChange={e => { const acc = accounts.find(a => a.id === parseInt(e.target.value)); setSelectedAcc(acc || null); setGeneratedMsg(""); }}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none">
+                  <option value="">-- اختر حساباً --</option>
+                  {accounts.map(a => (<option key={a.id} value={a.id}>@{a.username} — {a.category}</option>))}
                 </select>
               </div>
-
-              {/* Message type */}
               <div className="mb-4">
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Ù†ÙˆØ¹ Ø§Ù„Ø±Ø³Ø§Ù„Ø©</label>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">نوع الرسالة</label>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { v: "first",     l: "ðŸ“© Ø£ÙˆÙ„Ù‰" },
-                    { v: "followup1", l: "ðŸ”” Ù…ØªØ§Ø¨Ø¹Ø© Ø£ÙˆÙ„Ù‰" },
-                    { v: "followup2", l: "ðŸ‘‹ Ù…ØªØ§Ø¨Ø¹Ø© Ø£Ø®ÙŠØ±Ø©" },
-                    { v: "objection", l: "ðŸ’¬ Ø±Ø¯ Ø§Ø¹ØªØ±Ø§Ø¶" },
+                    { v: "first",     l: "📩 أولى" },
+                    { v: "followup1", l: "🔔 متابعة أولى" },
+                    { v: "followup2", l: "👋 متابعة أخيرة" },
+                    { v: "objection", l: "💬 رد اعتراض" },
                   ].map(t => (
                     <button key={t.v} onClick={() => setMsgType(t.v)}
                       className={`py-2.5 rounded-xl text-sm font-medium transition ${msgType === t.v ? "bg-orange-500 text-white" : "bg-gray-50 text-gray-600 hover:bg-orange-50"}`}>
@@ -442,51 +373,38 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                   ))}
                 </div>
               </div>
-
-              {/* Objection input */}
               {msgType === "objection" && (
                 <div className="mb-4">
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Ø§Ù„Ø§Ø¹ØªØ±Ø§Ø¶</label>
-                  <input value={objection} onChange={e => setObjection(e.target.value)}
-                    placeholder='Ù…Ø«Ø§Ù„: "Ù„ÙŠØ³ Ù„Ø¯ÙŠ ÙˆÙ‚Øª"' className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none" />
+                  <label className="text-sm font-medium text-gray-700 mb-2 block">الاعتراض</label>
+                  <input value={objection} onChange={e => setObjection(e.target.value)} placeholder='مثال: "ليس لدي وقت"'
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none" />
                 </div>
               )}
-
               <button onClick={generateMessage} disabled={!selectedAcc || genLoading}
                 className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-bold hover:opacity-90 transition disabled:opacity-50">
-                {genLoading ? "â³ Claude ÙŠÙƒØªØ¨ Ø§Ù„Ø±Ø³Ø§Ù„Ø©..." : "âœ¨ ÙˆÙ„Ù‘Ø¯ Ø§Ù„Ø±Ø³Ø§Ù„Ø© Ø¨Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„Ø§ØµØ·Ù†Ø§Ø¹ÙŠ"}
+                {genLoading ? "⏳ Claude يكتب الرسالة..." : "✨ ولّد الرسالة بالذكاء الاصطناعي"}
               </button>
             </div>
 
-            {/* Generated message */}
             {generatedMsg && (
               <div className="bg-white rounded-2xl p-6 border border-green-100">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-bold text-gray-800">Ø§Ù„Ø±Ø³Ø§Ù„Ø© Ø§Ù„Ø¬Ø§Ù‡Ø²Ø©</h3>
+                  <h3 className="font-bold text-gray-800">الرسالة الجاهزة</h3>
                   <div className="flex gap-2">
                     <button onClick={() => copyMsg(generatedMsg)}
                       className={`text-sm px-4 py-1.5 rounded-xl font-medium transition ${copied ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600 hover:bg-orange-200"}`}>
-                      {copied ? "âœ… ØªÙ… Ø§Ù„Ù†Ø³Ø®!" : "ðŸ“‹ Ù†Ø³Ø®"}
+                      {copied ? "✅ تم النسخ!" : "📋 نسخ"}
                     </button>
-                    <button onClick={generateMessage}
-                      className="text-sm px-4 py-1.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">
-                      ðŸ”„ Ø£Ø¹Ø¯ Ø§Ù„ØªÙˆÙ„ÙŠØ¯
-                    </button>
+                    <button onClick={generateMessage} className="text-sm px-4 py-1.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🔄 أعد التوليد</button>
                   </div>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-line border border-gray-100">
-                  {generatedMsg}
-                </div>
+                <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-line border border-gray-100">{generatedMsg}</div>
                 {selectedAcc && (
                   <div className="mt-3 flex gap-2">
-                    <a href={`https://instagram.com/${selectedAcc.username}`} target="_blank" rel="noopener noreferrer"
-                      className="flex-1 text-center text-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2.5 rounded-xl font-medium">
-                      ðŸ“± Ø§ÙØªØ­ Ø§Ù„Ø­Ø³Ø§Ø¨ Ø¹Ù„Ù‰ Ø¥Ù†Ø³ØªÙ‚Ø±Ø§Ù…
-                    </a>
+                    <a href={`https://www.instagram.com/${selectedAcc.username}/`} target="_blank" rel="noopener noreferrer"
+                      className="flex-1 text-center text-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2.5 rounded-xl font-medium">📱 افتح الحساب على إنستقرام</a>
                     <button onClick={() => updateStatus(selectedAcc.id, "contacted")}
-                      className="flex-1 text-sm bg-blue-500 text-white py-2.5 rounded-xl font-medium hover:bg-blue-600 transition">
-                      âœ… Ø³Ø¬Ù‘Ù„ ÙƒÙ€ "ØªÙ… Ø§Ù„ØªÙˆØ§ØµÙ„"
-                    </button>
+                      className="flex-1 text-sm bg-blue-500 text-white py-2.5 rounded-xl font-medium hover:bg-blue-600 transition">✅ سجّل كـ "تم التواصل"</button>
                   </div>
                 )}
               </div>
@@ -494,28 +412,23 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
           </div>
         )}
 
-        {/* â”€â”€ Tab 4: Objections â”€â”€ */}
+        {/* Tab 4: Objections */}
         {tab === "objections" && (
           <div className="space-y-3">
             <div className="bg-white rounded-2xl p-5 border border-orange-100 mb-4">
-              <p className="text-sm text-gray-600 text-center">Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø£ÙŠ Ø§Ø¹ØªØ±Ø§Ø¶ Ù„Ø±Ø¤ÙŠØ© Ø§Ù„Ø±Ø¯ Ø§Ù„Ø¬Ø§Ù‡Ø² â€” Ø«Ù… Ø§Ù†Ø³Ø®Ù‡ Ø¨Ø¶ØºØ·Ø© ÙˆØ§Ø­Ø¯Ø©</p>
+              <p className="text-sm text-gray-600 text-center">اضغط على أي اعتراض لرؤية الرد الجاهز — ثم انسخه بضغطة واحدة</p>
             </div>
             {OBJECTIONS.map((obj, i) => (
               <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
                 <button onClick={() => setExpandedObj(expandedObj === i ? null : i)}
                   className="w-full flex items-center justify-between p-4 text-right hover:bg-orange-50 transition">
                   <span className="font-medium text-gray-800 text-sm">{obj.q}</span>
-                  <span className="text-gray-400 text-lg">{expandedObj === i ? "â–²" : "â–¼"}</span>
+                  <span className="text-gray-400 text-lg">{expandedObj === i ? "▲" : "▼"}</span>
                 </button>
                 {expandedObj === i && (
                   <div className="px-4 pb-4">
-                    <div className="bg-green-50 rounded-xl p-4 text-sm text-gray-700 leading-relaxed border border-green-100 mb-3">
-                      {obj.a}
-                    </div>
-                    <button onClick={() => copyMsg(obj.a)}
-                      className="text-sm bg-orange-100 text-orange-600 px-4 py-2 rounded-xl hover:bg-orange-200 transition font-medium">
-                      ðŸ“‹ Ù†Ø³Ø® Ø§Ù„Ø±Ø¯
-                    </button>
+                    <div className="bg-green-50 rounded-xl p-4 text-sm text-gray-700 leading-relaxed border border-green-100 mb-3">{obj.a}</div>
+                    <button onClick={() => copyMsg(obj.a)} className="text-sm bg-orange-100 text-orange-600 px-4 py-2 rounded-xl hover:bg-orange-200 transition font-medium">📋 نسخ الرد</button>
                   </div>
                 )}
               </div>
@@ -526,5 +439,3 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
     </div>
   );
 }
-
-
