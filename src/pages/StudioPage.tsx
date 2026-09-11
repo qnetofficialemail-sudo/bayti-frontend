@@ -136,13 +136,16 @@ export default function StudioPage() {
 
   function openGemini() {
     if (!result) return;
-    // Try deep link first (works on desktop + some mobile)
-    const encodedPrompt = encodeURIComponent(result.prompt);
-    const geminiUrl = `https://gemini.google.com/app?q=${encodedPrompt}`;
-    // Also copy to clipboard as fallback
-    navigator.clipboard.writeText(result.prompt).catch(() => {});
-    setAutoCopied(true);
-    window.open(geminiUrl, "_blank");
+    navigator.clipboard.writeText(result.prompt)
+      .then(() => {
+        setAutoCopied(true);
+        setTimeout(() => window.open("https://gemini.google.com", "_blank"), 400);
+      })
+      .catch(() => {
+        // Clipboard failed (some mobile browsers) — just open Gemini
+        setAutoCopied(true);
+        window.open("https://gemini.google.com", "_blank");
+      });
   }
 
   function reset() {
@@ -439,24 +442,51 @@ export default function StudioPage() {
             <button onClick={openGemini}
               className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
               <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
-              {autoCopied ? "✅ Gemini مفتوح — ارفع صورتك!" : "افتح Gemini مع الـ Prompt جاهزاً ✨"}
+              {autoCopied ? "✅ Gemini مفتوح!" : "انسخ الـ Prompt وافتح Gemini ✨"}
             </button>
 
             {autoCopied && (
-              <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 text-sm text-center">
-                ✅ فُتح Gemini مع الـ Prompt جاهزاً!<br/>
-                <span className="font-bold">ارفع صورة المنتج واضغط إرسال فقط 🎉</span>
+              <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-green-800 text-sm">
+                <p className="font-bold text-base mb-3 text-center">✅ تم النسخ — Gemini مفتوح!</p>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2">
+                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">١</span>
+                    <p>في Gemini، اضغط على صندوق النص</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">٢</span>
+                    <div>
+                      <p className="font-bold">موبايل/تابلت:</p>
+                      <p>اضغط مطولاً ← اختر "لصق" (Paste)</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">٢</span>
+                    <div>
+                      <p className="font-bold">كمبيوتر:</p>
+                      <p>اضغط Ctrl+V (أو Cmd+V على Mac)</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">٣</span>
+                    <p>ارفع صورة منتجك واضغط إرسال 🎉</p>
+                  </div>
+                </div>
+                <button onClick={copyPrompt}
+                  className="mt-3 w-full text-center text-xs text-green-600 underline">
+                  {copied ? "✅ تم النسخ مجدداً" : "انسخ مجدداً إذا فقدت النسخ"}
+                </button>
               </div>
             )}
 
             {!autoCopied && (
               <div className="bg-blue-50 rounded-xl p-4 text-sm text-blue-700 border border-blue-100">
-                <p className="font-bold mb-1">📌 بضغطة واحدة فقط:</p>
-                <ol className="space-y-1 list-decimal list-inside">
-                  <li>يفتح Gemini مع الـ prompt مكتوباً تلقائياً</li>
-                  <li>ارفع صورة منتجك</li>
-                  <li>اضغط إرسال ← صورة احترافية! 🎉</li>
-                </ol>
+                <p className="font-bold mb-2">📌 كيف يعمل الزر:</p>
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2"><span className="text-blue-400">١.</span> ينسخ الـ prompt تلقائياً</div>
+                  <div className="flex items-center gap-2"><span className="text-blue-400">٢.</span> يفتح Gemini في تاب جديد</div>
+                  <div className="flex items-center gap-2"><span className="text-blue-400">٣.</span> الصق (Paste) + ارفع صورتك = صورة احترافية 🎉</div>
+                </div>
               </div>
             )}
 
