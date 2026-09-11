@@ -122,7 +122,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
         <div className="bg-white rounded-2xl p-8 border border-orange-100 shadow-lg w-full max-w-sm text-center">
           <div className="text-5xl mb-4">🔐</div>
           <h1 className="text-xl font-bold text-gray-800 mb-1">Bayti Growth OS</h1>
-          <p className="text-gray-400 text-sm mb-6">???? ??? ??????</p>
+          <p className="text-gray-400 text-sm mb-6">ادخل رمز الوصول</p>
           <input type="password" value={pin}
             onChange={e => { setPin(e.target.value); setPinError(false); }}
             onKeyDown={e => { if (e.key === "Enter") { if (pin === "bayti2026") { setUnlocked(true); } else { setPinError(true); setPin(""); } } }}
