@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import GrowthOSPage from "./GrowthOSPage";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
@@ -6,9 +6,9 @@ import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 
 const BADGE_CONFIG: Record<string, { label: string; labelAr: string; color: string; icon: string }> = {
-  verified:  { label: "Verified",  labelAr: "موثق",  color: "bg-blue-50 text-blue-700 border-blue-200",     icon: "✓"  },
-  inspected: { label: "Inspected", labelAr: "مفتش",  color: "bg-purple-50 text-purple-700 border-purple-200", icon: "/icons/bayti/ui/search.png" },
-  certified: { label: "Certified", labelAr: "معتمد", color: "bg-green-50 text-green-700 border-green-200",   icon: "🏅" },
+  verified:  { label: "Verified",  labelAr: "Ù…ÙˆØ«Ù‚",  color: "bg-blue-50 text-blue-700 border-blue-200",     icon: "âœ“"  },
+  inspected: { label: "Inspected", labelAr: "Ù…ÙØªØ´",  color: "bg-purple-50 text-purple-700 border-purple-200", icon: "/icons/bayti/ui/search.png" },
+  certified: { label: "Certified", labelAr: "Ù…Ø¹ØªÙ…Ø¯", color: "bg-green-50 text-green-700 border-green-200",   icon: "ðŸ…" },
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -137,7 +137,7 @@ export default function AdminPanel() {
   };
 
   const deleteSeller = async (seller: any) => {
-    if (!window.confirm(`⚠️ Permanently delete "${seller.shop_name}" and ALL their products and orders? This cannot be undone.`)) return;
+    if (!window.confirm(`âš ï¸ Permanently delete "${seller.shop_name}" and ALL their products and orders? This cannot be undone.`)) return;
     try {
       await api.delete(`/api/admin/sellers/${seller.id}`);
       setSellers(prev => prev.filter(s => s.id !== seller.id));
@@ -163,7 +163,7 @@ export default function AdminPanel() {
   };
 
   const deleteUser = async (user: any) => {
-    if (!window.confirm(`⚠️ Permanently delete "${user.full_name}" (${user.email}) and ALL their data? This cannot be undone.`)) return;
+    if (!window.confirm(`âš ï¸ Permanently delete "${user.full_name}" (${user.email}) and ALL their data? This cannot be undone.`)) return;
     try {
       if (user.role === "seller") {
         // Find seller profile id from sellers list
@@ -195,18 +195,18 @@ export default function AdminPanel() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">⚙️ {isArabic ? "لوحة الإدارة" : "Admin Panel"}</h1>
-          <p className="text-gray-500 text-sm mt-1">{isArabic ? "إدارة البائعين والطلبات والعمولات" : "Manage sellers, orders and commissions"}</p>
+          <h1 className="text-2xl font-bold text-gray-900">âš™ï¸ {isArabic ? "Ù„ÙˆØ­Ø© Ø§Ù„Ø¥Ø¯Ø§Ø±Ø©" : "Admin Panel"}</h1>
+          <p className="text-gray-500 text-sm mt-1">{isArabic ? "Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ† ÙˆØ§Ù„Ø·Ù„Ø¨Ø§Øª ÙˆØ§Ù„Ø¹Ù…ÙˆÙ„Ø§Øª" : "Manage sellers, orders and commissions"}</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={loadData} className="text-sm text-gray-500 hover:text-orange-500 flex items-center gap-1 transition">↻ {isArabic ? "تحديث" : "Refresh"}</button>
+          <button onClick={loadData} className="text-sm text-gray-500 hover:text-orange-500 flex items-center gap-1 transition">â†» {isArabic ? "ØªØ­Ø¯ÙŠØ«" : "Refresh"}</button>
           <a href="https://web-production-63685.up.railway.app/api/admin/export/sellers" target="_blank"
             className="text-xs bg-green-50 text-green-700 hover:bg-green-100 px-3 py-1.5 rounded-lg transition font-medium">
-            📥 {isArabic ? "تصدير البائعين" : "Export Sellers"}
+            ðŸ“¥ {isArabic ? "ØªØµØ¯ÙŠØ± Ø§Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ†" : "Export Sellers"}
           </a>
           <a href="https://web-production-63685.up.railway.app/api/admin/export/orders" target="_blank"
             className="text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition font-medium">
-            📥 {isArabic ? "تصدير الطلبات" : "Export Orders"}
+            ðŸ“¥ {isArabic ? "ØªØµØ¯ÙŠØ± Ø§Ù„Ø·Ù„Ø¨Ø§Øª" : "Export Orders"}
           </a>
         </div>
       </div>
@@ -215,14 +215,14 @@ export default function AdminPanel() {
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
-            { label: isArabic ? "بائعون معلقون" : "Pending Sellers", value: stats.pending_sellers, icon: "⏳", color: "border-yellow-200 bg-yellow-50", alert: stats.pending_sellers > 0 },
-            { label: isArabic ? "بائعون نشطون" : "Active Sellers", value: stats.approved_sellers, icon: "/icons/bayti/ui/seller-store.png", color: "border-green-200 bg-green-50" },
-            { label: isArabic ? "إجمالي الطلبات" : "Total Orders", value: stats.total_orders, icon: "/icons/bayti/ui/orders-box.png", color: "border-blue-200 bg-blue-50" },
-            { label: isArabic ? "عمولة المنصة" : "Platform Commission", value: `AED ${stats.platform_commission}`, icon: "💰", color: "border-orange-200 bg-orange-50" },
-            { label: isArabic ? "إجمالي المشترين" : "Total Buyers", value: stats.total_buyers, icon: "/icons/bayti/ui/shopping-bag.png", color: "border-purple-200 bg-purple-50" },
-            { label: isArabic ? "إجمالي المنتجات" : "Total Products", value: stats.total_products, icon: "/icons/bayti/categories/home-cooked-meals.png", color: "border-pink-200 bg-pink-50" },
-            { label: isArabic ? "إجمالي الإيرادات" : "Total Revenue", value: `AED ${stats.total_revenue}`, icon: "📈", color: "border-teal-200 bg-teal-50" },
-            { label: isArabic ? "إجمالي البائعين" : "Total Sellers", value: stats.total_sellers, icon: "👨‍🍳", color: "border-gray-200 bg-gray-50" },
+            { label: isArabic ? "Ø¨Ø§Ø¦Ø¹ÙˆÙ† Ù…Ø¹Ù„Ù‚ÙˆÙ†" : "Pending Sellers", value: stats.pending_sellers, icon: "â³", color: "border-yellow-200 bg-yellow-50", alert: stats.pending_sellers > 0 },
+            { label: isArabic ? "Ø¨Ø§Ø¦Ø¹ÙˆÙ† Ù†Ø´Ø·ÙˆÙ†" : "Active Sellers", value: stats.approved_sellers, icon: "/icons/bayti/ui/seller-store.png", color: "border-green-200 bg-green-50" },
+            { label: isArabic ? "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø·Ù„Ø¨Ø§Øª" : "Total Orders", value: stats.total_orders, icon: "/icons/bayti/ui/orders-box.png", color: "border-blue-200 bg-blue-50" },
+            { label: isArabic ? "Ø¹Ù…ÙˆÙ„Ø© Ø§Ù„Ù…Ù†ØµØ©" : "Platform Commission", value: `AED ${stats.platform_commission}`, icon: "ðŸ’°", color: "border-orange-200 bg-orange-50" },
+            { label: isArabic ? "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…Ø´ØªØ±ÙŠÙ†" : "Total Buyers", value: stats.total_buyers, icon: "/icons/bayti/ui/shopping-bag.png", color: "border-purple-200 bg-purple-50" },
+            { label: isArabic ? "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "Total Products", value: stats.total_products, icon: "/icons/bayti/categories/home-cooked-meals.png", color: "border-pink-200 bg-pink-50" },
+            { label: isArabic ? "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª" : "Total Revenue", value: `AED ${stats.total_revenue}`, icon: "ðŸ“ˆ", color: "border-teal-200 bg-teal-50" },
+            { label: isArabic ? "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ†" : "Total Sellers", value: stats.total_sellers, icon: "ðŸ‘¨â€ðŸ³", color: "border-gray-200 bg-gray-50" },
           ].map(stat => (
             <div key={stat.label} className={`rounded-2xl p-4 border ${stat.color} ${(stat as any).alert ? "ring-2 ring-yellow-400" : ""}`}>
               <div className="w-7 h-7 mb-1 flex items-center justify-center">{String(stat.icon).startsWith("/") ? <img src={stat.icon} alt="" aria-hidden="true" className="w-7 h-7 object-contain" /> : <span className="text-2xl">{stat.icon}</span>}</div>
@@ -236,18 +236,19 @@ export default function AdminPanel() {
       {/* Tabs */}
       <div className="flex gap-2 mb-6 flex-wrap">
         {([
-          { key: "overview",   label: isArabic ? "نظرة عامة" : "Overview",   icon: "📊" },
-          { key: "sellers",    label: isArabic ? `البائعون (${stats?.pending_sellers || 0} معلق)` : `Sellers (${stats?.pending_sellers || 0} pending)`, icon: "/icons/bayti/ui/seller-store.png" },
-          { key: "commission", label: isArabic ? "العمولات" : "Commissions",  icon: "💰" },
-          { key: "orders",     label: isArabic ? "الطلبات" : "Orders",        icon: "/icons/bayti/ui/orders-box.png" },
-          { key: "users",      label: isArabic ? "المستخدمون" : "Users",      icon: "👥" },
-          { key: "products",   label: isArabic ? "المنتجات" : "Products",    icon: "/icons/bayti/categories/home-cooked-meals.png" },
-          { key: "revenue",    label: isArabic ? "الإيرادات" : "Revenue",    icon: "📈" },
-          { key: "reviews",    label: isArabic ? `التقييمات${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}` : `Reviews${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}`, icon: "⭐" },
-          { key: "categories", label: isArabic ? "الفئات" : "Categories", icon: "🏷️" },
-          { key: "applications", label: (isArabic ? "الطلبات" : "Applications") + (applications.filter(a => a.status === "pending").length > 0 ? ` (${applications.filter(a => a.status === "pending").length})` : ""), icon: "📋" },
-          { key: "forecast", label: isArabic ? "توقعات الطلب" : "Demand Forecast", icon: "🔮" },
-          { key: "content", label: isArabic ? "محتوى إنستقرام" : "Instagram Content", icon: "📸" },
+          { key: "overview",   label: isArabic ? "Ù†Ø¸Ø±Ø© Ø¹Ø§Ù…Ø©" : "Overview",   icon: "ðŸ“Š" },
+          { key: "sellers",    label: isArabic ? `Ø§Ù„Ø¨Ø§Ø¦Ø¹ÙˆÙ† (${stats?.pending_sellers || 0} Ù…Ø¹Ù„Ù‚)` : `Sellers (${stats?.pending_sellers || 0} pending)`, icon: "/icons/bayti/ui/seller-store.png" },
+          { key: "commission", label: isArabic ? "Ø§Ù„Ø¹Ù…ÙˆÙ„Ø§Øª" : "Commissions",  icon: "ðŸ’°" },
+          { key: "orders",     label: isArabic ? "Ø§Ù„Ø·Ù„Ø¨Ø§Øª" : "Orders",        icon: "/icons/bayti/ui/orders-box.png" },
+          { key: "users",      label: isArabic ? "Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…ÙˆÙ†" : "Users",      icon: "ðŸ‘¥" },
+          { key: "products",   label: isArabic ? "Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª" : "Products",    icon: "/icons/bayti/categories/home-cooked-meals.png" },
+          { key: "revenue",    label: isArabic ? "Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª" : "Revenue",    icon: "ðŸ“ˆ" },
+          { key: "reviews",    label: isArabic ? `Ø§Ù„ØªÙ‚ÙŠÙŠÙ…Ø§Øª${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}` : `Reviews${pendingReviews.length > 0 ? ` (${pendingReviews.length})` : ""}`, icon: "â­" },
+          { key: "categories", label: isArabic ? "Ø§Ù„ÙØ¦Ø§Øª" : "Categories", icon: "ðŸ·ï¸" },
+          { key: "applications", label: (isArabic ? "Ø§Ù„Ø·Ù„Ø¨Ø§Øª" : "Applications") + (applications.filter(a => a.status === "pending").length > 0 ? ` (${applications.filter(a => a.status === "pending").length})` : ""), icon: "ðŸ“‹" },
+          { key: "forecast", label: isArabic ? "ØªÙˆÙ‚Ø¹Ø§Øª Ø§Ù„Ø·Ù„Ø¨" : "Demand Forecast", icon: "ðŸ”®" },
+          { key: "content", label: isArabic ? "Ù…Ø­ØªÙˆÙ‰ Ø¥Ù†Ø³ØªÙ‚Ø±Ø§Ù…" : "Instagram Content", icon: "ðŸ“¸" },
+          { key: "growth", label: "🚀 Growth OS", icon: "🚀" },
         ] as const).map(t => (
           <button key={t.key} onClick={() => setTab(t.key as any)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition ${tab === t.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
@@ -260,29 +261,29 @@ export default function AdminPanel() {
       {tab === "overview" && (
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h3 className="font-semibold text-gray-900 mb-4">⏳ {isArabic ? "بائعون بانتظار الموافقة" : "Sellers Awaiting Approval"}</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">â³ {isArabic ? "Ø¨Ø§Ø¦Ø¹ÙˆÙ† Ø¨Ø§Ù†ØªØ¸Ø§Ø± Ø§Ù„Ù…ÙˆØ§ÙÙ‚Ø©" : "Sellers Awaiting Approval"}</h3>
             {sellers.filter(s => !s.is_approved).length === 0 ? (
-              <p className="text-gray-400 text-sm">✅ {isArabic ? "لا يوجد بائعون معلقون" : "No pending sellers"}</p>
+              <p className="text-gray-400 text-sm">âœ… {isArabic ? "Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ø¨Ø§Ø¦Ø¹ÙˆÙ† Ù…Ø¹Ù„Ù‚ÙˆÙ†" : "No pending sellers"}</p>
             ) : sellers.filter(s => !s.is_approved).slice(0, 5).map(seller => (
               <div key={seller.id} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
                 <div>
                   <p className="font-medium text-gray-900 text-sm">{seller.shop_name}</p>
-                  <p className="text-xs text-gray-500">{seller.user.full_name} · {seller.area}</p>
+                  <p className="text-xs text-gray-500">{seller.user.full_name} Â· {seller.area}</p>
                 </div>
                 <button onClick={() => approveSeller(seller.id)} disabled={actionLoading === seller.id}
                   className="text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg transition disabled:opacity-60">
-                  {actionLoading === seller.id ? "..." : (isArabic ? "موافقة" : "Approve")}
+                  {actionLoading === seller.id ? "..." : (isArabic ? "Ù…ÙˆØ§ÙÙ‚Ø©" : "Approve")}
                 </button>
               </div>
             ))}
           </div>
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h3 className="font-semibold text-gray-900 mb-4">📦 {isArabic ? "أحدث الطلبات" : "Latest Orders"}</h3>
+            <h3 className="font-semibold text-gray-900 mb-4">ðŸ“¦ {isArabic ? "Ø£Ø­Ø¯Ø« Ø§Ù„Ø·Ù„Ø¨Ø§Øª" : "Latest Orders"}</h3>
             {orders.slice(0, 6).map(order => (
               <div key={order.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                 <div>
-                  <p className="text-sm font-medium text-gray-900">#{order.id} — {order.seller}</p>
-                  <p className="text-xs text-gray-500">{order.buyer} · {order.area}</p>
+                  <p className="text-sm font-medium text-gray-900">#{order.id} â€” {order.seller}</p>
+                  <p className="text-xs text-gray-500">{order.buyer} Â· {order.area}</p>
                 </div>
                 <div className="text-right">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[order.status]}`}>{order.status}</span>
@@ -298,10 +299,10 @@ export default function AdminPanel() {
       {tab === "commission" && (
         <div className="space-y-4">
           <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-4">
-            <p className="text-sm text-blue-800 font-medium">💡 {isArabic ? "كيف تعمل العمولات" : "How commissions work"}</p>
+            <p className="text-sm text-blue-800 font-medium">ðŸ’¡ {isArabic ? "ÙƒÙŠÙ ØªØ¹Ù…Ù„ Ø§Ù„Ø¹Ù…ÙˆÙ„Ø§Øª" : "How commissions work"}</p>
             <p className="text-xs text-blue-600 mt-1">
               {isArabic
-                ? "يتم احتساب العمولة تلقائياً على كل طلب بناءً على نسبة البائع. يمكنك تخصيص نسبة مختلفة لكل بائع."
+                ? "ÙŠØªÙ… Ø§Ø­ØªØ³Ø§Ø¨ Ø§Ù„Ø¹Ù…ÙˆÙ„Ø© ØªÙ„Ù‚Ø§Ø¦ÙŠØ§Ù‹ Ø¹Ù„Ù‰ ÙƒÙ„ Ø·Ù„Ø¨ Ø¨Ù†Ø§Ø¡Ù‹ Ø¹Ù„Ù‰ Ù†Ø³Ø¨Ø© Ø§Ù„Ø¨Ø§Ø¦Ø¹. ÙŠÙ…ÙƒÙ†Ùƒ ØªØ®ØµÙŠØµ Ù†Ø³Ø¨Ø© Ù…Ø®ØªÙ„ÙØ© Ù„ÙƒÙ„ Ø¨Ø§Ø¦Ø¹."
                 : "Commission is automatically calculated on each order based on the seller's rate. You can set a custom rate per seller. Default is 12%."}
             </p>
           </div>
@@ -309,16 +310,16 @@ export default function AdminPanel() {
           {/* Commission Summary */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-4 border-b border-gray-50">
-              <h3 className="font-semibold text-gray-900">💰 {isArabic ? "ملخص العمولات" : "Commission Breakdown"}</h3>
+              <h3 className="font-semibold text-gray-900">ðŸ’° {isArabic ? "Ù…Ù„Ø®Øµ Ø§Ù„Ø¹Ù…ÙˆÙ„Ø§Øª" : "Commission Breakdown"}</h3>
             </div>
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "المتجر" : "Shop"}</th>
-                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "النسبة" : "Rate"}</th>
-                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "الطلبات" : "Orders"}</th>
-                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "الإيرادات" : "Revenue"}</th>
-                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "العمولة" : "Commission"}</th>
+                  <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ù…ØªØ¬Ø±" : "Shop"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ù†Ø³Ø¨Ø©" : "Rate"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ø·Ù„Ø¨Ø§Øª" : "Orders"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª" : "Revenue"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ø¹Ù…ÙˆÙ„Ø©" : "Commission"}</th>
                 </tr>
               </thead>
               <tbody>
@@ -334,32 +335,32 @@ export default function AdminPanel() {
                   </tr>
                 ))}
                 {commissionSummary.length === 0 && (
-                  <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-400 text-sm">{isArabic ? "لا توجد بيانات بعد" : "No data yet"}</td></tr>
+                  <tr><td colSpan={5} className="px-4 py-8 text-center text-gray-400 text-sm">{isArabic ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ø¨Ø¹Ø¯" : "No data yet"}</td></tr>
                 )}
               </tbody>
             </table>
           </div>
 
           {/* Per-seller commission rates */}
-          <h3 className="font-semibold text-gray-900 mt-6 mb-3">⚙️ {isArabic ? "إعدادات العمولة" : "Commission Settings"}</h3>
+          <h3 className="font-semibold text-gray-900 mt-6 mb-3">âš™ï¸ {isArabic ? "Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ø¹Ù…ÙˆÙ„Ø©" : "Commission Settings"}</h3>
           {sellers.filter(s => s.is_approved).map(seller => (
             <div key={seller.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm flex items-center justify-between gap-4">
               <div>
                 <p className="font-semibold text-gray-900">{seller.shop_name}</p>
-                <p className="text-sm text-gray-500">{seller.user.full_name} · {seller.area}</p>
+                <p className="text-sm text-gray-500">{seller.user.full_name} Â· {seller.area}</p>
                 <p className="text-xs text-gray-400 mt-1">
-                  {isArabic ? "الإيرادات:" : "Revenue:"} AED {seller.total_revenue} ·
-                  {isArabic ? " العمولة:" : " Commission:"} AED {seller.total_commission}
+                  {isArabic ? "Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª:" : "Revenue:"} AED {seller.total_revenue} Â·
+                  {isArabic ? " Ø§Ù„Ø¹Ù…ÙˆÙ„Ø©:" : " Commission:"} AED {seller.total_commission}
                 </p>
               </div>
               <div className="flex items-center gap-3">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-orange-500">{seller.commission_rate}%</div>
-                  <div className="text-xs text-gray-400">{isArabic ? "النسبة الحالية" : "Current rate"}</div>
+                  <div className="text-xs text-gray-400">{isArabic ? "Ø§Ù„Ù†Ø³Ø¨Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©" : "Current rate"}</div>
                 </div>
                 <button onClick={() => { setCommissionModal(seller); setNewRate(String(seller.commission_rate)); }}
                   className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
-                  {isArabic ? "تغيير" : "Change"}
+                  {isArabic ? "ØªØºÙŠÙŠØ±" : "Change"}
                 </button>
               </div>
             </div>
@@ -372,9 +373,9 @@ export default function AdminPanel() {
         <div>
           <div className="flex gap-2 mb-4">
             {[
-              { key: "all", label: isArabic ? "الكل" : "All" },
-              { key: "pending", label: isArabic ? "معلق" : "Pending" },
-              { key: "approved", label: isArabic ? "موافق" : "Approved" },
+              { key: "all", label: isArabic ? "Ø§Ù„ÙƒÙ„" : "All" },
+              { key: "pending", label: isArabic ? "Ù…Ø¹Ù„Ù‚" : "Pending" },
+              { key: "approved", label: isArabic ? "Ù…ÙˆØ§ÙÙ‚" : "Approved" },
             ].map(f => (
               <button key={f.key} onClick={() => setSellerFilter(f.key)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${sellerFilter === f.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200"}`}>
@@ -395,43 +396,43 @@ export default function AdminPanel() {
                         </span>
                       )}
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${seller.is_approved ? "bg-green-50 text-green-700" : "bg-yellow-50 text-yellow-700"}`}>
-                        {seller.is_approved ? (isArabic ? "نشط" : "Active") : (isArabic ? "معلق" : "Pending")}
+                        {seller.is_approved ? (isArabic ? "Ù†Ø´Ø·" : "Active") : (isArabic ? "Ù…Ø¹Ù„Ù‚" : "Pending")}
                       </span>
                       <span className="text-xs bg-orange-50 text-orange-600 px-2 py-0.5 rounded-full font-medium">
-                        {seller.commission_rate}% {isArabic ? "عمولة" : "commission"}
+                        {seller.commission_rate}% {isArabic ? "Ø¹Ù…ÙˆÙ„Ø©" : "commission"}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500">{seller.user.full_name} · {seller.user.email}</p>
-                    <p className="text-sm text-gray-500">📍 {seller.area}, {seller.city} · ⭐ {seller.rating} · 📦 {seller.total_orders} {isArabic ? "طلب" : "orders"}</p>
-                    {seller.badge_notes && <p className="text-xs text-orange-500 mt-1">📝 {seller.badge_notes}</p>}
+                    <p className="text-sm text-gray-500">{seller.user.full_name} Â· {seller.user.email}</p>
+                    <p className="text-sm text-gray-500">ðŸ“ {seller.area}, {seller.city} Â· â­ {seller.rating} Â· ðŸ“¦ {seller.total_orders} {isArabic ? "Ø·Ù„Ø¨" : "orders"}</p>
+                    {seller.badge_notes && <p className="text-xs text-orange-500 mt-1">ðŸ“ {seller.badge_notes}</p>}
                     <button onClick={() => setExpandedSeller(expandedSeller === seller.id ? null : seller.id)}
                       className="text-xs text-orange-500 hover:underline mt-2 inline-block">
-                      {expandedSeller === seller.id ? "▲ Hide details" : "▼ View details"}
+                      {expandedSeller === seller.id ? "â–² Hide details" : "â–¼ View details"}
                     </button>
                   </div>
                   <div className="flex flex-col gap-2 flex-shrink-0">
                     {!seller.is_approved ? (
                       <button onClick={() => approveSeller(seller.id)} disabled={actionLoading === seller.id}
                         className="text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg transition disabled:opacity-60 font-medium">
-                        ✓ {isArabic ? "موافقة" : "Approve"}
+                        âœ“ {isArabic ? "Ù…ÙˆØ§ÙÙ‚Ø©" : "Approve"}
                       </button>
                     ) : (
                       <button onClick={() => disableSeller(seller.id)} disabled={actionLoading === seller.id}
                         className="text-xs bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition font-medium">
-                        ✕ {isArabic ? "تعطيل" : "Disable"}
+                        âœ• {isArabic ? "ØªØ¹Ø·ÙŠÙ„" : "Disable"}
                       </button>
                     )}
                     <button onClick={() => setBadgeModal(seller)}
                       className="text-xs bg-purple-500 hover:bg-purple-600 text-white px-3 py-2 rounded-lg transition font-medium">
-                      🏅 {isArabic ? "شارة" : "Badge"}
+                      ðŸ… {isArabic ? "Ø´Ø§Ø±Ø©" : "Badge"}
                     </button>
                     <button onClick={() => { setCommissionModal(seller); setNewRate(String(seller.commission_rate)); }}
                       className="text-xs bg-orange-500 hover:bg-orange-600 text-gray-900 px-3 py-2 rounded-lg transition font-medium">
-                      💰 {isArabic ? "عمولة" : "Commission"}
+                      ðŸ’° {isArabic ? "Ø¹Ù…ÙˆÙ„Ø©" : "Commission"}
                     </button>
                     <button onClick={() => deleteSeller(seller)}
                       className="text-xs bg-red-700 hover:bg-red-800 text-white px-3 py-2 rounded-lg transition font-medium">
-                      🗑️ {isArabic ? "حذف" : "Delete"}
+                      ðŸ—‘ï¸ {isArabic ? "Ø­Ø°Ù" : "Delete"}
                     </button>
                   </div>
                 </div>
@@ -439,7 +440,7 @@ export default function AdminPanel() {
                 <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
                   {(seller.sample_image_1 || seller.sample_image_2 || seller.sample_image_3) && (
                     <div>
-                      <p className="text-xs font-medium text-gray-500 mb-2">{isArabic ? "صور العينات" : "Sample Photos"}</p>
+                      <p className="text-xs font-medium text-gray-500 mb-2">{isArabic ? "ØµÙˆØ± Ø§Ù„Ø¹ÙŠÙ†Ø§Øª" : "Sample Photos"}</p>
                       <div className="flex gap-2">
                         {[seller.sample_image_1, seller.sample_image_2, seller.sample_image_3].filter(Boolean).map((img: string, i: number) => (
                           <a key={i} href={img} target="_blank" rel="noopener noreferrer">
@@ -452,34 +453,34 @@ export default function AdminPanel() {
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     {seller.whatsapp_number && (
                       <div className="bg-green-50 rounded-xl p-3">
-                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "واتساب" : "WhatsApp"}</p>
-                        <p className="font-medium text-gray-900">📱 {seller.whatsapp_number}</p>
+                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "ÙˆØ§ØªØ³Ø§Ø¨" : "WhatsApp"}</p>
+                        <p className="font-medium text-gray-900">ðŸ“± {seller.whatsapp_number}</p>
                       </div>
                     )}
                     {seller.instagram_handle && (
                       <div className="bg-pink-50 rounded-xl p-3">
-                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "إنستغرام" : "Instagram"}</p>
-                        <p className="font-medium text-gray-900">📸 {seller.instagram_handle}</p>
+                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "Ø¥Ù†Ø³ØªØºØ±Ø§Ù…" : "Instagram"}</p>
+                        <p className="font-medium text-gray-900">ðŸ“¸ {seller.instagram_handle}</p>
                       </div>
                     )}
                     {seller.min_order_amount && (
                       <div className="bg-blue-50 rounded-xl p-3">
-                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "الحد الأدنى للطلب" : "Min Order"}</p>
+                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¯Ù†Ù‰ Ù„Ù„Ø·Ù„Ø¨" : "Min Order"}</p>
                         <p className="font-medium text-gray-900">AED {seller.min_order_amount}</p>
                       </div>
                     )}
                     {seller.delivery_type && (
                       <div className="bg-orange-50 rounded-xl p-3">
-                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "التوصيل" : "Delivery"}</p>
+                        <p className="text-xs text-gray-500 mb-0.5">{isArabic ? "Ø§Ù„ØªÙˆØµÙŠÙ„" : "Delivery"}</p>
                         <p className="font-medium text-gray-900">
-                          {seller.delivery_type === "self" ? (isArabic ? "🏠 يوصل بنفسه" : "🏠 Self delivery") : (isArabic ? "🚗 يحتاج بيتي" : "🚗 Needs Bayti")}
+                          {seller.delivery_type === "self" ? (isArabic ? "ðŸ  ÙŠÙˆØµÙ„ Ø¨Ù†ÙØ³Ù‡" : "ðŸ  Self delivery") : (isArabic ? "ðŸš— ÙŠØ­ØªØ§Ø¬ Ø¨ÙŠØªÙŠ" : "ðŸš— Needs Bayti")}
                         </p>
                       </div>
                     )}
                   </div>
                   {seller.description && (
                     <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">{isArabic ? "الوصف" : "Description"}</p>
+                      <p className="text-xs font-medium text-gray-500 mb-1">{isArabic ? "Ø§Ù„ÙˆØµÙ" : "Description"}</p>
                       <p className="text-sm text-gray-700">{seller.description}</p>
                     </div>
                   )}
@@ -494,36 +495,36 @@ export default function AdminPanel() {
       {/* Products Tab */}
       {tab === "products" && (
         <div className="space-y-3">
-          <p className="text-sm text-gray-500">{allProducts.length} {isArabic ? "منتج" : "products total"}</p>
+          <p className="text-sm text-gray-500">{allProducts.length} {isArabic ? "Ù…Ù†ØªØ¬" : "products total"}</p>
           {allProducts.map(product => (
             <div key={product.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl overflow-hidden bg-orange-50 flex items-center justify-center flex-shrink-0">
                 {product.image_url
                   ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} className="w-full h-full object-cover" alt={product.name} />
-                  : <span className="text-2xl">🍽️</span>}
+                  : <span className="text-2xl">ðŸ½ï¸</span>}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-gray-900 truncate">{product.name}</p>
-                <p className="text-xs text-gray-500">🏠 {product.shop_name} · {product.category} · AED {product.price}</p>
+                <p className="text-xs text-gray-500">ðŸ  {product.shop_name} Â· {product.category} Â· AED {product.price}</p>
               </div>
               <div className="flex gap-2 flex-shrink-0">
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${product.is_available ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
-                  {product.is_available ? (isArabic ? "متاح" : "Live") : (isArabic ? "مخفي" : "Hidden")}
+                  {product.is_available ? (isArabic ? "Ù…ØªØ§Ø­" : "Live") : (isArabic ? "Ù…Ø®ÙÙŠ" : "Hidden")}
                 </span>
                 <button onClick={async () => {
                     await api.patch(`/api/admin/products/${product.id}/feature`);
                     setAllProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_featured: !p.is_featured } : p));
                   }}
                   className={`text-xs px-3 py-1.5 rounded-lg transition font-medium ${product.is_featured ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-600"}`}>
-                  ⭐ {product.is_featured ? (isArabic ? "مميز" : "Featured") : (isArabic ? "تمييز" : "Feature")}
+                  â­ {product.is_featured ? (isArabic ? "Ù…Ù…ÙŠØ²" : "Featured") : (isArabic ? "ØªÙ…ÙŠÙŠØ²" : "Feature")}
                 </button>
                 <button onClick={() => toggleProduct(product)}
                   className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg transition">
-                  {product.is_available ? (isArabic ? "إخفاء" : "Hide") : (isArabic ? "إظهار" : "Show")}
+                  {product.is_available ? (isArabic ? "Ø¥Ø®ÙØ§Ø¡" : "Hide") : (isArabic ? "Ø¥Ø¸Ù‡Ø§Ø±" : "Show")}
                 </button>
                 <button onClick={() => deleteProductAdmin(product)}
                   className="text-xs bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded-lg transition">
-                  🗑
+                  ðŸ—‘
                 </button>
               </div>
             </div>
@@ -537,33 +538,33 @@ export default function AdminPanel() {
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm text-center">
               <p className="text-3xl font-bold text-orange-500">AED {dailyRevenue.reduce((a, r) => a + r.revenue, 0).toFixed(0)}</p>
-              <p className="text-sm text-gray-500 mt-1">{isArabic ? "إجمالي الإيرادات (30 يوم)" : "Total Revenue (30 days)"}</p>
+              <p className="text-sm text-gray-500 mt-1">{isArabic ? "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª (30 ÙŠÙˆÙ…)" : "Total Revenue (30 days)"}</p>
             </div>
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm text-center">
               <p className="text-3xl font-bold text-green-500">AED {dailyRevenue.reduce((a, r) => a + r.commission, 0).toFixed(0)}</p>
-              <p className="text-sm text-gray-500 mt-1">{isArabic ? "عمولة بيتي (30 يوم)" : "Bayti Commission (30 days)"}</p>
+              <p className="text-sm text-gray-500 mt-1">{isArabic ? "Ø¹Ù…ÙˆÙ„Ø© Ø¨ÙŠØªÙŠ (30 ÙŠÙˆÙ…)" : "Bayti Commission (30 days)"}</p>
             </div>
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm text-center">
               <p className="text-3xl font-bold text-blue-500">{dailyRevenue.reduce((a, r) => a + r.orders, 0)}</p>
-              <p className="text-sm text-gray-500 mt-1">{isArabic ? "إجمالي الطلبات (30 يوم)" : "Total Orders (30 days)"}</p>
+              <p className="text-sm text-gray-500 mt-1">{isArabic ? "Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø·Ù„Ø¨Ø§Øª (30 ÙŠÙˆÙ…)" : "Total Orders (30 days)"}</p>
             </div>
           </div>
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="p-4 border-b border-gray-50">
-              <h3 className="font-semibold text-gray-900">📅 {isArabic ? "الإيرادات اليومية" : "Daily Revenue"}</h3>
+              <h3 className="font-semibold text-gray-900">ðŸ“… {isArabic ? "Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª Ø§Ù„ÙŠÙˆÙ…ÙŠØ©" : "Daily Revenue"}</h3>
             </div>
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "اليوم" : "Date"}</th>
-                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "الطلبات" : "Orders"}</th>
-                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "الإيرادات" : "Revenue"}</th>
-                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "العمولة" : "Commission"}</th>
+                  <th className="text-left text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„ÙŠÙˆÙ…" : "Date"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ø·Ù„Ø¨Ø§Øª" : "Orders"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª" : "Revenue"}</th>
+                  <th className="text-right text-xs font-medium text-gray-500 px-4 py-3">{isArabic ? "Ø§Ù„Ø¹Ù…ÙˆÙ„Ø©" : "Commission"}</th>
                 </tr>
               </thead>
               <tbody>
                 {dailyRevenue.length === 0 ? (
-                  <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400 text-sm">{isArabic ? "لا توجد بيانات بعد" : "No data yet"}</td></tr>
+                  <tr><td colSpan={4} className="px-4 py-8 text-center text-gray-400 text-sm">{isArabic ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ø¨Ø¹Ø¯" : "No data yet"}</td></tr>
                 ) : dailyRevenue.map((row, i) => (
                   <tr key={i} className="border-t border-gray-50 hover:bg-gray-50">
                     <td className="px-4 py-3 text-sm text-gray-900">{row.day}</td>
@@ -581,7 +582,7 @@ export default function AdminPanel() {
       {/* Categories Tab */}
       {tab === "categories" && (
         <div className="space-y-3">
-          <p className="text-sm text-gray-500">{isArabic ? "تحكم في الفئات المعروضة للعملاء" : "Control which categories are visible to customers"}</p>
+          <p className="text-sm text-gray-500">{isArabic ? "ØªØ­ÙƒÙ… ÙÙŠ Ø§Ù„ÙØ¦Ø§Øª Ø§Ù„Ù…Ø¹Ø±ÙˆØ¶Ø© Ù„Ù„Ø¹Ù…Ù„Ø§Ø¡" : "Control which categories are visible to customers"}</p>
           {managedCategories.map((cat: any) => (
             <div key={cat.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center gap-4">
               {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt={cat.name} className="w-10 h-10 object-contain" /> : <span className="text-3xl">{cat.icon}</span>}
@@ -591,7 +592,7 @@ export default function AdminPanel() {
               </div>
               <div className="flex items-center gap-3">
                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${cat.is_active ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
-                  {cat.is_active ? (isArabic ? "نشط" : "Active") : (isArabic ? "مخفي" : "Hidden")}
+                  {cat.is_active ? (isArabic ? "Ù†Ø´Ø·" : "Active") : (isArabic ? "Ù…Ø®ÙÙŠ" : "Hidden")}
                 </span>
                 <button onClick={async () => {
                   const res = await api.patch(`/api/admin/categories/${cat.id}/toggle`);
@@ -611,17 +612,17 @@ export default function AdminPanel() {
         <div className="space-y-3">
           {pendingReviews.length === 0 ? (
             <div className="text-center py-16 text-gray-400">
-              <div className="text-4xl mb-3">✅</div>
-              <p>{isArabic ? "لا توجد تقييمات معلقة" : "No pending reviews"}</p>
+              <div className="text-4xl mb-3">âœ…</div>
+              <p>{isArabic ? "Ù„Ø§ ØªÙˆØ¬Ø¯ ØªÙ‚ÙŠÙŠÙ…Ø§Øª Ù…Ø¹Ù„Ù‚Ø©" : "No pending reviews"}</p>
             </div>
           ) : pendingReviews.map((review: any) => (
             <div key={review.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-yellow-400 text-lg">{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
+                    <span className="text-yellow-400 text-lg">{"â˜…".repeat(review.rating)}{"â˜†".repeat(5 - review.rating)}</span>
                     <span className="font-medium text-gray-900">{review.buyer_name}</span>
-                    <span className="text-gray-400 text-sm">→ {review.seller_name}</span>
+                    <span className="text-gray-400 text-sm">â†’ {review.seller_name}</span>
                   </div>
                   {review.comment && <p className="text-sm text-gray-600 mt-1">"{review.comment}"</p>}
                   <p className="text-xs text-gray-400 mt-1">{new Date(review.created_at).toLocaleDateString()}</p>
@@ -631,13 +632,13 @@ export default function AdminPanel() {
                     await api.patch(`/api/reviews/admin/${review.id}/approve`);
                     setPendingReviews(prev => prev.filter(r => r.id !== review.id));
                   }} className="text-xs bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl font-medium transition">
-                    ✓ {isArabic ? "موافقة" : "Approve"}
+                    âœ“ {isArabic ? "Ù…ÙˆØ§ÙÙ‚Ø©" : "Approve"}
                   </button>
                   <button onClick={async () => {
                     await api.delete(`/api/reviews/admin/${review.id}`);
                     setPendingReviews(prev => prev.filter(r => r.id !== review.id));
                   }} className="text-xs bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-xl font-medium transition">
-                    🗑 {isArabic ? "حذف" : "Delete"}
+                    ðŸ—‘ {isArabic ? "Ø­Ø°Ù" : "Delete"}
                   </button>
                 </div>
               </div>
@@ -657,12 +658,12 @@ export default function AdminPanel() {
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[order.status]}`}>{order.status}</span>
                   <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{order.commission_rate}%</span>
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5">🏪 {order.seller} · 👤 {order.buyer} · 📍 {order.area}</p>
+                <p className="text-xs text-gray-500 mt-0.5">ðŸª {order.seller} Â· ðŸ‘¤ {order.buyer} Â· ðŸ“ {order.area}</p>
                 <p className="text-xs text-gray-400">{new Date(order.created_at).toLocaleDateString()}</p>
               </div>
               <div className="text-right">
                 <p className="font-bold text-gray-900">AED {order.total}</p>
-                <p className="text-xs text-green-600 font-medium">+AED {order.commission_amount} {isArabic ? "عمولة" : "commission"}</p>
+                <p className="text-xs text-green-600 font-medium">+AED {order.commission_amount} {isArabic ? "Ø¹Ù…ÙˆÙ„Ø©" : "commission"}</p>
               </div>
             </div>
           ))}
@@ -678,20 +679,20 @@ export default function AdminPanel() {
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-gray-900">{u.full_name}</span>
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${u.role === "admin" ? "bg-red-50 text-red-600" : u.role === "seller" ? "bg-orange-50 text-orange-600" : "bg-blue-50 text-blue-600"}`}>{u.role}</span>
-                  {!u.is_active && <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{isArabic ? "معطل" : "Disabled"}</span>}
+                  {!u.is_active && <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{isArabic ? "Ù…Ø¹Ø·Ù„" : "Disabled"}</span>}
                 </div>
-                <p className="text-xs text-gray-500">{u.email} · {u.phone || "No phone"}</p>
+                <p className="text-xs text-gray-500">{u.email} Â· {u.phone || "No phone"}</p>
               </div>
               {u.role !== "admin" && (
                 <div className="flex gap-2">
                   <button onClick={() => toggleUser(u)}
                     className={`text-xs px-3 py-2 rounded-lg transition font-medium ${u.is_active ? "bg-red-50 text-red-600 hover:bg-red-100" : "bg-green-50 text-green-600 hover:bg-green-100"}`}>
-                    {u.is_active ? (isArabic ? "تعطيل" : "Disable") : (isArabic ? "تفعيل" : "Enable")}
+                    {u.is_active ? (isArabic ? "ØªØ¹Ø·ÙŠÙ„" : "Disable") : (isArabic ? "ØªÙØ¹ÙŠÙ„" : "Enable")}
                   </button>
                   {(u.role === "buyer" || u.role === "seller") && (
                     <button onClick={() => deleteUser(u)}
                       className="text-xs px-3 py-2 rounded-lg transition font-medium bg-red-700 text-white hover:bg-red-800">
-                      🗑 {isArabic ? "حذف" : "Delete"}
+                      ðŸ—‘ {isArabic ? "Ø­Ø°Ù" : "Delete"}
                     </button>
                   )}
                 </div>
@@ -706,10 +707,10 @@ export default function AdminPanel() {
         <div className="space-y-4">
           <div className="flex gap-2 mb-4">
             {[
-              { key: "pending", label: isArabic ? "معلق" : "Pending" },
-              { key: "approved", label: isArabic ? "موافق" : "Approved" },
-              { key: "rejected", label: isArabic ? "مرفوض" : "Rejected" },
-              { key: "all", label: isArabic ? "الكل" : "All" },
+              { key: "pending", label: isArabic ? "Ù…Ø¹Ù„Ù‚" : "Pending" },
+              { key: "approved", label: isArabic ? "Ù…ÙˆØ§ÙÙ‚" : "Approved" },
+              { key: "rejected", label: isArabic ? "Ù…Ø±ÙÙˆØ¶" : "Rejected" },
+              { key: "all", label: isArabic ? "Ø§Ù„ÙƒÙ„" : "All" },
             ].map(f => (
               <button key={f.key} onClick={() => setAppFilter(f.key)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${appFilter === f.key ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200"}`}>
@@ -720,26 +721,26 @@ export default function AdminPanel() {
 
           {inviteLink && (
             <div className="bg-green-50 border border-green-200 rounded-2xl p-4 mb-4">
-              <p className="text-sm font-medium text-green-800 mb-2">✅ {isArabic ? "رابط التسجيل (أرسله للبائع):" : "Registration link (send this to the seller):"}</p>
+              <p className="text-sm font-medium text-green-800 mb-2">âœ… {isArabic ? "Ø±Ø§Ø¨Ø· Ø§Ù„ØªØ³Ø¬ÙŠÙ„ (Ø£Ø±Ø³Ù„Ù‡ Ù„Ù„Ø¨Ø§Ø¦Ø¹):" : "Registration link (send this to the seller):"}</p>
               <div className="flex items-center gap-2">
                 <code className="flex-1 text-xs bg-white border border-green-200 rounded-lg px-3 py-2 break-all">
                   {`${window.location.origin}${inviteLink}`}
                 </code>
                 <button onClick={() => { navigator.clipboard.writeText(`${window.location.origin}${inviteLink}`); alert("Copied!"); }}
                   className="text-xs bg-green-500 text-white px-3 py-2 rounded-lg hover:bg-green-600 transition flex-shrink-0">
-                  📋 {isArabic ? "نسخ" : "Copy"}
+                  ðŸ“‹ {isArabic ? "Ù†Ø³Ø®" : "Copy"}
                 </button>
               </div>
               <button onClick={() => setInviteLink(null)} className="text-xs text-green-600 hover:underline mt-2 block">
-                {isArabic ? "إخفاء" : "Dismiss"}
+                {isArabic ? "Ø¥Ø®ÙØ§Ø¡" : "Dismiss"}
               </button>
             </div>
           )}
 
           {applications.filter(a => appFilter === "all" ? true : a.status === appFilter).length === 0 ? (
             <div className="text-center py-16 text-gray-400">
-              <div className="text-4xl mb-3">📋</div>
-              <p>{isArabic ? "لا توجد طلبات" : "No applications"}</p>
+              <div className="text-4xl mb-3">ðŸ“‹</div>
+              <p>{isArabic ? "Ù„Ø§ ØªÙˆØ¬Ø¯ Ø·Ù„Ø¨Ø§Øª" : "No applications"}</p>
             </div>
           ) : applications.filter(a => appFilter === "all" ? true : a.status === appFilter).map((app: any) => (
             <div key={app.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
@@ -754,10 +755,10 @@ export default function AdminPanel() {
                       {app.status}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500">{app.email} · {app.phone}</p>
-                  <p className="text-sm text-gray-500">📍 {app.area}, {app.city}</p>
+                  <p className="text-sm text-gray-500">{app.email} Â· {app.phone}</p>
+                  <p className="text-sm text-gray-500">ðŸ“ {app.area}, {app.city}</p>
                   <p className="text-sm text-gray-700 mt-2 bg-gray-50 rounded-lg px-3 py-2">
-                    <span className="font-medium text-gray-500 text-xs block mb-0.5">{isArabic ? "ماذا سيبيع:" : "What they sell:"}</span>
+                    <span className="font-medium text-gray-500 text-xs block mb-0.5">{isArabic ? "Ù…Ø§Ø°Ø§ Ø³ÙŠØ¨ÙŠØ¹:" : "What they sell:"}</span>
                     {app.what_they_sell}
                   </p>
                   {(app.doc_1_url || app.doc_2_url || app.doc_3_url) && (
@@ -765,7 +766,7 @@ export default function AdminPanel() {
                       {[app.doc_1_url, app.doc_2_url, app.doc_3_url].filter(Boolean).map((url: string, i: number) => (
                         <a key={i} href={url} target="_blank" rel="noopener noreferrer"
                           className="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition font-medium">
-                          📄 {isArabic ? `مستند ${i + 1}` : `Document ${i + 1}`}
+                          ðŸ“„ {isArabic ? `Ù…Ø³ØªÙ†Ø¯ ${i + 1}` : `Document ${i + 1}`}
                         </a>
                       ))}
                     </div>
@@ -786,7 +787,7 @@ export default function AdminPanel() {
                         setAppActionLoading(null);
                       }}
                       className="text-xs bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl font-medium transition disabled:opacity-60">
-                      ✓ {isArabic ? "موافقة" : "Approve"}
+                      âœ“ {isArabic ? "Ù…ÙˆØ§ÙÙ‚Ø©" : "Approve"}
                     </button>
                     <button
                       disabled={appActionLoading === app.id}
@@ -799,14 +800,14 @@ export default function AdminPanel() {
                         setAppActionLoading(null);
                       }}
                       className="text-xs bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium transition disabled:opacity-60">
-                      ✕ {isArabic ? "رفض" : "Reject"}
+                      âœ• {isArabic ? "Ø±ÙØ¶" : "Reject"}
                     </button>
                   </div>
                 )}
                 {app.status === "approved" && app.invite_token && (
                   <button onClick={() => setInviteLink(`/seller-register?token=${app.invite_token}`)}
                     className="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-2 rounded-xl transition font-medium flex-shrink-0">
-                    🔗 {isArabic ? "عرض الرابط" : "Show Link"}
+                    ðŸ”— {isArabic ? "Ø¹Ø±Ø¶ Ø§Ù„Ø±Ø§Ø¨Ø·" : "Show Link"}
                   </button>
                 )}
               </div>
@@ -819,14 +820,14 @@ export default function AdminPanel() {
       {badgeModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-            <h3 className="font-bold text-gray-900 mb-1">{isArabic ? "تعيين شارة التحقق" : "Set Verification Badge"}</h3>
+            <h3 className="font-bold text-gray-900 mb-1">{isArabic ? "ØªØ¹ÙŠÙŠÙ† Ø´Ø§Ø±Ø© Ø§Ù„ØªØ­Ù‚Ù‚" : "Set Verification Badge"}</h3>
             <p className="text-sm text-gray-500 mb-4">{badgeModal.shop_name}</p>
             <div className="space-y-3 mb-4">
               {[
-                { key: "verified",  icon: "✓",  label: "Verified",      labelAr: "موثق",        desc: "ID confirmed, phone verified",          descAr: "هوية مؤكدة، هاتف موثق" },
-                { key: "inspected", icon: "/icons/bayti/ui/search.png", label: "Inspected",     labelAr: "مفتش",         desc: "Food safety certificate uploaded",       descAr: "شهادة سلامة غذائية مرفوعة" },
-                { key: "certified", icon: "🏅", label: "Certified",     labelAr: "معتمد",        desc: "Passed mystery order quality test",      descAr: "اجتازت اختبار الجودة السري" },
-                { key: "none",      icon: "✕",  label: "Remove Badge",  labelAr: "إزالة الشارة", desc: "Remove current badge",                  descAr: "إزالة الشارة الحالية" },
+                { key: "verified",  icon: "âœ“",  label: "Verified",      labelAr: "Ù…ÙˆØ«Ù‚",        desc: "ID confirmed, phone verified",          descAr: "Ù‡ÙˆÙŠØ© Ù…Ø¤ÙƒØ¯Ø©ØŒ Ù‡Ø§ØªÙ Ù…ÙˆØ«Ù‚" },
+                { key: "inspected", icon: "/icons/bayti/ui/search.png", label: "Inspected",     labelAr: "Ù…ÙØªØ´",         desc: "Food safety certificate uploaded",       descAr: "Ø´Ù‡Ø§Ø¯Ø© Ø³Ù„Ø§Ù…Ø© ØºØ°Ø§Ø¦ÙŠØ© Ù…Ø±ÙÙˆØ¹Ø©" },
+                { key: "certified", icon: "ðŸ…", label: "Certified",     labelAr: "Ù…Ø¹ØªÙ…Ø¯",        desc: "Passed mystery order quality test",      descAr: "Ø§Ø¬ØªØ§Ø²Øª Ø§Ø®ØªØ¨Ø§Ø± Ø§Ù„Ø¬ÙˆØ¯Ø© Ø§Ù„Ø³Ø±ÙŠ" },
+                { key: "none",      icon: "âœ•",  label: "Remove Badge",  labelAr: "Ø¥Ø²Ø§Ù„Ø© Ø§Ù„Ø´Ø§Ø±Ø©", desc: "Remove current badge",                  descAr: "Ø¥Ø²Ø§Ù„Ø© Ø§Ù„Ø´Ø§Ø±Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©" },
               ].map(b => (
                 <button key={b.key} onClick={() => updateBadge(badgeModal.id, b.key)}
                   className={`w-full text-left p-3 rounded-xl border transition ${badgeModal.badge === b.key ? "border-orange-400 bg-orange-50" : "border-gray-200 hover:border-orange-300"}`}>
@@ -836,7 +837,7 @@ export default function AdminPanel() {
               ))}
             </div>
             <button onClick={() => setBadgeModal(null)} className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-xl text-sm font-medium transition">
-              {isArabic ? "إلغاء" : "Cancel"}
+              {isArabic ? "Ø¥Ù„ØºØ§Ø¡" : "Cancel"}
             </button>
           </div>
         </div>
@@ -846,12 +847,12 @@ export default function AdminPanel() {
       {commissionModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
-            <h3 className="font-bold text-gray-900 mb-1">💰 {isArabic ? "تعديل نسبة العمولة" : "Edit Commission Rate"}</h3>
+            <h3 className="font-bold text-gray-900 mb-1">ðŸ’° {isArabic ? "ØªØ¹Ø¯ÙŠÙ„ Ù†Ø³Ø¨Ø© Ø§Ù„Ø¹Ù…ÙˆÙ„Ø©" : "Edit Commission Rate"}</h3>
             <p className="text-sm text-gray-500 mb-1">{commissionModal.shop_name}</p>
-            <p className="text-xs text-gray-400 mb-4">{isArabic ? "النسبة الحالية:" : "Current rate:"} {commissionModal.commission_rate}%</p>
+            <p className="text-xs text-gray-400 mb-4">{isArabic ? "Ø§Ù„Ù†Ø³Ø¨Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©:" : "Current rate:"} {commissionModal.commission_rate}%</p>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "النسبة الجديدة (%)" : "New Rate (%)"}</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "Ø§Ù„Ù†Ø³Ø¨Ø© Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø© (%)" : "New Rate (%)"}</label>
               <input type="number" value={newRate} onChange={e => setNewRate(e.target.value)}
                 min="0" max="50" step="0.5"
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 text-lg font-bold" />
@@ -863,13 +864,13 @@ export default function AdminPanel() {
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-2">{isArabic ? "نصيحة: 8% للبائعين الجدد، 12% افتراضي، 15% للبائعين ذوي الأداء المنخفض" : "Tip: 8% for new sellers, 12% default, 15% for underperformers"}</p>
+              <p className="text-xs text-gray-400 mt-2">{isArabic ? "Ù†ØµÙŠØ­Ø©: 8% Ù„Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ† Ø§Ù„Ø¬Ø¯Ø¯ØŒ 12% Ø§ÙØªØ±Ø§Ø¶ÙŠØŒ 15% Ù„Ù„Ø¨Ø§Ø¦Ø¹ÙŠÙ† Ø°ÙˆÙŠ Ø§Ù„Ø£Ø¯Ø§Ø¡ Ø§Ù„Ù…Ù†Ø®ÙØ¶" : "Tip: 8% for new sellers, 12% default, 15% for underperformers"}</p>
             </div>
 
             {newRate && (
               <div className="bg-orange-50 rounded-xl p-3 mb-4">
                 <p className="text-sm text-orange-800">
-                  {isArabic ? "على طلب بقيمة AED 100:" : "On a AED 100 order:"} <span className="font-bold">AED {(100 * parseFloat(newRate || "0") / 100).toFixed(2)}</span> {isArabic ? "عمولة" : "commission"}
+                  {isArabic ? "Ø¹Ù„Ù‰ Ø·Ù„Ø¨ Ø¨Ù‚ÙŠÙ…Ø© AED 100:" : "On a AED 100 order:"} <span className="font-bold">AED {(100 * parseFloat(newRate || "0") / 100).toFixed(2)}</span> {isArabic ? "Ø¹Ù…ÙˆÙ„Ø©" : "commission"}
                 </p>
               </div>
             )}
@@ -877,11 +878,11 @@ export default function AdminPanel() {
             <div className="flex gap-3">
               <button onClick={() => { setCommissionModal(null); setNewRate(""); }}
                 className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl text-sm font-medium transition">
-                {isArabic ? "إلغاء" : "Cancel"}
+                {isArabic ? "Ø¥Ù„ØºØ§Ø¡" : "Cancel"}
               </button>
               <button onClick={() => updateCommission(commissionModal.id)}
                 className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl text-sm font-medium transition">
-                {isArabic ? "حفظ" : "Save"}
+                {isArabic ? "Ø­ÙØ¸" : "Save"}
               </button>
             </div>
           </div>
@@ -893,7 +894,7 @@ export default function AdminPanel() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900">
-              {isArabic ? "🔮 توقعات الطلب الموسمي" : "🔮 Seasonal Demand Forecast"}
+              {isArabic ? "ðŸ”® ØªÙˆÙ‚Ø¹Ø§Øª Ø§Ù„Ø·Ù„Ø¨ Ø§Ù„Ù…ÙˆØ³Ù…ÙŠ" : "ðŸ”® Seasonal Demand Forecast"}
             </h2>
             <button
               onClick={async () => {
@@ -908,20 +909,20 @@ export default function AdminPanel() {
                 }
               }}
               className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition">
-              {forecastLoading ? (isArabic ? "جارٍ التحليل..." : "Analyzing...") : (isArabic ? "تحليل الطلب" : "Run Forecast")}
+              {forecastLoading ? (isArabic ? "Ø¬Ø§Ø±Ù Ø§Ù„ØªØ­Ù„ÙŠÙ„..." : "Analyzing...") : (isArabic ? "ØªØ­Ù„ÙŠÙ„ Ø§Ù„Ø·Ù„Ø¨" : "Run Forecast")}
             </button>
           </div>
           {!forecast && !forecastLoading && (
             <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-              <div className="text-5xl mb-4">🔮</div>
-              <p className="text-gray-500 text-lg mb-2">{isArabic ? "توقعات الطلب الموسمي" : "UAE Seasonal Demand Forecasting"}</p>
-              <p className="text-gray-400 text-sm">{isArabic ? "اضغط على تحليل الطلب لرؤية توقعات كل فئة" : "Click Run Forecast to see demand predictions per category"}</p>
+              <div className="text-5xl mb-4">ðŸ”®</div>
+              <p className="text-gray-500 text-lg mb-2">{isArabic ? "ØªÙˆÙ‚Ø¹Ø§Øª Ø§Ù„Ø·Ù„Ø¨ Ø§Ù„Ù…ÙˆØ³Ù…ÙŠ" : "UAE Seasonal Demand Forecasting"}</p>
+              <p className="text-gray-400 text-sm">{isArabic ? "Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ ØªØ­Ù„ÙŠÙ„ Ø§Ù„Ø·Ù„Ø¨ Ù„Ø±Ø¤ÙŠØ© ØªÙˆÙ‚Ø¹Ø§Øª ÙƒÙ„ ÙØ¦Ø©" : "Click Run Forecast to see demand predictions per category"}</p>
             </div>
           )}
           {forecastLoading && (
             <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-              <div className="animate-spin text-4xl mb-4">⏳</div>
-              <p className="text-gray-500">{isArabic ? "جارٍ تحليل البيانات الموسمية..." : "Analyzing seasonal patterns..."}</p>
+              <div className="animate-spin text-4xl mb-4">â³</div>
+              <p className="text-gray-500">{isArabic ? "Ø¬Ø§Ø±Ù ØªØ­Ù„ÙŠÙ„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…ÙˆØ³Ù…ÙŠØ©..." : "Analyzing seasonal patterns..."}</p>
             </div>
           )}
           {forecast && !forecastLoading && (
@@ -932,11 +933,11 @@ export default function AdminPanel() {
                     <div>
                       <h3 className="font-bold text-gray-900 text-lg">{isArabic ? f.category_name_ar || f.category_name : f.category_name}</h3>
                       <p className="text-orange-600 font-medium text-sm mt-1">
-                        🎯 {isArabic ? f.top_season_ar : f.top_season}
+                        ðŸŽ¯ {isArabic ? f.top_season_ar : f.top_season}
                       </p>
                     </div>
                     <div className="bg-orange-50 border border-orange-200 rounded-xl px-3 py-2 text-right">
-                      <p className="text-xs text-orange-600 font-medium">{isArabic ? "نصيحة" : "Tip"}</p>
+                      <p className="text-xs text-orange-600 font-medium">{isArabic ? "Ù†ØµÙŠØ­Ø©" : "Tip"}</p>
                       <p className="text-xs text-orange-700 mt-1 max-w-48">{isArabic ? f.tip_ar : f.tip}</p>
                     </div>
                   </div>
@@ -969,16 +970,16 @@ export default function AdminPanel() {
         <div className="max-w-2xl mx-auto space-y-6">
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
             <h3 className="text-lg font-bold text-gray-900 mb-2">
-              {isArabic ? "🎨 مولّد محتوى إنستقرام" : "🎨 Instagram Content Generator"}
+              {isArabic ? "ðŸŽ¨ Ù…ÙˆÙ„Ù‘Ø¯ Ù…Ø­ØªÙˆÙ‰ Ø¥Ù†Ø³ØªÙ‚Ø±Ø§Ù…" : "ðŸŽ¨ Instagram Content Generator"}
             </h3>
             <p className="text-gray-500 text-sm mb-6">
-              {isArabic ? "يولّد نص + صورة احترافية جاهزة للنشر على @baytimarketplace" : "Generate caption + AI image ready for @baytimarketplace"}
+              {isArabic ? "ÙŠÙˆÙ„Ù‘Ø¯ Ù†Øµ + ØµÙˆØ±Ø© Ø§Ø­ØªØ±Ø§ÙÙŠØ© Ø¬Ø§Ù‡Ø²Ø© Ù„Ù„Ù†Ø´Ø± Ø¹Ù„Ù‰ @baytimarketplace" : "Generate caption + AI image ready for @baytimarketplace"}
             </p>
             <div className="grid grid-cols-3 gap-3">
               {[
-                { type: "sellers", label: isArabic ? "👩‍💼 للبائعات" : "👩‍💼 Sellers", desc: isArabic ? "دعوة وتسجيل" : "Recruitment", color: "bg-orange-500 hover:bg-orange-600" },
-                { type: "events",  label: isArabic ? "🎉 فعاليات وترندات" : "🎉 Events & Trends", desc: isArabic ? "أحداث الإمارات" : "UAE Events", color: "bg-purple-500 hover:bg-purple-600" },
-                { type: "value",   label: isArabic ? "💡 محتوى قيمة" : "💡 Value Content", desc: isArabic ? "نصائح وأفكار" : "Tips & Ideas", color: "bg-teal-500 hover:bg-teal-600" },
+                { type: "sellers", label: isArabic ? "ðŸ‘©â€ðŸ’¼ Ù„Ù„Ø¨Ø§Ø¦Ø¹Ø§Øª" : "ðŸ‘©â€ðŸ’¼ Sellers", desc: isArabic ? "Ø¯Ø¹ÙˆØ© ÙˆØªØ³Ø¬ÙŠÙ„" : "Recruitment", color: "bg-orange-500 hover:bg-orange-600" },
+                { type: "events",  label: isArabic ? "ðŸŽ‰ ÙØ¹Ø§Ù„ÙŠØ§Øª ÙˆØªØ±Ù†Ø¯Ø§Øª" : "ðŸŽ‰ Events & Trends", desc: isArabic ? "Ø£Ø­Ø¯Ø§Ø« Ø§Ù„Ø¥Ù…Ø§Ø±Ø§Øª" : "UAE Events", color: "bg-purple-500 hover:bg-purple-600" },
+                { type: "value",   label: isArabic ? "ðŸ’¡ Ù…Ø­ØªÙˆÙ‰ Ù‚ÙŠÙ…Ø©" : "ðŸ’¡ Value Content", desc: isArabic ? "Ù†ØµØ§Ø¦Ø­ ÙˆØ£ÙÙƒØ§Ø±" : "Tips & Ideas", color: "bg-teal-500 hover:bg-teal-600" },
               ].map(btn => (
                 <button key={btn.type}
                   onClick={async () => {
@@ -994,7 +995,7 @@ export default function AdminPanel() {
                       const data = await res.json();
                       setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null, contentType: btn.type });
                     } catch {
-                      alert(isArabic ? "حدث خطأ في توليد المحتوى" : "Error generating content");
+                      alert(isArabic ? "Ø­Ø¯Ø« Ø®Ø·Ø£ ÙÙŠ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„Ù…Ø­ØªÙˆÙ‰" : "Error generating content");
                     } finally {
                       setContentLoading(false);
                     }
@@ -1009,7 +1010,7 @@ export default function AdminPanel() {
             </div>
             {contentLoading && (
               <div className="text-center py-4 text-gray-500">
-                {isArabic ? "⏳ جاري التوليد... قد يستغرق ٣٠ ثانية" : "⏳ Generating... may take 30 seconds"}
+                {isArabic ? "â³ Ø¬Ø§Ø±ÙŠ Ø§Ù„ØªÙˆÙ„ÙŠØ¯... Ù‚Ø¯ ÙŠØ³ØªØºØ±Ù‚ Ù£Ù  Ø«Ø§Ù†ÙŠØ©" : "â³ Generating... may take 30 seconds"}
               </div>
             )}
           </div>
@@ -1019,9 +1020,9 @@ export default function AdminPanel() {
               {contentPost.imageUrl && (
                 <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
                   <div className="flex items-center justify-between mb-3">
-                    <p className="font-semibold text-gray-900">{isArabic ? "الصورة" : "Image"}</p>
+                    <p className="font-semibold text-gray-900">{isArabic ? "Ø§Ù„ØµÙˆØ±Ø©" : "Image"}</p>
                     <a href={contentPost.imageUrl} download="bayti_post.png" className="text-sm text-orange-500 font-medium hover:text-orange-600">
-                      {isArabic ? "⬇️ تنزيل" : "⬇️ Download"}
+                      {isArabic ? "â¬‡ï¸ ØªÙ†Ø²ÙŠÙ„" : "â¬‡ï¸ Download"}
                     </a>
                   </div>
                   <img src={contentPost.imageUrl} alt="Generated" className="w-full rounded-xl" />
@@ -1029,7 +1030,7 @@ export default function AdminPanel() {
               )}
               <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="font-semibold text-gray-900">{isArabic ? "الكابشن" : "Caption"}</p>
+                  <p className="font-semibold text-gray-900">{isArabic ? "Ø§Ù„ÙƒØ§Ø¨Ø´Ù†" : "Caption"}</p>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(contentPost.caption + "\n\n" + contentPost.hashtags);
@@ -1038,7 +1039,7 @@ export default function AdminPanel() {
                     }}
                     className="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg font-medium transition"
                   >
-                    {contentCopied ? "✅ " + (isArabic ? "تم النسخ!" : "Copied!") : (isArabic ? "📋 نسخ الكل" : "📋 Copy All")}
+                    {contentCopied ? "âœ… " + (isArabic ? "ØªÙ… Ø§Ù„Ù†Ø³Ø®!" : "Copied!") : (isArabic ? "ðŸ“‹ Ù†Ø³Ø® Ø§Ù„ÙƒÙ„" : "ðŸ“‹ Copy All")}
                   </button>
                 </div>
                 <div dir="rtl" className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
@@ -1050,7 +1051,7 @@ export default function AdminPanel() {
               </div>
               <a href="https://publish.buffer.com" target="_blank" rel="noopener noreferrer"
                 className="block w-full bg-gray-900 text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition text-center text-lg">
-                {isArabic ? "📤 افتح Buffer للنشر" : "📤 Open Buffer to Publish"}
+                {isArabic ? "ðŸ“¤ Ø§ÙØªØ­ Buffer Ù„Ù„Ù†Ø´Ø±" : "ðŸ“¤ Open Buffer to Publish"}
               </a>
             </>
           )}
