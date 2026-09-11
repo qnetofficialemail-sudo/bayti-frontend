@@ -82,6 +82,7 @@ export default function StudioPage() {
   const [result, setResult]           = useState<Result | null>(null);
   const [error, setError]             = useState<string | null>(null);
   const [copied, setCopied]           = useState(false);
+  const [autoCopied, setAutoCopied]   = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const token = localStorage.getItem("token");
 
@@ -131,6 +132,14 @@ export default function StudioPage() {
     navigator.clipboard.writeText(result.prompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  }
+
+  function openGemini() {
+    if (!result) return;
+    navigator.clipboard.writeText(result.prompt).then(() => {
+      setAutoCopied(true);
+      setTimeout(() => window.open("https://gemini.google.com", "_blank"), 300);
+    });
   }
 
   function reset() {
@@ -390,21 +399,24 @@ export default function StudioPage() {
               )}
             </div>
 
-            {/* The Prompt */}
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-800 flex items-center gap-2">
-                  <span>📋</span> الـ Prompt الجاهز
-                </h3>
-                <button onClick={copyPrompt}
-                  className={`text-sm px-4 py-1.5 rounded-lg font-medium transition ${copied ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600 hover:bg-orange-200"}`}>
-                  {copied ? "✅ تم النسخ!" : "نسخ"}
-                </button>
+            {/* The Prompt — hidden by default, show on demand */}
+            <details className="bg-white rounded-2xl border border-orange-100 overflow-hidden">
+              <summary className="px-5 py-4 cursor-pointer font-bold text-gray-700 flex items-center gap-2 hover:bg-orange-50 transition list-none">
+                <span>📋</span> عرض الـ Prompt
+                <span className="mr-auto text-xs text-gray-400 font-normal">اضغط للعرض</span>
+              </summary>
+              <div className="px-5 pb-5">
+                <div className="flex justify-end mb-2">
+                  <button onClick={copyPrompt}
+                    className={`text-sm px-4 py-1.5 rounded-lg font-medium transition ${copied ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600 hover:bg-orange-200"}`}>
+                    {copied ? "✅ تم النسخ!" : "نسخ"}
+                  </button>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 leading-relaxed font-mono text-left" dir="ltr">
+                  {result.prompt}
+                </div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-700 leading-relaxed font-mono text-left" dir="ltr">
-                {result.prompt}
-              </div>
-            </div>
+            </details>
 
             {/* Tips */}
             {result.tips?.length > 0 && (
@@ -420,22 +432,31 @@ export default function StudioPage() {
               </div>
             )}
 
-            {/* Open Gemini */}
-            <a href="https://gemini.google.com" target="_blank" rel="noopener noreferrer"
+            {/* Open Gemini — auto copy */}
+            <button onClick={openGemini}
               className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
               <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
-              افتح Gemini الآن
-            </a>
+              {autoCopied ? "✅ تم النسخ — جارٍ فتح Gemini..." : "انسخ الـ Prompt وافتح Gemini ✨"}
+            </button>
 
-            <div className="bg-blue-50 rounded-xl p-4 text-sm text-blue-700 border border-blue-100">
-              <p className="font-bold mb-2">📌 خطوات في Gemini:</p>
-              <ol className="space-y-1 list-decimal list-inside">
-                <li>انسخ الـ prompt أعلاه</li>
-                <li>افتح Gemini وارفع صورة منتجك</li>
-                <li>الصق الـ prompt واضغط إرسال</li>
-                <li>احفظ الصورة واستخدمها في بيتي! 🎉</li>
-              </ol>
-            </div>
+            {autoCopied && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 text-sm text-center">
+                ✅ تم نسخ الـ Prompt تلقائياً!<br/>
+                <span className="font-bold">الصقه في Gemini (Ctrl+V) وارفع صورة منتجك</span>
+              </div>
+            )}
+
+            {!autoCopied && (
+              <div className="bg-blue-50 rounded-xl p-4 text-sm text-blue-700 border border-blue-100">
+                <p className="font-bold mb-1">📌 بعد الضغط على الزر:</p>
+                <ol className="space-y-1 list-decimal list-inside">
+                  <li>سيُنسخ الـ prompt تلقائياً</li>
+                  <li>سيفتح Gemini في تاب جديد</li>
+                  <li>ارفع صورة منتجك والصق الـ prompt (Ctrl+V)</li>
+                  <li>احفظ الصورة واستخدمها في بيتي! 🎉</li>
+                </ol>
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-3">
               <button onClick={() => { setStep("options"); setResult(null); }}
