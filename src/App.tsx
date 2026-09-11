@@ -21,6 +21,7 @@ import SellPage from "./pages/SellPage";
 import SellerRegisterPage from "./pages/SellerRegisterPage";
 import NotFound from "./pages/NotFound";
 import StudioPage from './pages/StudioPage';
+import GrowthOSPage from './pages/GrowthOSPage';
 import { useAuth } from "./context/AuthContext";
 import { Navigate } from "react-router-dom";
 
@@ -58,6 +59,7 @@ export default function App() {
               <Route path="/seller-apply" element={<><Navbar /><main id="main-content"><SellerApplyPage /></main></>} />
               <Route path="/sell" element={<><Navbar /><main id="main-content"><SellPage /></main></>} />
               <Route path="/studio" element={<><Navbar /><main id="main-content"><StudioPage /></main></>} />
+              <Route path="/growth" element={<><Navbar /><main id="main-content"><GrowthOSPage /></main></>} />
               <Route path="/seller-register" element={<><Navbar /><main id="main-content"><SellerRegisterPage /></main></>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
