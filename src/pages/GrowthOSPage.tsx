@@ -31,7 +31,7 @@ interface Stats {
   due_today: number; goal: number; progress_pct: number;
 }
 
-export default function GrowthOSPage() {
+export default function GrowthOSPage({ embedded = false }: { embedded?: boolean }) {
   const [tab, setTab]               = useState<"brief"|"accounts"|"compose"|"objections">("brief");
   const [accounts, setAccounts]     = useState<Account[]>([]);
   const [stats, setStats]           = useState<Stats | null>(null);
@@ -114,43 +114,55 @@ export default function GrowthOSPage() {
   const filtered = filterStatus === "all" ? accounts : accounts.filter(a => a.status === filterStatus);
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-5">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-white">🚀 Bayti Growth OS</h1>
-              <p className="text-orange-100 text-sm mt-0.5">نظام تشغيل النمو — استقطاب البائعين</p>
-            </div>
-            {stats && (
-              <div className="flex items-center gap-6 text-white">
-                <div className="text-center">
-                  <div className="text-2xl font-bold">{stats.confirmed}</div>
-                  <div className="text-xs text-orange-100">مؤكدون</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold">{stats.goal}</div>
-                  <div className="text-xs text-orange-100">الهدف</div>
-                </div>
-                <div className="bg-white/20 rounded-xl px-4 py-2 text-center">
-                  <div className="text-xl font-bold">{stats.progress_pct}%</div>
-                  <div className="text-xs text-orange-100">التقدم</div>
-                </div>
+    <div className={embedded ? "" : "min-h-screen bg-gray-50"} dir="rtl">
+      {/* Header — hidden when embedded in Admin Panel */}
+      {!embedded && (
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-5">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-white">🚀 Bayti Growth OS</h1>
+                <p className="text-orange-100 text-sm mt-0.5">نظام تشغيل النمو — استقطاب البائعين</p>
               </div>
-            )}
-          </div>
-          {/* Progress bar */}
-          {stats && (
+              {stats && (
+                <div className="flex items-center gap-6 text-white">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold">{stats.confirmed}</div>
+                    <div className="text-xs text-orange-100">مؤكدون</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold">{stats.goal}</div>
+                    <div className="text-xs text-orange-100">الهدف</div>
+                  </div>
+                  <div className="bg-white/20 rounded-xl px-4 py-2 text-center">
+                    <div className="text-xl font-bold">{stats.progress_pct}%</div>
+                    <div className="text-xs text-orange-100">التقدم</div>
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="mt-4 bg-white/20 rounded-full h-2">
               <div className="bg-white rounded-full h-2 transition-all duration-500" style={{ width: `${stats.progress_pct}%` }} />
             </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
+      {/* Embedded stats strip */}
+      {embedded && stats && (
+        <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-4 mb-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-white font-bold text-lg">🚀 Growth OS</h2>
+            <p className="text-orange-100 text-xs">نظام استقطاب البائعين</p>
+          </div>
+          <div className="flex items-center gap-4 text-white">
+            <div className="text-center"><div className="text-xl font-bold">{stats.confirmed}/{stats.goal}</div><div className="text-xs text-orange-100">المؤكدون</div></div>
+            <div className="bg-white/20 rounded-xl px-3 py-1.5 text-center"><div className="text-lg font-bold">{stats.progress_pct}%</div><div className="text-xs text-orange-100">التقدم</div></div>
+          </div>
+        </div>
+      )}
 
-      {/* Stats strip */}
-      {stats && (
+      {/* Stats strip — only on standalone page */}
+      {!embedded && stats && (
         <div className="bg-white border-b border-gray-100 px-6 py-3">
           <div className="max-w-5xl mx-auto flex items-center gap-6 overflow-x-auto">
             {[
@@ -172,7 +184,7 @@ export default function GrowthOSPage() {
       )}
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-100 px-6">
+      <div className={embedded ? "bg-white rounded-2xl mb-4 px-4 border border-gray-100" : "bg-white border-b border-gray-100 px-6"}>
         <div className="max-w-5xl mx-auto flex gap-1">
           {[
             { id: "brief",      label: "🧠 التقرير اليومي" },
@@ -188,7 +200,7 @@ export default function GrowthOSPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-6">
+      <div className={embedded ? "py-2" : "max-w-5xl mx-auto px-4 py-6"}>
 
         {/* ── Tab 1: Daily Brief ── */}
         {tab === "brief" && (

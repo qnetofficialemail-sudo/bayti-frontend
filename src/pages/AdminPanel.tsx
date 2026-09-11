@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import GrowthOSPage from "./GrowthOSPage";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
@@ -21,7 +22,7 @@ export default function AdminPanel() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories"|"applications"|"forecast"|"content">("overview");
+  const [tab, setTab] = useState<"overview"|"sellers"|"orders"|"users"|"commission"|"products"|"revenue"|"reviews"|"categories"|"applications"|"forecast"|"content"|"growth">("overview");
   const [forecast, setForecast] = useState<any>(null);
   const [contentPost, setContentPost] = useState<{caption: string; hashtags: string; imageUrl: string | null; contentType?: string} | null>(null);
   const [contentLoading, setContentLoading] = useState(false);
@@ -1053,6 +1054,13 @@ export default function AdminPanel() {
               </a>
             </>
           )}
+        </div>
+      )}
+
+      {/* Growth OS Tab */}
+      {tab === "growth" && (
+        <div className="-mx-4 -mb-4">
+          <GrowthOSPage embedded={true} />
         </div>
       )}
 
