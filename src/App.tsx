@@ -22,6 +22,8 @@ import SellerRegisterPage from "./pages/SellerRegisterPage";
 import NotFound from "./pages/NotFound";
 import StudioPage from './pages/StudioPage';
 import GrowthOSPage from './pages/GrowthOSPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import { useAuth } from "./context/AuthContext";
 import { Navigate } from "react-router-dom";
 
@@ -60,6 +62,8 @@ export default function App() {
               <Route path="/sell" element={<><Navbar /><main id="main-content"><SellPage /></main></>} />
               <Route path="/studio" element={<><Navbar /><main id="main-content"><StudioPage /></main></>} />
               <Route path="/growth" element={<><Navbar /><main id="main-content"><GrowthOSPage /></main></>} />
+              <Route path="/forgot-password" element={<><Navbar /><main id="main-content"><ForgotPasswordPage /></main></>} />
+              <Route path="/reset-password" element={<><Navbar /><main id="main-content"><ResetPasswordPage /></main></>} />
               <Route path="/seller-register" element={<><Navbar /><main id="main-content"><SellerRegisterPage /></main></>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
