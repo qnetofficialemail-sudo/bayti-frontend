@@ -50,6 +50,9 @@ export function LoginPage() {
             className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
             {loading ? (isArabic ? "جاري الدخول..." : "Signing in...") : (isArabic ? "تسجيل الدخول" : "Sign In")}
           </button>
+          <div className="text-center mt-2">
+            <a href="/forgot-password" className="text-orange-500 hover:underline text-sm">{isArabic ? "???? ???? ???????" : "Forgot password?"}</a>
+          </div>
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
           {isArabic ? "ليس لديك حساب؟" : "No account?"}{" "}
