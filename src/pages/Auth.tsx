@@ -51,7 +51,7 @@ export function LoginPage() {
             {loading ? (isArabic ? "جاري الدخول..." : "Signing in...") : (isArabic ? "تسجيل الدخول" : "Sign In")}
           </button>
           <div className="text-center mt-2">
-            <a href="/forgot-password" className="text-orange-500 hover:underline text-sm">{isArabic ? "???? ???? ???????" : "Forgot password?"}</a>
+            <a href="/forgot-password" className="text-orange-500 hover:underline text-sm">{isArabic ? "نسيت كلمة المرور؟" : "Forgot password?"}</a>
           </div>
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
