@@ -375,6 +375,7 @@ export default function AddProduct() {
 
       {/* Single Product Mode */}
       {mode === "single" && (
+      <>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "إضافة منتج جديد" : "Add a new product"}</h1>
       <p className="text-gray-500 text-sm mb-8">{isArabic ? "ارفع صورة ودع الذكاء الاصطناعي يكتب قائمتك ✨" : "Upload a photo and let AI write your listing ✨"}</p>
       {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
@@ -681,6 +682,7 @@ export default function AddProduct() {
           </button>
         </div>
       </form>
+    </>
     )}
     </div>
   );
