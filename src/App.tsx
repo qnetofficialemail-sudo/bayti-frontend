@@ -1,4 +1,5 @@
 import React from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { LanguageProvider } from "./context/LanguageContext";
@@ -38,6 +39,7 @@ function HomeRoute() {
 
 export default function App() {
   return (
+    <HelmetProvider>
     <AuthProvider>
       <LanguageProvider>
         <BrowserRouter>
@@ -71,5 +73,6 @@ export default function App() {
         </BrowserRouter>
       </LanguageProvider>
     </AuthProvider>
+    </HelmetProvider>
   );
 }

@@ -69,6 +69,11 @@ export default function SellPage() {
   const dir = isArabic ? "rtl" : "ltr";
 
   return (
+    <>
+    <Helmet>
+      <title>بيع منتجاتك على بيتي | Sell on Bayti UAE</title>
+      <meta name="description" content="انضمي إلى بائعات الإمارات على منصة بيتي. سجّلي مجاناً وابدئي البيع اليوم. Join Bayti UAE marketplace as a seller." />
+    </Helmet>
     <div dir={dir} className="min-h-screen bg-white">
       <SEO
         title={isArabic ? "بيعي من البيت — بيتي" : "Sell from Home — Bayti"}

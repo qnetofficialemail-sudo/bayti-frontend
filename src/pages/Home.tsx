@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import api from "../api/client";
@@ -170,5 +171,7 @@ export default function Home() {
     </div>
     <AIPersonalShopper />
     </>
+  );
+  </>
   );
 }

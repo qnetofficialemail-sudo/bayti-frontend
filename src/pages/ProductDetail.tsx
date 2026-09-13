@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/client";
@@ -147,6 +148,11 @@ export default function ProductDetail() {
   );
 
   return (
+    <>
+    <Helmet>
+      <title>{product ? `${product.name_ar || product.name} | بيتي Bayti` : "بيتي | Bayti"}</title>
+      <meta name="description" content={product ? (product.description_ar || product.description || product.name) : "منتج على بيتي"} />
+    </Helmet>
     <div className="max-w-4xl mx-auto px-4 py-8">
       <SEO
         title={displayName}
