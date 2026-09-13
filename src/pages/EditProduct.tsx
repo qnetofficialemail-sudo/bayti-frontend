@@ -361,7 +361,7 @@ export default function EditProduct() {
           {form.free_shipping_enabled && (
             <div className="flex items-center gap-3">
               <span className="text-green-700 text-sm">{isArabic ? "مجاني عند طلب يبلغ" : "Free when order is"}</span>
-              <input type="number" value={form.free_shipping_min_amount} onChange={e => setForm(f => ({ ...f, free_shipping_min_amount: e.target.value }))} min="1" step="5" placeholder="100" className="w-24 border border-green-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300 bg-white text-center font-bold" />
+              <input type="number" value={form.free_shipping_min_amount} onChange={e => setForm(f => ({ ...f, free_shipping_min_amount: e.target.value }))} min="1" placeholder="100" className="w-24 border border-green-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300 bg-white text-center font-bold" />
               <span className="text-green-700 font-medium text-sm">AED</span>
             </div>
           )}
