@@ -4,6 +4,11 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare global { interface Window { trackEvent?: (event: string, params?: Record<string, any>) => void; } }
+
+
+
 export default function SellerRegisterPage() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");

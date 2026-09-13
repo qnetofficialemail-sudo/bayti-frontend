@@ -6,6 +6,11 @@ import { useAuth } from "../context/AuthContext";
 import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare global { interface Window { trackEvent?: (event: string, params?: Record<string, any>) => void; } }
+
+
+
 const EMIRATES = ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"];
 
 export default function ProductDetail() {
