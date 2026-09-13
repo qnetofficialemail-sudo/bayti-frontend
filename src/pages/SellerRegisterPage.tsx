@@ -4,11 +4,6 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare global { interface Window { trackEvent?: (event: string, params?: Record<string, any>) => void; } }
-
-
-
 export default function SellerRegisterPage() {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -37,8 +32,8 @@ export default function SellerRegisterPage() {
     e.preventDefault(); setError(""); setSubmitting(true);
     try {
       await register({ ...form, role: "seller" });
-      if (typeof window.trackEvent === "function") {
-        window.trackEvent("sign_up", { method: "seller_invite", email: form.email });
+      if (typeof (window as any).trackEvent === "function") {
+        (window as any).trackEvent("sign_up", { method: "seller_invite", email: form.email });
       }
       navigate("/seller/setup");
     } catch (e: any) {

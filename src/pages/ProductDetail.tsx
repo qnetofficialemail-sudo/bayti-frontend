@@ -6,11 +6,6 @@ import { useAuth } from "../context/AuthContext";
 import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare global { interface Window { trackEvent?: (event: string, params?: Record<string, any>) => void; } }
-
-
-
 const EMIRATES = ["Abu Dhabi", "Dubai", "Sharjah", "Ajman", "Umm Al Quwain", "Ras Al Khaimah", "Fujairah"];
 
 export default function ProductDetail() {
@@ -49,8 +44,8 @@ export default function ProductDetail() {
     ]).then(([p, v]) => {
       setProduct(p.data);
       setVariants(v.data || []);
-      if (typeof window.trackEvent === "function") {
-        window.trackEvent("view_item", { item_id: p.data.id, item_name: p.data.name, price: p.data.price, currency: "AED" });
+      if (typeof (window as any).trackEvent === "function") {
+        (window as any).trackEvent("view_item", { item_id: p.data.id, item_name: p.data.name, price: p.data.price, currency: "AED" });
       }
       if (p.data?.seller?.id) {
         api.get(`/api/sellers/${p.data.seller.id}/status`)
@@ -67,8 +62,8 @@ export default function ProductDetail() {
 
   const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (typeof window.trackEvent === "function" && product) {
-      window.trackEvent("begin_checkout", { item_id: product.id, item_name: product.name, value: product.price * quantity, currency: "AED", quantity });
+    if (typeof (window as any).trackEvent === "function" && product) {
+      (window as any).trackEvent("begin_checkout", { item_id: product.id, item_name: product.name, value: product.price * quantity, currency: "AED", quantity });
     }
     if (!user) { navigate("/login"); return; }
     const missingVariant = variants.find((v: any) => v.is_required && !selectedVariants[v.name]);
