@@ -81,6 +81,12 @@ export default function AddProduct() {
   const [error, setError] = useState("");
   const [aiSuggestion, setAiSuggestion] = useState<any>(null);
   const [variants, setVariants] = useState<Variant[]>([]);
+  const [mode, setMode] = useState<"single" | "bulk">("single");
+  const [bulkFiles, setBulkFiles] = useState<File[]>([]);
+  const [bulkPreviews, setBulkPreviews] = useState<string[]>([]);
+  const [bulkProducts, setBulkProducts] = useState<any[]>([]);
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkAnalyzed, setBulkAnalyzed] = useState(false);
   const [showVariantBuilder, setShowVariantBuilder] = useState(false);
   const [newVariant, setNewVariant] = useState<Variant>({ name: "", name_ar: "", options: [{ label: "", price_adj: 0 }], is_required: true });
 
@@ -158,6 +164,69 @@ export default function AddProduct() {
     setNewVariant({ name: "", name_ar: "", options: [{ label: "", price_adj: 0 }], is_required: true });
     setShowVariantBuilder(false);
     setError("");
+  };
+
+  const analyzeBulk = async () => {
+    if (bulkFiles.length === 0) return;
+    setBulkLoading(true);
+    const results = [];
+    for (const file of bulkFiles) {
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+        formData.append("name", file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "));
+        formData.append("category_name", isArabic ? "منتج" : "Product");
+        const res = await api.post("/api/studio/analyze", formData);
+        const data = res.data;
+        results.push({
+          file,
+          preview: URL.createObjectURL(file),
+          name: data.name_suggestion || "",
+          name_ar: data.arabic_description || "",
+          description: data.arabic_description || "",
+          price: "",
+          category_id: "",
+          discount_percent: "",
+          free_shipping_enabled: false,
+          free_shipping_min_amount: "",
+          processing_days: "3",
+          time_unit: "days",
+        });
+      } catch {
+        results.push({
+          file,
+          preview: URL.createObjectURL(file),
+          name: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
+          name_ar: "",
+          description: "",
+          price: "",
+          category_id: "",
+          discount_percent: "",
+          free_shipping_enabled: false,
+          free_shipping_min_amount: "",
+          processing_days: "3",
+          time_unit: "days",
+        });
+      }
+    }
+    setBulkProducts(results);
+    setBulkAnalyzed(true);
+    setBulkLoading(false);
+  };
+
+  const submitBulkProduct = async (prod: any, index: number) => {
+    const data = new FormData();
+    data.append("name", prod.name);
+    data.append("description", prod.description);
+    data.append("price", prod.price);
+    if (prod.category_id) data.append("category_id", prod.category_id);
+    data.append("preparation_time", prod.processing_days);
+    data.append("time_unit", prod.time_unit);
+    if (prod.discount_percent && parseFloat(prod.discount_percent) > 0) data.append("discount_percent", prod.discount_percent);
+    if (prod.free_shipping_enabled && prod.free_shipping_min_amount) data.append("free_shipping_min_amount", prod.free_shipping_min_amount);
+    data.append("image", prod.file);
+    await api.post("/api/products", data, { headers: { "Content-Type": "multipart/form-data" } });
+    setBulkProducts(prev => prev.map((p, i) => i === index ? { ...p, done: true } : p));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -504,6 +573,7 @@ export default function AddProduct() {
           </button>
         </div>
       </form>
+    )}
     </div>
   );
 }
