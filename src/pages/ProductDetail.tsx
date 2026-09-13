@@ -117,7 +117,9 @@ export default function ProductDetail() {
   };
   const deliveryFee = getDeliveryFee();
   const deliveryAvailable = !buyerEmirate || deliveryFee !== null;
-  const total = (product.price * quantity + (deliveryFee !== null ? deliveryFee : 0)).toFixed(2);
+  const discountedPrice = product.discount_percent > 0 ? product.price * (1 - product.discount_percent / 100) : product.price;
+  const freeShipping = product.free_shipping_min_amount > 0 && (discountedPrice * quantity) >= product.free_shipping_min_amount;
+  const total = (discountedPrice * quantity + (freeShipping ? 0 : deliveryFee !== null ? deliveryFee : 0)).toFixed(2);
   const allImgs = [product.image_url, product.image_2, product.image_3, product.image_4, product.image_5].filter(Boolean);
   const displayImg = allImgs[activeImageIndex] || allImgs[0];
   const imgSrc = displayImg ? (displayImg.startsWith("http") ? displayImg : `https://web-production-63685.up.railway.app${displayImg}`) : null;
@@ -279,9 +281,25 @@ export default function ProductDetail() {
           <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-gray-900">{isArabic ? "تقديم الطلب" : "Place Order"}</h2>
-              <span className="text-2xl font-bold text-orange-500">AED {product.price}</span>
+              <div className="text-right">
+              {product.discount_percent > 0 ? (
+                <>
+                  <span className="line-through text-gray-400 text-sm mr-2">AED {product.price}</span>
+                  <span className="text-2xl font-bold text-orange-500">AED {discountedPrice.toFixed(0)}</span>
+                  <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">-{product.discount_percent}%</span>
+                </>
+              ) : (
+                <span className="text-2xl font-bold text-orange-500">AED {product.price}</span>
+              )}
+            </div>
             </div>
 
+            {product.free_shipping_min_amount > 0 && (
+              <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-2.5 rounded-xl mb-3 flex items-center gap-2">
+                <span>🚚</span>
+                <span>{isArabic ? `توصيل مجاني عند طلب بـ AED ${product.free_shipping_min_amount} أو أكثر` : `Free shipping on orders AED ${product.free_shipping_min_amount}+`}</span>
+              </div>
+            )}
             {sellerOpen && !sellerOpen.is_open && (
               <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
                 <span>🔴</span>
@@ -385,11 +403,11 @@ export default function ProductDetail() {
               <div className="border-t border-gray-100 pt-4 space-y-2 text-sm text-gray-500">
                 <div className="flex justify-between">
                   <span>{isArabic ? "المجموع الفرعي" : "Subtotal"}</span>
-                  <span>AED {(product.price * quantity).toFixed(2)}</span>
+                  <span>{product.discount_percent > 0 ? <><span className="line-through text-gray-300 mr-1">AED {(product.price * quantity).toFixed(2)}</span> AED {(discountedPrice * quantity).toFixed(2)}</> : <>AED {(product.price * quantity).toFixed(2)}</>}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>{isArabic ? "التوصيل" : "Delivery"}</span>
-                  <span>{!buyerEmirate ? (isArabic ? "حدد إمارتك" : "Select emirate") : deliveryFee !== null ? `AED ${deliveryFee}` : (isArabic ? "غير متاح" : "Not available")}</span>
+                  <span>{!buyerEmirate ? (isArabic ? "حدد إمارتك" : "Select emirate") : freeShipping ? <span className="text-green-600 font-medium">{isArabic ? "مجاني" : "FREE"}</span> : deliveryFee !== null ? `AED ${deliveryFee}` : (isArabic ? "غير متاح" : "Not available")}</span>
                 </div>
                 <div className="flex justify-between font-bold text-gray-900 text-base">
                   <span>{isArabic ? "الإجمالي" : "Total"}</span>
