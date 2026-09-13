@@ -442,7 +442,7 @@ export default function AddProduct() {
               {bulkProducts.length > 0 && bulkProducts.every((p:any) => p.done) && (
                 <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-center">
                   <p className="text-green-700 font-bold text-sm">✅ {isArabic ? "تم نشر جميع المنتجات!" : "All products published!"}</p>
-                  <button type="button" onClick={() => navigate("/seller/products")}
+                  <button type="button" onClick={() => navigate("/seller/dashboard")}
                     className="mt-2 text-sm text-orange-500 hover:underline">{isArabic ? "عرض منتجاتي" : "View my products"}</button>
                 </div>
               )}
