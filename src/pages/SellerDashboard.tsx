@@ -271,8 +271,23 @@ export default function SellerDashboard() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 truncate">{isArabic && product.name_ar ? product.name_ar : product.name}</p>
-                  <p className="text-orange-500 font-bold text-sm">AED {product.price}</p>
-                  <div className="flex items-center gap-1 mt-1">{getStockBadge(product)}</div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {product.discount_percent > 0 ? (
+                      <>
+                        <span className="line-through text-gray-400 text-xs">AED {product.price}</span>
+                        <p className="text-orange-500 font-bold text-sm">AED {(product.price * (1 - product.discount_percent / 100)).toFixed(0)}</p>
+                        <span className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">-{product.discount_percent}%</span>
+                      </>
+                    ) : (
+                      <p className="text-orange-500 font-bold text-sm">AED {product.price}</p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 mt-1 flex-wrap">
+                    {getStockBadge(product)}
+                    {product.free_shipping_min_amount > 0 && (
+                      <span className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">{isArabic ? "مجاني +" + product.free_shipping_min_amount : "Free +" + product.free_shipping_min_amount}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span className={`text-xs px-2 py-1 rounded-full ${product.is_available ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>

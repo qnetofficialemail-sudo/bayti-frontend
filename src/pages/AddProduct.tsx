@@ -71,7 +71,7 @@ export default function AddProduct() {
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
   const [categories, setCategories] = useState<any[]>([]);
-  const [form, setForm] = useState({ name: "", name_ar: "", description: "", description_ar: "", price: "", category_id: "", processing_days: "3", time_unit: "days", stock_quantity: "10", track_stock: false });
+  const [form, setForm] = useState({ name: "", name_ar: "", description: "", description_ar: "", price: "", category_id: "", processing_days: "3", time_unit: "days", stock_quantity: "10", track_stock: false, discount_percent: "", free_shipping_enabled: false, free_shipping_min_amount: "" });
   const [specs, setSpecs] = useState<Record<string, string | string[]>>({});
   const [images, setImages] = useState<(File | null)[]>([null, null, null, null, null]);
   const [previews, setPreviews] = useState<(string | null)[]>([null, null, null, null, null]);
@@ -169,6 +169,8 @@ export default function AddProduct() {
       data.append("price", form.price);
       data.append("preparation_time", form.processing_days);
       data.append("time_unit", form.time_unit);
+      if (form.discount_percent && parseFloat(form.discount_percent) > 0) data.append("discount_percent", form.discount_percent);
+      if (form.free_shipping_enabled && form.free_shipping_min_amount) data.append("free_shipping_min_amount", form.free_shipping_min_amount);
       if (form.category_id) data.append("category_id", form.category_id);
       data.append("track_stock", String(form.track_stock));
       if (form.track_stock) data.append("stock_quantity", form.stock_quantity);
@@ -353,6 +355,45 @@ export default function AddProduct() {
             <input type="number" value={form.stock_quantity} onChange={e => setForm(f => ({ ...f, stock_quantity: e.target.value }))}
               min="1" required={form.track_stock} placeholder={isArabic ? "الكمية المتاحة" : "Available quantity"}
               className="w-full border border-blue-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white" />
+          )}
+        </div>
+
+        {/* Discount */}
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-3">
+          <div>
+            <p className="text-sm font-medium text-red-900">{isArabic ? "خصم على المنتج" : "Product Discount"}</p>
+            <p className="text-xs text-red-500 mt-0.5">{isArabic ? "اتركه صفراً اذا لا يوجد خصم" : "Leave 0 for no discount"}</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <input type="number" value={form.discount_percent} onChange={e => setForm(f => ({ ...f, discount_percent: e.target.value }))} min="0" max="90" step="1" placeholder="0" className="w-24 border border-red-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-300 bg-white text-center font-bold text-lg" />
+            <span className="text-red-700 font-bold text-lg">%</span>
+            {form.discount_percent && parseFloat(form.discount_percent) > 0 && form.price && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="line-through text-gray-400">AED {parseFloat(form.price).toFixed(0)}</span>
+                <span className="text-red-600 font-bold">AED {(parseFloat(form.price) * (1 - parseFloat(form.discount_percent) / 100)).toFixed(0)}</span>
+                <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">-{form.discount_percent}%</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Free Shipping */}
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-green-900">{isArabic ? "توصيل مجاني" : "Free Shipping"}</p>
+              <p className="text-xs text-green-600 mt-0.5">{isArabic ? "يفعل عند طلب بمبلغ محدد او اكثر" : "Activated when order reaches a set amount"}</p>
+            </div>
+            <button type="button" onClick={() => setForm(f => ({ ...f, free_shipping_enabled: !f.free_shipping_enabled, free_shipping_min_amount: "" }))} className={`relative w-12 h-6 rounded-full transition-colors ${form.free_shipping_enabled ? "bg-green-500" : "bg-gray-300"}`}>
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.free_shipping_enabled ? "translate-x-6" : ""}`} />
+            </button>
+          </div>
+          {form.free_shipping_enabled && (
+            <div className="flex items-center gap-3">
+              <span className="text-green-700 text-sm">{isArabic ? "مجاني عند طلب يبلغ" : "Free when order is"}</span>
+              <input type="number" value={form.free_shipping_min_amount} onChange={e => setForm(f => ({ ...f, free_shipping_min_amount: e.target.value }))} min="1" step="5" placeholder="100" className="w-24 border border-green-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300 bg-white text-center font-bold" />
+              <span className="text-green-700 font-medium text-sm">AED</span>
+            </div>
           )}
         </div>
 
