@@ -8,7 +8,7 @@ import AIPersonalShopper from "../components/AIPersonalShopper";
 
 interface Product {
   id: number; name: string; name_ar?: string; description: string; description_ar?: string;
-  price: number; image_url: string | null; preparation_time: number;
+  price: number; discount_percent?: number; free_shipping_min_amount?: number; image_url: string | null; preparation_time: number;
   stock_quantity: number; track_stock: number;
   seller: { id: number; shop_name: string; area: string; rating: number };
   category: { name: string; name_ar?: string; icon: string } | null;
@@ -121,6 +121,11 @@ export default function Home() {
                     const src = main.startsWith("http") ? main : `https://web-production-63685.up.railway.app${main}`;
                     return <img src={src} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />;
                   })()}
+                  {(product as any).discount_percent > 0 && (
+                    <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold z-10">
+                      -{(product as any).discount_percent}%
+                    </div>
+                  )}
                   {product.track_stock === 1 && product.stock_quantity >= 0 && product.stock_quantity <= 3 && product.stock_quantity > 0 && (
                     <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">
                       🔥 {isArabic ? `${product.stock_quantity} فقط` : `${product.stock_quantity} left`}
@@ -130,7 +135,16 @@ export default function Home() {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h3 className="font-semibold text-gray-900 leading-tight">{displayName}</h3>
-                    <span className="text-orange-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
+                    <div className="text-right">
+                      {(product as any).discount_percent > 0 ? (
+                        <>
+                          <span className="line-through text-gray-400 text-xs">AED {product.price}</span>
+                          <span className="text-orange-500 font-bold text-sm whitespace-nowrap block">AED {(product.price * (1 - (product as any).discount_percent / 100)).toFixed(0)}</span>
+                        </>
+                      ) : (
+                        <span className="text-orange-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
+                      )}
+                    </div>
                   </div>
                   <p className="text-gray-500 text-sm line-clamp-2 mb-2">{displayDesc}</p>
                   {getStockBadge(product)}
