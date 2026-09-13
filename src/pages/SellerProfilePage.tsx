@@ -134,7 +134,7 @@ export default function SellerProfilePage() {
                 const dayNamesAr = ["الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت","الأحد"];
                 const dayNamesEn = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
                 const days = seller.available_days.split(",").map(Number);
-                return <span>📅 {days.map(d => isArabic ? dayNamesAr[d] : dayNamesEn[d]).join(", ")}</span>;
+                return <span>📅 {days.map((d: number) => isArabic ? dayNamesAr[d] : dayNamesEn[d]).join(", ")}</span>;
               })()}
               {seller.available_from && seller.available_until && (
                 <span>🕐 {seller.available_from} – {seller.available_until}</span>
