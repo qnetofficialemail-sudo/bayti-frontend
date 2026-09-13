@@ -27,8 +27,8 @@ export default function EditShop() {
 
   useEffect(() => {
     if (!user || user.role !== "seller") { navigate("/login"); return; }
-    api.get("/api/sellers").then(r => {
-      const myShop = r.data.find((s: any) => s.user?.id === user.id);
+    api.get("/api/sellers/me").then(r => {
+      const myShop = r.data;
       if (myShop) {
         if (myShop.delivery_fees) {
           try { setDeliveryFees(JSON.parse(myShop.delivery_fees)); } catch {}
