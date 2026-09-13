@@ -43,6 +43,9 @@ export default function ProductDetail() {
     ]).then(([p, v]) => {
       setProduct(p.data);
       setVariants(v.data || []);
+      if (typeof window.trackEvent === "function") {
+        window.trackEvent("view_item", { item_id: p.data.id, item_name: p.data.name, price: p.data.price, currency: "AED" });
+      }
       if (p.data?.seller?.id) {
         api.get(`/api/sellers/${p.data.seller.id}/status`)
           .then(s => setSellerOpen(s.data)).catch(() => {});
@@ -58,6 +61,9 @@ export default function ProductDetail() {
 
   const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (typeof window.trackEvent === "function" && product) {
+      window.trackEvent("begin_checkout", { item_id: product.id, item_name: product.name, value: product.price * quantity, currency: "AED", quantity });
+    }
     if (!user) { navigate("/login"); return; }
     const missingVariant = variants.find((v: any) => v.is_required && !selectedVariants[v.name]);
     if (missingVariant) {
