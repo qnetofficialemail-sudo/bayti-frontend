@@ -267,6 +267,114 @@ export default function AddProduct() {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-8">
+
+      {/* Mode Toggle */}
+      <div className="flex gap-2 p-1 bg-gray-100 rounded-2xl mb-5">
+        <button type="button" onClick={() => setMode("single")}
+          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition ${mode === "single" ? "bg-white shadow text-orange-500" : "text-gray-500 hover:text-gray-700"}`}>
+          {isArabic ? "➕ منتج واحد" : "➕ Single Product"}
+        </button>
+        <button type="button" onClick={() => { setMode("bulk"); setBulkAnalyzed(false); setBulkProducts([]); setBulkFiles([]); setBulkPreviews([]); }}
+          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition ${mode === "bulk" ? "bg-white shadow text-orange-500" : "text-gray-500 hover:text-gray-700"}`}>
+          {isArabic ? "🚀 رفع متعدد بالذكاء الاصطناعي" : "🚀 Bulk AI Upload"}
+        </button>
+      </div>
+
+      {/* Bulk Upload Mode */}
+      {mode === "bulk" && (
+        <div className="space-y-5">
+          {!bulkAnalyzed ? (
+            <div className="space-y-4">
+              <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
+                <p className="text-sm font-medium text-orange-900">{isArabic ? "🤖 الذكاء الاصطناعي يحلل صورك" : "🤖 AI analyzes your photos"}</p>
+                <p className="text-xs text-orange-600 mt-1">{isArabic ? "ارفع حتى 10 صور — الذكاء الاصطناعي يكتب الاسم والوصف تلقائياً، أنت فقط تضيف السعر" : "Upload up to 10 photos — AI writes the name & description, you just add the price"}</p>
+              </div>
+              <label className="block border-2 border-dashed border-orange-200 rounded-2xl p-8 text-center cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition">
+                <div className="text-4xl mb-3">📸</div>
+                <p className="text-sm font-medium text-gray-700">{isArabic ? "اختر صور منتجاتك" : "Select your product photos"}</p>
+                <p className="text-xs text-gray-400 mt-1">{isArabic ? "حتى 10 صور دفعة واحدة" : "Up to 10 photos at once"}</p>
+                <input type="file" accept="image/*" multiple className="hidden" onChange={e => {
+                  const files = Array.from(e.target.files || []).slice(0, 10);
+                  setBulkFiles(files);
+                  setBulkPreviews(files.map(f => URL.createObjectURL(f)));
+                }} />
+              </label>
+              {bulkPreviews.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {bulkPreviews.map((src, i) => (
+                    <div key={i} className="aspect-square rounded-xl overflow-hidden border border-gray-200 relative">
+                      <img src={src} alt="" className="w-full h-full object-cover" />
+                      <button type="button" onClick={() => {
+                        setBulkFiles(prev => prev.filter((_, j) => j !== i));
+                        setBulkPreviews(prev => prev.filter((_, j) => j !== i));
+                      }} className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center">x</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {bulkFiles.length > 0 && (
+                <button type="button" onClick={analyzeBulk} disabled={bulkLoading}
+                  className="w-full bg-orange-500 text-white py-3 rounded-2xl font-bold text-sm hover:bg-orange-600 disabled:opacity-50 transition">
+                  {bulkLoading
+                    ? (isArabic ? "جاري التحليل..." : "Analyzing...")
+                    : (isArabic ? `تحليل ${bulkFiles.length} صورة بالذكاء الاصطناعي` : `Analyze ${bulkFiles.length} photos with AI`)}
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-700">{isArabic ? `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} منتج` : `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} published`}</p>
+                <button type="button" onClick={() => { setBulkAnalyzed(false); setBulkFiles([]); setBulkPreviews([]); setBulkProducts([]); }}
+                  className="text-xs text-orange-500 hover:underline">{isArabic ? "ابدأ من جديد" : "Start over"}</button>
+              </div>
+              {bulkProducts.map((prod: any, index: number) => (
+                <div key={index} className={`border rounded-2xl overflow-hidden ${prod.done ? "border-green-200 bg-green-50" : "border-gray-200"}`}>
+                  <div className="flex gap-3 p-3 items-start">
+                    <img src={prod.preview} alt="" className="w-20 h-20 object-cover rounded-xl flex-shrink-0" />
+                    <div className="flex-1 space-y-2 min-w-0">
+                      {prod.done ? (
+                        <p className="text-sm font-medium text-green-700">✅ {isArabic ? "تم النشر" : "Published"}</p>
+                      ) : (
+                        <>
+                          <input value={prod.name} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, name: e.target.value} : p))}
+                            placeholder={isArabic ? "اسم المنتج" : "Product name"}
+                            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                          <input type="number" value={prod.price} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, price: e.target.value} : p))}
+                            placeholder={isArabic ? "السعر (درهم)" : "Price (AED)"}
+                            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                          <select value={prod.category_id} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, category_id: e.target.value} : p))}
+                            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300">
+                            <option value="">{isArabic ? "اختر فئة" : "Select category"}</option>
+                            {categories.map((cat: any) => (
+                              <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>
+                            ))}
+                          </select>
+                          <button type="button" disabled={!prod.price || !prod.name}
+                            onClick={() => submitBulkProduct(prod, index)}
+                            className="w-full bg-orange-500 text-white py-2 rounded-xl text-sm font-bold hover:bg-orange-600 disabled:opacity-40 transition">
+                            {isArabic ? "نشر المنتج" : "Publish Product"}
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {bulkProducts.length > 0 && bulkProducts.every((p:any) => p.done) && (
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-center">
+                  <p className="text-green-700 font-bold text-sm">✅ {isArabic ? "تم نشر جميع المنتجات!" : "All products published!"}</p>
+                  <button type="button" onClick={() => navigate("/seller/products")}
+                    className="mt-2 text-sm text-orange-500 hover:underline">{isArabic ? "عرض منتجاتي" : "View my products"}</button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Single Product Mode */}
+      {mode === "single" && (
       <h1 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "إضافة منتج جديد" : "Add a new product"}</h1>
       <p className="text-gray-500 text-sm mb-8">{isArabic ? "ارفع صورة ودع الذكاء الاصطناعي يكتب قائمتك ✨" : "Upload a photo and let AI write your listing ✨"}</p>
       {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
