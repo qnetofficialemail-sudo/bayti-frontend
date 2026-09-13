@@ -172,6 +172,4 @@ export default function Home() {
     <AIPersonalShopper />
     </>
   );
-  </>
-  );
 }
