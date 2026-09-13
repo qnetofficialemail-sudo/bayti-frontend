@@ -12,7 +12,10 @@ export default function EditShop() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ shop_name: "", description: "", area: "", city: "Dubai", whatsapp_number: "", instagram_handle: "", min_order_amount: "" });
+  const [form, setForm] = useState({ shop_name: "", description: "", description_ar: "", area: "", city: "Dubai", whatsapp_number: "", instagram_handle: "", min_order_amount: "" });
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [existingLogo, setExistingLogo] = useState<string | null>(null);
   const [deliveryFees, setDeliveryFees] = useState<Record<string, string>>({});
   const [existingImages, setExistingImages] = useState<(string|null)[]>([null, null, null]);
   const [newImages, setNewImages] = useState<(File|null)[]>([null, null, null]);
@@ -31,9 +34,11 @@ export default function EditShop() {
           try { setDeliveryFees(JSON.parse(myShop.delivery_fees)); } catch {}
         }
         setExistingImages([myShop.sample_image_1 || null, myShop.sample_image_2 || null, myShop.sample_image_3 || null]);
+        setExistingLogo(myShop.logo_url || null);
         setForm({
           shop_name: myShop.shop_name || "",
           description: myShop.description || "",
+          description_ar: myShop.description_ar || "",
           area: myShop.area || "",
           city: myShop.city || "Dubai",
           whatsapp_number: myShop.whatsapp_number || "",
@@ -57,6 +62,7 @@ export default function EditShop() {
     try {
       const data = new FormData();
       Object.entries(form).forEach(([k, v]) => { if (v !== "") data.append(k, v); });
+      if (logoFile) data.append("logo", logoFile);
       data.append("delivery_fees", JSON.stringify(deliveryFees));
       newImages.forEach((img, i) => { if (img) data.append(`sample_image_${i+1}`, img); });
       await api.patch("/api/sellers/profile/edit", data, { headers: { "Content-Type": "multipart/form-data" } });
@@ -88,6 +94,31 @@ export default function EditShop() {
       {success && <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-xl mb-4">✅ {isArabic ? "تم الحفظ!" : "Saved!"}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Shop images */}
+        {/* Logo */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "صورة البروفايل" : "Profile Photo"}</label>
+          <div className="flex items-center gap-4">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-orange-200 flex items-center justify-center bg-orange-50 flex-shrink-0">
+              {logoPreview
+                ? <img src={logoPreview} alt="logo" className="w-full h-full object-cover" />
+                : existingLogo
+                ? <img src={existingLogo.startsWith("http") ? existingLogo : `https://web-production-63685.up.railway.app${existingLogo}`} alt="logo" className="w-full h-full object-cover" />
+                : <span className="text-3xl">🏠</span>
+              }
+            </div>
+            <label className="cursor-pointer">
+              <div className="text-sm text-orange-500 hover:text-orange-600 border border-orange-200 rounded-xl px-4 py-2 hover:bg-orange-50 transition">
+                {isArabic ? "رفع صورة" : "Upload Photo"}
+              </div>
+              <input type="file" accept="image/*" className="hidden" onChange={e => {
+                const file = e.target.files?.[0] || null;
+                setLogoFile(file);
+                setLogoPreview(file ? URL.createObjectURL(file) : null);
+              }} />
+            </label>
+          </div>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "صور المتجر (حتى 3)" : "Shop Photos (up to 3)"}</label>
           <p className="text-xs text-gray-400 mb-3">{isArabic ? "تظهر في صفحة متجرك للعملاء" : "Shown on your public shop page"}</p>
@@ -123,6 +154,14 @@ export default function EditShop() {
           <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
             className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
         </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وصف المتجر بالعربي" : "Shop description (Arabic)"}</label>
+          <textarea value={form.description_ar} onChange={e => setForm(f => ({ ...f, description_ar: e.target.value }))} rows={3}
+            placeholder={isArabic ? "وصف متجرك بالعربية..." : "Shop description in Arabic..."}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" dir="rtl" />
+          <p className="text-xs text-gray-400 mt-1">{isArabic ? "إذا تركتها فارغة سيترجمها الذكاء الاصطناعي تلقائياً" : "Leave empty to auto-translate with AI"}</p>
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "المنطقة *" : "Area *"}</label>
           <select value={form.area} onChange={e => setForm(f => ({ ...f, area: e.target.value }))} required

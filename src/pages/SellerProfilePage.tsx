@@ -20,6 +20,7 @@ export default function SellerProfilePage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -84,8 +85,11 @@ export default function SellerProfilePage() {
       {/* Shop header */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-3xl flex-shrink-0">
-            🏠
+          <div className="w-16 h-16 rounded-full overflow-hidden bg-orange-50 flex items-center justify-center flex-shrink-0 border-2 border-orange-100">
+            {seller.logo_url
+              ? <img src={seller.logo_url.startsWith("http") ? seller.logo_url : `https://web-production-63685.up.railway.app${seller.logo_url}`} alt={seller.shop_name} className="w-full h-full object-cover" />
+              : <span className="text-3xl">🏠</span>
+            }
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -115,11 +119,32 @@ export default function SellerProfilePage() {
                 </span>
               )}
             </div>
-            {seller.description && (
-              <p className="text-gray-600 text-sm">{seller.description}</p>
+            {(seller.description || seller.description_ar) && (
+              <p className="text-gray-600 text-sm">{isArabic && seller.description_ar ? seller.description_ar : seller.description}</p>
             )}
           </div>
         </div>
+
+        {/* Working hours */}
+        {(seller.available_from || seller.available_days) && (
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <p className="text-xs font-medium text-gray-500 mb-2">{isArabic ? "أوقات العمل" : "Working Hours"}</p>
+            <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+              {seller.available_days && (() => {
+                const dayNamesAr = ["الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت","الأحد"];
+                const dayNamesEn = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+                const days = seller.available_days.split(",").map(Number);
+                return <span>📅 {days.map(d => isArabic ? dayNamesAr[d] : dayNamesEn[d]).join(", ")}</span>;
+              })()}
+              {seller.available_from && seller.available_until && (
+                <span>🕐 {seller.available_from} – {seller.available_until}</span>
+              )}
+              {!seller.accepting_orders && (
+                <span className="text-red-500 font-medium">{isArabic ? "مغلق الآن" : "Closed now"}</span>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Categories offered */}
         {offeredCategories.length > 0 && (
@@ -189,6 +214,22 @@ export default function SellerProfilePage() {
         {isArabic ? "منتجات المتجر" : "Shop Products"}
       </h2>
 
+      {/* Category filter */}
+      {offeredCategories.length > 1 && (
+        <div className="flex gap-2 flex-wrap mb-4">
+          <button onClick={() => setSelectedCategory(null)}
+            className={`text-sm px-4 py-1.5 rounded-full border transition ${selectedCategory === null ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
+            {isArabic ? "الكل" : "All"}
+          </button>
+          {offeredCategories.map(cat => (
+            <button key={cat.id} onClick={() => setSelectedCategory(cat.id === selectedCategory ? null : cat.id)}
+              className={`text-sm px-4 py-1.5 rounded-full border transition ${selectedCategory === cat.id ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
+              {isArabic && cat.name_ar ? cat.name_ar : cat.name}
+            </button>
+          ))}
+        </div>
+      )}
+
       {productsLoading ? (
         <div className="text-center py-8 text-gray-400 animate-pulse">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">{[1,2,3].map(i => <div key={i} className="bg-gray-100 rounded-2xl h-48" />)}</div>
@@ -200,7 +241,7 @@ export default function SellerProfilePage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {products.map(product => {
+          {products.filter(p => selectedCategory === null || p.category?.id === selectedCategory).map(product => {
             const displayName = isArabic && product.name_ar ? product.name_ar : product.name;
             const displayDesc = isArabic && product.description_ar ? product.description_ar : product.description;
             return (
@@ -216,7 +257,16 @@ export default function SellerProfilePage() {
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <h3 className="font-semibold text-gray-900 text-sm leading-tight">{displayName}</h3>
-                    <span className="text-orange-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
+                    <div className="text-right">
+                      {product.discount_percent > 0 ? (
+                        <>
+                          <span className="line-through text-gray-400 text-xs">AED {product.price}</span>
+                          <span className="text-orange-500 font-bold text-sm whitespace-nowrap block">AED {(product.price * (1 - product.discount_percent / 100)).toFixed(0)}</span>
+                        </>
+                      ) : (
+                        <span className="text-orange-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
+                      )}
+                    </div>
                   </div>
                   <p className="text-gray-500 text-xs line-clamp-2">{displayDesc}</p>
                   <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
