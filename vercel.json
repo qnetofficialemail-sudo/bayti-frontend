@@ -1,11 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/p/:seller",
-      "destination": "https://qnetofficialemail-sudo.github.io/bayti-proposals/:seller.html",
-      "permanent": false
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
