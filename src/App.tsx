@@ -21,6 +21,7 @@ import SellerApplyPage from "./pages/SellerApplyPage";
 import SellPage from "./pages/SellPage";
 import SellerRegisterPage from "./pages/SellerRegisterPage";
 import NotFound from "./pages/NotFound";
+import ProposalPage from "./pages/ProposalPage";
 import StudioPage from './pages/StudioPage';
 import GrowthOSPage from './pages/GrowthOSPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -67,6 +68,7 @@ export default function App() {
               <Route path="/forgot-password" element={<><Navbar /><main id="main-content"><ForgotPasswordPage /></main></>} />
               <Route path="/reset-password" element={<><Navbar /><main id="main-content"><ResetPasswordPage /></main></>} />
               <Route path="/seller-register" element={<><Navbar /><main id="main-content"><SellerRegisterPage /></main></>} />
+              <Route path="/p/:seller" element={<ProposalPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
