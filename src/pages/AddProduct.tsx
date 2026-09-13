@@ -87,6 +87,7 @@ export default function AddProduct() {
   const [bulkProducts, setBulkProducts] = useState<any[]>([]);
   const [bulkLoading, setBulkLoading] = useState(false);
   const [bulkAnalyzed, setBulkAnalyzed] = useState(false);
+  const [bulkGroups, setBulkGroups] = useState<string[]>([]);
   const [showVariantBuilder, setShowVariantBuilder] = useState(false);
   const [newVariant, setNewVariant] = useState<Variant>({ name: "", name_ar: "", options: [{ label: "", price_adj: 0 }], is_required: true });
 
@@ -169,45 +170,45 @@ export default function AddProduct() {
   const analyzeBulk = async () => {
     if (bulkFiles.length === 0) return;
     setBulkLoading(true);
+
+    // Group files by their assigned product group
+    const groupMap: Record<string, {files: File[], previews: string[]}> = {};
+    bulkFiles.forEach((file, i) => {
+      const group = bulkGroups[i] || "product_1";
+      if (!groupMap[group]) groupMap[group] = { files: [], previews: [] };
+      groupMap[group].files.push(file);
+      groupMap[group].previews.push(bulkPreviews[i]);
+    });
+
     const results = [];
-    for (const file of bulkFiles) {
+    for (const group of Object.keys(groupMap).sort()) {
+      const { files, previews } = groupMap[group];
+      const mainFile = files[0];
+      let name = "";
+      let description = "";
       try {
         const formData = new FormData();
-        formData.append("image", file);
-        formData.append("name", file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "));
+        formData.append("image", mainFile);
+        formData.append("name", mainFile.name);
         formData.append("category_name", isArabic ? "منتج" : "Product");
         const res = await api.post("/api/studio/analyze", formData);
         const data = res.data;
-        results.push({
-          file,
-          preview: URL.createObjectURL(file),
-          name: data.name_suggestion || "",
-          name_ar: data.arabic_description || "",
-          description: data.arabic_description || "",
-          price: "",
-          category_id: "",
-          discount_percent: "",
-          free_shipping_enabled: false,
-          free_shipping_min_amount: "",
-          processing_days: "3",
-          time_unit: "days",
-        });
+        name = data.name_suggestion || mainFile.name;
+        description = data.arabic_description || "";
       } catch {
-        results.push({
-          file,
-          preview: URL.createObjectURL(file),
-          name: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
-          name_ar: "",
-          description: "",
-          price: "",
-          category_id: "",
-          discount_percent: "",
-          free_shipping_enabled: false,
-          free_shipping_min_amount: "",
-          processing_days: "3",
-          time_unit: "days",
-        });
+        name = mainFile.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
       }
+      results.push({
+        files,
+        images: previews,
+        name,
+        description,
+        price: "",
+        category_id: "",
+        processing_days: "3",
+        time_unit: "days",
+        done: false,
+      });
     }
     setBulkProducts(results);
     setBulkAnalyzed(true);
@@ -222,11 +223,17 @@ export default function AddProduct() {
     if (prod.category_id) data.append("category_id", prod.category_id);
     data.append("preparation_time", prod.processing_days);
     data.append("time_unit", prod.time_unit);
-    if (prod.discount_percent && parseFloat(prod.discount_percent) > 0) data.append("discount_percent", prod.discount_percent);
-    if (prod.free_shipping_enabled && prod.free_shipping_min_amount) data.append("free_shipping_min_amount", prod.free_shipping_min_amount);
-    data.append("image", prod.file);
+    // Main image
+    if (prod.files && prod.files[0]) data.append("image", prod.files[0]);
+    // Extra images
+    const extraKeys = ["image_2", "image_3", "image_4", "image_5"];
+    if (prod.files) {
+      prod.files.slice(1, 5).forEach((f: File, i: number) => {
+        data.append(extraKeys[i], f);
+      });
+    }
     await api.post("/api/products", data, { headers: { "Content-Type": "multipart/form-data" } });
-    setBulkProducts(prev => prev.map((p, i) => i === index ? { ...p, done: true } : p));
+    setBulkProducts((prev: any) => prev.map((p: any, i: number) => i === index ? { ...p, done: true } : p));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -283,84 +290,155 @@ export default function AddProduct() {
       {/* Bulk Upload Mode */}
       {mode === "bulk" && (
         <div className="space-y-5">
-          {!bulkAnalyzed ? (
+          {/* Step 1: Upload photos */}
+          {bulkFiles.length === 0 && (
             <div className="space-y-4">
               <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
-                <p className="text-sm font-medium text-orange-900">{isArabic ? "🤖 الذكاء الاصطناعي يحلل صورك" : "🤖 AI analyzes your photos"}</p>
-                <p className="text-xs text-orange-600 mt-1">{isArabic ? "ارفع حتى 10 صور — الذكاء الاصطناعي يكتب الاسم والوصف تلقائياً، أنت فقط تضيف السعر" : "Upload up to 10 photos — AI writes the name & description, you just add the price"}</p>
+                <p className="text-sm font-medium text-orange-900">{isArabic ? "🤖 رفع متعدد ذكي" : "🤖 Smart Bulk Upload"}</p>
+                <p className="text-xs text-orange-600 mt-1">{isArabic ? "ارفع صور منتجاتك — ثم حددي أي صور تنتمي لنفس المنتج" : "Upload your product photos — then group photos that belong to the same product"}</p>
               </div>
               <label className="block border-2 border-dashed border-orange-200 rounded-2xl p-8 text-center cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition">
                 <div className="text-4xl mb-3">📸</div>
                 <p className="text-sm font-medium text-gray-700">{isArabic ? "اختر صور منتجاتك" : "Select your product photos"}</p>
-                <p className="text-xs text-gray-400 mt-1">{isArabic ? "حتى 10 صور دفعة واحدة" : "Up to 10 photos at once"}</p>
+                <p className="text-xs text-gray-400 mt-1">{isArabic ? "حتى 20 صورة دفعة واحدة" : "Up to 20 photos at once"}</p>
                 <input type="file" accept="image/*" multiple className="hidden" onChange={e => {
-                  const files = Array.from(e.target.files || []).slice(0, 10);
+                  const files = Array.from(e.target.files || []).slice(0, 20);
                   setBulkFiles(files);
                   setBulkPreviews(files.map(f => URL.createObjectURL(f)));
+                  setBulkGroups(files.map((_, i) => `product_${Math.floor(i/1)+1}`));
                 }} />
               </label>
-              {bulkPreviews.length > 0 && (
-                <div className="grid grid-cols-3 gap-2">
-                  {bulkPreviews.map((src, i) => (
-                    <div key={i} className="aspect-square rounded-xl overflow-hidden border border-gray-200 relative">
-                      <img src={src} alt="" className="w-full h-full object-cover" />
-                      <button type="button" onClick={() => {
-                        setBulkFiles(prev => prev.filter((_, j) => j !== i));
-                        setBulkPreviews(prev => prev.filter((_, j) => j !== i));
-                      }} className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center">x</button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {bulkFiles.length > 0 && (
-                <button type="button" onClick={analyzeBulk} disabled={bulkLoading}
-                  className="w-full bg-orange-500 text-white py-3 rounded-2xl font-bold text-sm hover:bg-orange-600 disabled:opacity-50 transition">
-                  {bulkLoading
-                    ? (isArabic ? "جاري التحليل..." : "Analyzing...")
-                    : (isArabic ? `تحليل ${bulkFiles.length} صورة بالذكاء الاصطناعي` : `Analyze ${bulkFiles.length} photos with AI`)}
-                </button>
-              )}
             </div>
-          ) : (
+          )}
+
+          {/* Step 2: Group photos */}
+          {bulkFiles.length > 0 && !bulkAnalyzed && (
+            <div className="space-y-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                <p className="text-sm font-medium text-blue-900">{isArabic ? "📌 حددي المنتج لكل صورة" : "📌 Assign each photo to a product"}</p>
+                <p className="text-xs text-blue-600 mt-1">{isArabic ? "الصور التي تحمل نفس رقم المنتج ستُجمع معاً في صفحة منتج واحدة" : "Photos with the same product number will be grouped into one product page"}</p>
+              </div>
+
+              {/* Photo grid with group selector */}
+              <div className="grid grid-cols-2 gap-3">
+                {bulkPreviews.map((src, i) => {
+                  const currentGroup = bulkGroups[i] || "product_1";
+                  const groupNum = parseInt(currentGroup.split("_")[1]);
+                  const groupColors = ["bg-orange-500","bg-blue-500","bg-green-500","bg-purple-500","bg-red-500","bg-yellow-500","bg-pink-500","bg-indigo-500"];
+                  const color = groupColors[(groupNum - 1) % groupColors.length];
+                  return (
+                    <div key={i} className="border border-gray-200 rounded-2xl overflow-hidden">
+                      <div className="relative">
+                        <img src={src} alt="" className="w-full h-32 object-cover" />
+                        <div className={`absolute top-2 right-2 ${color} text-white text-xs font-bold px-2 py-1 rounded-full`}>
+                          {isArabic ? `م${groupNum}` : `P${groupNum}`}
+                        </div>
+                      </div>
+                      <div className="p-2">
+                        <select
+                          value={bulkGroups[i] || "product_1"}
+                          onChange={e => {
+                            const newGroups = [...bulkGroups];
+                            newGroups[i] = e.target.value;
+                            setBulkGroups(newGroups);
+                          }}
+                          className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                        >
+                          {Array.from({length: Math.min(bulkFiles.length, 10)}, (_, j) => (
+                            <option key={j+1} value={`product_${j+1}`}>
+                              {isArabic ? `منتج ${j+1}` : `Product ${j+1}`}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Summary */}
+              <div className="bg-gray-50 rounded-2xl p-3">
+                <p className="text-xs font-medium text-gray-600 mb-2">{isArabic ? "ملخص المجموعات:" : "Groups summary:"}</p>
+                <div className="flex flex-wrap gap-2">
+                  {Array.from(new Set(bulkGroups)).sort().map(group => {
+                    const count = bulkGroups.filter(g => g === group).length;
+                    const num = parseInt(group.split("_")[1]);
+                    return (
+                      <span key={group} className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                        {isArabic ? `منتج ${num}: ${count} صور` : `Product ${num}: ${count} photo${count>1?"s":""}`}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <button type="button" onClick={() => { setBulkFiles([]); setBulkPreviews([]); setBulkGroups([]); }}
+                  className="flex-1 border border-gray-200 text-gray-600 py-3 rounded-2xl text-sm hover:bg-gray-50 transition">
+                  {isArabic ? "إعادة الاختيار" : "Reselect"}
+                </button>
+                <button type="button" onClick={analyzeBulk} disabled={bulkLoading}
+                  className="flex-1 bg-orange-500 text-white py-3 rounded-2xl font-bold text-sm hover:bg-orange-600 disabled:opacity-50 transition">
+                  {bulkLoading ? (isArabic ? "جاري التحليل..." : "Analyzing...") : (isArabic ? "تحليل بالذكاء الاصطناعي" : "Analyze with AI")}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Review and publish */}
+          {bulkAnalyzed && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-700">{isArabic ? `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} منتج` : `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} published`}</p>
-                <button type="button" onClick={() => { setBulkAnalyzed(false); setBulkFiles([]); setBulkPreviews([]); setBulkProducts([]); }}
+                <p className="text-sm font-medium text-gray-700">
+                  {isArabic ? `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} منتج تم نشره` : `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} published`}
+                </p>
+                <button type="button" onClick={() => { setBulkAnalyzed(false); setBulkFiles([]); setBulkPreviews([]); setBulkProducts([]); setBulkGroups([]); }}
                   className="text-xs text-orange-500 hover:underline">{isArabic ? "ابدأ من جديد" : "Start over"}</button>
               </div>
+
               {bulkProducts.map((prod: any, index: number) => (
                 <div key={index} className={`border rounded-2xl overflow-hidden ${prod.done ? "border-green-200 bg-green-50" : "border-gray-200"}`}>
-                  <div className="flex gap-3 p-3 items-start">
-                    <img src={prod.preview} alt="" className="w-20 h-20 object-cover rounded-xl flex-shrink-0" />
-                    <div className="flex-1 space-y-2 min-w-0">
-                      {prod.done ? (
-                        <p className="text-sm font-medium text-green-700">✅ {isArabic ? "تم النشر" : "Published"}</p>
-                      ) : (
-                        <>
-                          <input value={prod.name} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, name: e.target.value} : p))}
-                            placeholder={isArabic ? "اسم المنتج" : "Product name"}
-                            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-                          <input type="number" value={prod.price} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, price: e.target.value} : p))}
-                            placeholder={isArabic ? "السعر (درهم)" : "Price (AED)"}
-                            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
-                          <select value={prod.category_id} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, category_id: e.target.value} : p))}
-                            className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300">
-                            <option value="">{isArabic ? "اختر فئة" : "Select category"}</option>
-                            {categories.map((cat: any) => (
-                              <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>
-                            ))}
-                          </select>
-                          <button type="button" disabled={!prod.price || !prod.name}
-                            onClick={() => submitBulkProduct(prod, index)}
-                            className="w-full bg-orange-500 text-white py-2 rounded-xl text-sm font-bold hover:bg-orange-600 disabled:opacity-40 transition">
-                            {isArabic ? "نشر المنتج" : "Publish Product"}
-                          </button>
-                        </>
-                      )}
-                    </div>
+                  {/* Product images strip */}
+                  <div className="flex gap-1 p-2 bg-gray-50 border-b border-gray-100">
+                    {prod.images.map((src: string, imgIdx: number) => (
+                      <img key={imgIdx} src={src} alt="" className={`h-16 w-16 object-cover rounded-lg ${imgIdx === 0 ? "ring-2 ring-orange-400" : ""}`} />
+                    ))}
+                    {prod.images.length > 1 && (
+                      <div className="flex items-center text-xs text-gray-400 px-2">
+                        {isArabic ? `${prod.images.length} صور` : `${prod.images.length} photos`}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-3 space-y-2">
+                    {prod.done ? (
+                      <p className="text-sm font-medium text-green-700">✅ {isArabic ? "تم النشر" : "Published"}</p>
+                    ) : (
+                      <>
+                        <input value={prod.name} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, name: e.target.value} : p))}
+                          placeholder={isArabic ? "اسم المنتج" : "Product name"}
+                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                        <input type="number" value={prod.price} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, price: e.target.value} : p))}
+                          placeholder={isArabic ? "السعر (درهم)" : "Price (AED)"}
+                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                        <select value={prod.category_id} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, category_id: e.target.value} : p))}
+                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300">
+                          <option value="">{isArabic ? "اختر فئة" : "Select category"}</option>
+                          {categories.map((cat: any) => (
+                            <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>
+                          ))}
+                        </select>
+                        <button type="button" disabled={!prod.price || !prod.name}
+                          onClick={() => submitBulkProduct(prod, index)}
+                          className="w-full bg-orange-500 text-white py-2 rounded-xl text-sm font-bold hover:bg-orange-600 disabled:opacity-40 transition">
+                          {isArabic ? "نشر المنتج" : "Publish Product"}
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
+
               {bulkProducts.length > 0 && bulkProducts.every((p:any) => p.done) && (
                 <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-center">
                   <p className="text-green-700 font-bold text-sm">✅ {isArabic ? "تم نشر جميع المنتجات!" : "All products published!"}</p>
@@ -373,7 +451,7 @@ export default function AddProduct() {
         </div>
       )}
 
-      {/* Single Product Mode */}
+            {/* Single Product Mode */}
       {mode === "single" && (
       <>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "إضافة منتج جديد" : "Add a new product"}</h1>
