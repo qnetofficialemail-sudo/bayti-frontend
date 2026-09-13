@@ -271,5 +271,6 @@ export default function SellPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
