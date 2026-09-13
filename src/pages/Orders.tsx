@@ -26,6 +26,12 @@ export default function Orders() {
     if (!user) { navigate("/login"); return; }
     api.get("/api/orders/my").then(r => {
       setOrders(r.data);
+      if (typeof window.trackEvent === "function" && r.data.length > 0) {
+        const latest = r.data[0];
+        if (latest.status === "pending" && (Date.now() - new Date(latest.created_at).getTime()) < 60000) {
+          window.trackEvent("purchase", { transaction_id: latest.id, value: latest.total_amount, currency: "AED", shipping: latest.delivery_fee });
+        }
+      }
       // Check which delivered orders have been reviewed
       const delivered = r.data.filter((o: any) => o.status === "delivered");
       if (delivered.length > 0) {
@@ -57,6 +63,9 @@ export default function Orders() {
     setReviewSubmitting(true);
     try {
       await api.post(`/api/reviews/?order_id=${reviewModal.id}&rating=${reviewRating}${reviewComment ? `&comment=${encodeURIComponent(reviewComment)}` : ""}`);
+      if (typeof window.trackEvent === "function") {
+        window.trackEvent("review_submitted", { order_id: reviewModal.id, rating: reviewRating });
+      }
       setReviewedOrders(prev => [...prev, reviewModal.id]);
       setReviewModal(null);
       setReviewComment("");

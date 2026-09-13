@@ -32,6 +32,9 @@ export default function SellerRegisterPage() {
     e.preventDefault(); setError(""); setSubmitting(true);
     try {
       await register({ ...form, role: "seller" });
+      if (typeof window.trackEvent === "function") {
+        window.trackEvent("sign_up", { method: "seller_invite", email: form.email });
+      }
       navigate("/seller/setup");
     } catch (e: any) {
       setError(e.response?.data?.detail || "Registration failed");
