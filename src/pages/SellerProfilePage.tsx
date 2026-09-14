@@ -88,7 +88,7 @@ export default function SellerProfilePage() {
           <div className="w-16 h-16 rounded-full overflow-hidden bg-orange-50 flex items-center justify-center flex-shrink-0 border-2 border-orange-100">
             {seller.logo_url
               ? <img src={seller.logo_url.startsWith("http") ? seller.logo_url : `https://web-production-63685.up.railway.app${seller.logo_url}`} alt={seller.shop_name} className="w-full h-full object-cover" />
-              : <span className="text-3xl">🏠</span>
+              : <img src="/logo-icon.png" alt={seller.shop_name} className="w-full h-full object-contain p-2" />
             }
           </div>
           <div className="flex-1">
