@@ -2,58 +2,212 @@ import { useState, useRef } from "react";
 
 const BACKEND = "https://web-production-63685.up.railway.app";
 
-const PRODUCT_TYPES = [
-  { value: "apparel", label: "ملابس وعبايات", emoji: "👗" },
-  { value: "bag",     label: "حقائب",          emoji: "👜" },
-  { value: "jewelry", label: "مجوهرات",        emoji: "💍" },
-  { value: "glasses", label: "نظارات",         emoji: "👓" },
-  { value: "watch",   label: "ساعات",          emoji: "⌚" },
-  { value: "belt",    label: "أحزمة",          emoji: "🎗️" },
+// ── فئات المنتجات ──────────────────────────────────────────────────────────────
+const PRODUCT_GROUPS = [
+  {
+    group: "fashion", label: "👗 ملابس وإكسسوارات",
+    types: [
+      { value: "apparel",  label: "ملابس وعبايات", emoji: "👗" },
+      { value: "bag",      label: "حقائب",          emoji: "👜" },
+      { value: "jewelry",  label: "مجوهرات",        emoji: "💍" },
+      { value: "glasses",  label: "نظارات",         emoji: "👓" },
+      { value: "watch",    label: "ساعات",          emoji: "⌚" },
+      { value: "shoes",    label: "أحذية",          emoji: "👠" },
+    ]
+  },
+  {
+    group: "home", label: "🕯️ منزل وديكور",
+    types: [
+      { value: "candle",   label: "شموع وعطور",    emoji: "🕯️" },
+      { value: "decor",    label: "ديكور منزلي",   emoji: "🏺" },
+      { value: "plants",   label: "نباتات وأصص",   emoji: "🪴" },
+    ]
+  },
+  {
+    group: "food", label: "🍰 طعام وحلويات",
+    types: [
+      { value: "food",     label: "طعام وأكلات",   emoji: "🍽️" },
+      { value: "sweets",   label: "حلويات وكيك",   emoji: "🍰" },
+      { value: "drinks",   label: "مشروبات",        emoji: "🧃" },
+    ]
+  },
+  {
+    group: "beauty", label: "✨ جمال وعناية",
+    types: [
+      { value: "skincare", label: "عناية بالبشرة", emoji: "🧴" },
+      { value: "makeup",   label: "مكياج",         emoji: "💄" },
+      { value: "haircare", label: "عناية بالشعر",  emoji: "💆" },
+    ]
+  },
+  {
+    group: "craft", label: "🎨 أعمال يدوية",
+    types: [
+      { value: "handcraft",label: "أعمال يدوية وفن", emoji: "🎨" },
+    ]
+  },
 ];
-const MODEL_STYLES = [
-  { value: "female_gulf_modern", label: "موديل خليجي — بحجاب" },
-  { value: "female_modern",      label: "موديل عصري" },
-  { value: "neutral_studio",     label: "بدون موديل — استوديو" },
+
+// ── خيارات مشتركة ──────────────────────────────────────────────────────────────
+const LIGHTING = [
+  { value: "soft_natural",   label: "☀️ طبيعي ناعم" },
+  { value: "golden_hour",    label: "🌅 ذهبي — غروب" },
+  { value: "studio_bright",  label: "💡 استوديو ساطع" },
+  { value: "moody_dramatic", label: "🌙 درامي — داكن" },
+  { value: "ring_light",     label: "💫 رينج لايت" },
+  { value: "backlit_rim",    label: "✨ خلفي — هالة" },
+  { value: "candlelight",    label: "🕯️ ضوء شموع" },
 ];
-const BACKGROUNDS = [
-  { value: "white_studio", label: "⬜ أبيض — استوديو" },
-  { value: "warm_beige",   label: "🟫 بيج دافئ" },
-  { value: "cafe",         label: "☕ مقهى عصري" },
-  { value: "street",       label: "🌇 شارع — ذهبي" },
-  { value: "interior",     label: "🏠 ديكور منزلي" },
+const SEASON = [
+  { value: "none",     label: "🗓️ بدون تحديد" },
+  { value: "summer",   label: "☀️ صيف" },
+  { value: "winter",   label: "❄️ شتاء" },
+  { value: "ramadan",  label: "🌙 رمضان" },
+  { value: "eid",      label: "🎉 عيد" },
+  { value: "national", label: "🇦🇪 اليوم الوطني" },
 ];
-const FRAMINGS = [
-  { value: "full_body", label: "لقطة كاملة" },
-  { value: "half_body", label: "نصفية" },
-  { value: "close_up",  label: "قريبة" },
+const OUTPUT_FORMATS = [
+  { value: "product_square", label: "◻️ مربع 1:1" },
+  { value: "story_vertical", label: "📱 ستوري 9:16" },
+  { value: "landscape_wide", label: "🖼️ عريض 16:9" },
 ];
-const FORMATS = [
-  { value: "product_square",  label: "مربع 1:1" },
-  { value: "story_vertical",  label: "ستوري 9:16" },
+
+// ── خيارات الملابس ──────────────────────────────────────────────────────────────
+const FASHION_MODELS = [
+  { value: "female_gulf_modern", label: "👩 موديل خليجي — بحجاب" },
+  { value: "female_modern",      label: "👩 موديل عصري" },
+  { value: "female_elegant",     label: "👩 موديل رسمي أنيق" },
+  { value: "neutral_studio",     label: "🪆 بدون موديل — استوديو" },
+  { value: "ghost_mannequin",    label: "👻 Ghost Mannequin" },
 ];
-const MODEL_SIZES = [
+const FASHION_POSES = [
+  { value: "standing_neutral", label: "🧍 وقوف محايد" },
+  { value: "walking",          label: "🚶 مشي ديناميكي" },
+  { value: "sitting_elegant",  label: "🪑 جلوس أنيق" },
+  { value: "looking_side",     label: "👀 نظرة جانبية" },
+  { value: "hand_on_hip",      label: "💁 يد على الخصر" },
+  { value: "twirling",         label: "💃 دوران — حركة" },
+];
+const FASHION_SIZES = [
   { value: "slim",    label: "نحيف" },
   { value: "regular", label: "متوسط" },
   { value: "curvy",   label: "ممتلئ" },
 ];
-const LIGHTING = [
-  { value: "soft_natural",  label: "☀️ طبيعي ناعم" },
-  { value: "golden_hour",   label: "🌅 ذهبي — غروب" },
-  { value: "studio_bright", label: "💡 استوديو ساطع" },
-  { value: "moody_dark",    label: "🌙 درامي — داكن" },
+const FASHION_BG = [
+  { value: "white_studio",  label: "⬜ أبيض استوديو" },
+  { value: "warm_beige",    label: "🟫 بيج دافئ" },
+  { value: "cream_minimal", label: "🤍 كريمي فاخر" },
+  { value: "cafe",          label: "☕ مقهى عصري" },
+  { value: "street",        label: "🌇 شارع — دبي" },
+  { value: "garden",        label: "🌿 حديقة خضراء" },
+  { value: "interior",      label: "🏠 ديكور منزلي" },
+  { value: "desert",        label: "🏜️ صحراء ذهبية" },
 ];
-const SEASON = [
-  { value: "none",   label: "بدون تحديد" },
-  { value: "summer", label: "☀️ صيف" },
-  { value: "winter", label: "❄️ شتاء" },
-  { value: "ramadan", label: "🌙 رمضان" },
-  { value: "eid",    label: "🎉 عيد" },
+
+// ── خيارات المنزل ──────────────────────────────────────────────────────────────
+const HOME_SHOTS = [
+  { value: "flat_lay_overhead",  label: "📷 Flat Lay — من فوق" },
+  { value: "45_angle",           label: "📐 زاوية 45°" },
+  { value: "lifestyle_scene",    label: "🏠 ديكور حياتي" },
+  { value: "close_up_macro",     label: "🔍 ماكرو — تفاصيل" },
+  { value: "hero_shot",          label: "⭐ Hero Shot درامي" },
+  { value: "grouped_collection", label: "🎁 مجموعة منتجات" },
 ];
-const POSE = [
-  { value: "standing_neutral", label: "وقوف — محايد" },
-  { value: "walking",          label: "مشي — ديناميكي" },
-  { value: "sitting_elegant",  label: "جلوس — أنيق" },
-  { value: "looking_side",     label: "نظرة جانبية" },
+const HOME_SURFACES = [
+  { value: "linen_cream",    label: "🤍 كتان كريمي" },
+  { value: "marble_white",   label: "⬜ رخام أبيض" },
+  { value: "dark_wood",      label: "🟫 خشب داكن" },
+  { value: "light_oak",      label: "🍁 أوك فاتح" },
+  { value: "concrete_gray",  label: "🩶 خرسانة رمادية" },
+  { value: "travertine",     label: "🪨 تريفرتين دافئ" },
+  { value: "rattan_natural", label: "🌾 راتان طبيعي" },
+];
+const HOME_MOODS = [
+  { value: "warm_cozy",       label: "🕯️ دافئ ومريح" },
+  { value: "clean_minimal",   label: "🤍 مينيمال نظيف" },
+  { value: "luxury_dark",     label: "🖤 فاخر داكن" },
+  { value: "botanical",       label: "🌿 بوتانيكال أخضر" },
+  { value: "arabic_heritage", label: "🪔 تراث عربي" },
+  { value: "modern_chic",     label: "✨ مودرن شيك" },
+];
+const HOME_PROPS = [
+  { value: "none",            label: "✖️ بدون إكسسوار" },
+  { value: "botanicals",      label: "🌾 نباتات جافة" },
+  { value: "candles_ambient", label: "🕯️ شموع محيطية" },
+  { value: "citrus_fresh",    label: "🍋 حمضيات طازجة" },
+  { value: "coffee_book",     label: "☕ كتاب وقهوة" },
+  { value: "petals_romantic", label: "🌹 بتلات ورد" },
+  { value: "seasonal_eid",    label: "🌙 ديكور رمضان/عيد" },
+  { value: "herbs_natural",   label: "🌿 أعشاب طبيعية" },
+];
+
+// ── خيارات الطعام ──────────────────────────────────────────────────────────────
+const FOOD_SHOTS = [
+  { value: "overhead_flat",   label: "📷 Flat Lay — من فوق" },
+  { value: "45_editorial",    label: "📐 زاوية 45° إيديتوريال" },
+  { value: "close_up_steam",  label: "💨 قريب — بخار وتفاصيل" },
+  { value: "plated_hero",     label: "🍽️ تقديم فاخر" },
+  { value: "rustic_spread",   label: "🪵 مائدة ريفية غنية" },
+  { value: "single_hero",     label: "⭐ بطل منفرد" },
+];
+const FOOD_SURFACES = [
+  { value: "white_marble",  label: "⬜ رخام أبيض" },
+  { value: "dark_slate",    label: "⬛ سليت داكن" },
+  { value: "rustic_wood",   label: "🪵 خشب ريفي" },
+  { value: "ceramic_plate", label: "🍽️ صحن سيراميك" },
+  { value: "linen_napkin",  label: "🤍 كتان أبيض" },
+  { value: "golden_tray",   label: "🥇 صينية ذهبية" },
+];
+const FOOD_MOODS = [
+  { value: "fresh_bright",  label: "☀️ طازج ومضيء" },
+  { value: "warm_homemade", label: "🏠 دافئ منزلي" },
+  { value: "luxury_fine",   label: "✨ فاين داينينج" },
+  { value: "festive_eid",   label: "🌙 رمضاني احتفالي" },
+  { value: "cafe_modern",   label: "☕ كافيه مودرن" },
+];
+const FOOD_GARNISH = [
+  { value: "none",           label: "✖️ بدون إضافات" },
+  { value: "herbs_fresh",    label: "🌿 أعشاب طازجة" },
+  { value: "nuts_honey",     label: "🍯 مكسرات وعسل" },
+  { value: "flowers_edible", label: "🌸 زهور صالحة للأكل" },
+  { value: "sauce_drizzle",  label: "🎨 صلصة فنية" },
+  { value: "powdered_sugar", label: "❄️ سكر بودرة" },
+];
+
+// ── خيارات الجمال ──────────────────────────────────────────────────────────────
+const BEAUTY_SHOTS = [
+  { value: "flat_lay_clean",   label: "📷 Flat Lay نظيف" },
+  { value: "hero_product",     label: "⭐ Hero Shot فاخر" },
+  { value: "lifestyle_vanity", label: "💄 طاولة المرآة" },
+  { value: "grouped_routine",  label: "🧴 روتين عناية" },
+  { value: "macro_texture",    label: "🔍 ماكرو — القوام" },
+  { value: "open_product",     label: "✨ المنتج مفتوح" },
+];
+const BEAUTY_BG = [
+  { value: "white_clean",      label: "⬜ أبيض نقي" },
+  { value: "marble_pink",      label: "🌸 رخام وردي" },
+  { value: "cream_linen",      label: "🤍 كتان كريمي" },
+  { value: "dark_luxury",      label: "🖤 مخمل داكن فاخر" },
+  { value: "botanical_green",  label: "🌿 بوتانيكال" },
+  { value: "glass_reflective", label: "💎 زجاج عاكس" },
+];
+const BEAUTY_PROPS = [
+  { value: "none",            label: "✖️ المنتج فقط" },
+  { value: "flowers_pink",    label: "🌸 بتلات وردية" },
+  { value: "crystals",        label: "💎 كريستال وأحجار" },
+  { value: "herbs_botanical", label: "🌿 نباتات عطرية" },
+  { value: "gold_accents",    label: "✨ لمسات ذهبية" },
+  { value: "mirror_elegant",  label: "🪞 مرآة أنيقة" },
+  { value: "water_splash",    label: "💧 رذاذ ماء نقي" },
+];
+
+// ── خيارات الأعمال اليدوية ──────────────────────────────────────────────────────
+const CRAFT_SHOTS = [
+  { value: "flat_lay",          label: "📷 Flat Lay فني" },
+  { value: "hands_wearing",     label: "🤲 في الأيدي" },
+  { value: "display_stand",     label: "🏆 على حامل عرض" },
+  { value: "atelier_scene",     label: "🎨 مشهد الأتيليه" },
+  { value: "gift_presentation", label: "🎁 تقديم هدية" },
+  { value: "collection_spread", label: "✨ مجموعة متكاملة" },
 ];
 
 interface Result {
@@ -63,28 +217,83 @@ interface Result {
   detected_color: string;
   detected_fabric: string;
   detected_details: string;
+  product_group: string;
+}
+
+function OptionGrid({ options, value, onChange, cols = 2 }: {
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (v: string) => void;
+  cols?: number;
+}) {
+  return (
+    <div className={`grid grid-cols-${cols} gap-2`}>
+      {options.map(o => (
+        <button key={o.value} type="button" onClick={() => onChange(o.value)}
+          className={`text-right px-3 py-2.5 rounded-xl border-2 transition text-sm font-medium
+            ${value === o.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="bg-white rounded-2xl p-5 border border-orange-100">
+      <h3 className="font-bold text-gray-800 mb-3">{title}</h3>
+      {children}
+    </div>
+  );
 }
 
 export default function StudioPage() {
-  const [step, setStep]               = useState<"upload"|"options"|"analyzing"|"result">("upload");
-  const [imageFile, setImageFile]     = useState<File | null>(null);
+  const [step, setStep]             = useState<"upload"|"options"|"analyzing"|"result">("upload");
+  const [imageFile, setImageFile]   = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [productType, setProductType] = useState("apparel");
-  const [modelStyle, setModelStyle]   = useState("female_gulf_modern");
-  const [background, setBackground]   = useState("white_studio");
-  const [framing, setFraming]         = useState("full_body");
-  const [outputFormat, setOutputFormat] = useState("product_square");
-  const [modelSize, setModelSize]     = useState("regular");
-  const [lighting, setLighting]       = useState("soft_natural");
-  const [season, setSeason]           = useState("none");
-  const [pose, setPose]               = useState("standing_neutral");
-  const [extraNotes, setExtraNotes]   = useState("");
-  const [result, setResult]           = useState<Result | null>(null);
-  const [error, setError]             = useState<string | null>(null);
-  const [copied, setCopied]           = useState(false);
-  const [autoCopied, setAutoCopied]   = useState(false);
+  const [result, setResult]         = useState<Result | null>(null);
+  const [error, setError]           = useState<string | null>(null);
+  const [copied, setCopied]         = useState(false);
+  const [autoCopied, setAutoCopied] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const token = localStorage.getItem("token");
+
+  // المنتج
+  const [productType, setProductType] = useState("apparel");
+  const productGroup = PRODUCT_GROUPS.find(g => g.types.some(t => t.value === productType))?.group || "fashion";
+
+  // مشتركة
+  const [lighting, setLighting]       = useState("soft_natural");
+  const [season, setSeason]           = useState("none");
+  const [outputFormat, setOutputFormat] = useState("product_square");
+  const [extraNotes, setExtraNotes]   = useState("");
+
+  // ملابس
+  const [modelStyle, setModelStyle]   = useState("female_gulf_modern");
+  const [modelSize, setModelSize]     = useState("regular");
+  const [pose, setPose]               = useState("standing_neutral");
+  const [background, setBackground]   = useState("white_studio");
+
+  // منزل
+  const [homeShotStyle, setHomeShotStyle] = useState("flat_lay_overhead");
+  const [homeSurface, setHomeSurface]     = useState("linen_cream");
+  const [homeMood, setHomeMood]           = useState("warm_cozy");
+  const [homeProps, setHomeProps]         = useState("botanicals");
+
+  // طعام
+  const [foodShotStyle, setFoodShotStyle] = useState("overhead_flat");
+  const [foodSurface, setFoodSurface]     = useState("white_marble");
+  const [foodMood, setFoodMood]           = useState("warm_homemade");
+  const [foodGarnish, setFoodGarnish]     = useState("none");
+
+  // جمال
+  const [beautyShotStyle, setBeautyShotStyle] = useState("hero_product");
+  const [beautyBackground, setBeautyBackground] = useState("white_clean");
+  const [beautyProps, setBeautyProps]           = useState("none");
+
+  // يدوي
+  const [craftShotStyle, setCraftShotStyle] = useState("flat_lay");
 
   function handleFile(file: File) {
     if (file.size > 10 * 1024 * 1024) { setError("الصورة أكبر من 10MB"); return; }
@@ -96,21 +305,36 @@ export default function StudioPage() {
 
   async function analyze() {
     if (!imageFile || !token) return;
-    setStep("analyzing");
-    setError(null);
+    setStep("analyzing"); setError(null);
     try {
       const form = new FormData();
       form.append("image", imageFile);
-      form.append("product_type",  productType);
-      form.append("model_style",   modelStyle);
-      form.append("background",    background);
-      form.append("framing",       framing);
-      form.append("output_format", outputFormat);
-      form.append("model_size",    modelSize);
-      form.append("lighting",      lighting);
-      form.append("season",        season);
-      form.append("pose",          pose);
+      form.append("product_type",   productType);
+      form.append("output_format",  outputFormat);
+      form.append("lighting",       lighting);
+      form.append("season",         season);
       if (extraNotes) form.append("extra_notes", extraNotes);
+      // ملابس
+      form.append("model_style",    modelStyle);
+      form.append("model_size",     modelSize);
+      form.append("pose",           pose);
+      form.append("background",     background);
+      // منزل
+      form.append("home_shot_style", homeShotStyle);
+      form.append("home_surface",    homeSurface);
+      form.append("home_mood",       homeMood);
+      form.append("home_props",      homeProps);
+      // طعام
+      form.append("food_shot_style", foodShotStyle);
+      form.append("food_surface",    foodSurface);
+      form.append("food_mood",       foodMood);
+      form.append("food_garnish",    foodGarnish);
+      // جمال
+      form.append("beauty_shot_style",  beautyShotStyle);
+      form.append("beauty_background",  beautyBackground);
+      form.append("beauty_props",       beautyProps);
+      // يدوي
+      form.append("craft_shot_style",   craftShotStyle);
 
       const res = await fetch(`${BACKEND}/api/studio/analyze`, {
         method: "POST",
@@ -137,20 +361,13 @@ export default function StudioPage() {
   function openGemini() {
     if (!result) return;
     navigator.clipboard.writeText(result.prompt)
-      .then(() => {
-        setAutoCopied(true);
-        setTimeout(() => window.open("https://gemini.google.com", "_blank"), 400);
-      })
-      .catch(() => {
-        // Clipboard failed (some mobile browsers) — just open Gemini
-        setAutoCopied(true);
-        window.open("https://gemini.google.com", "_blank");
-      });
+      .then(() => { setAutoCopied(true); setTimeout(() => window.open("https://gemini.google.com", "_blank"), 400); })
+      .catch(() => { setAutoCopied(true); window.open("https://gemini.google.com", "_blank"); });
   }
 
   function reset() {
     setStep("upload"); setImageFile(null); setImagePreview(null);
-    setResult(null); setError(null);
+    setResult(null); setError(null); setAutoCopied(false);
   }
 
   return (
@@ -161,7 +378,7 @@ export default function StudioPage() {
           <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-lg">✨</div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">استوديو بيتي الذكي</h1>
-            <p className="text-sm text-gray-500">بيتي يحلل منتجك ويولّد prompt احترافي لـ Gemini مجاناً</p>
+            <p className="text-sm text-gray-500">يحلل منتجك ويولّد prompt احترافي لـ Gemini — مجاناً</p>
           </div>
         </div>
       </div>
@@ -185,16 +402,14 @@ export default function StudioPage() {
               <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
                 onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
             </div>
-
-            {/* How it works */}
             <div className="bg-white rounded-2xl p-5 border border-orange-100">
               <h3 className="font-bold text-gray-800 mb-3">كيف يعمل؟</h3>
               <div className="space-y-3">
                 {[
-                  { n: "١", text: "ارفع صورة منتجك واختر الخيارات" },
-                  { n: "٢", text: "بيتي يحلل المنتج ويولّد prompt مخصص" },
+                  { n: "١", text: "ارفع صورة منتجك واختر خياراتك" },
+                  { n: "٢", text: "الاستوديو يحلل المنتج ويولّد prompt مخصص لنوعه" },
                   { n: "٣", text: "انسخ الـ prompt وافتح Gemini مجاناً" },
-                  { n: "٤", text: "الصق الـ prompt وارفع صورة المنتج → صورة احترافية!" },
+                  { n: "٤", text: "الصق الـ prompt → صورة احترافية في ثوانٍ!" },
                 ].map(s => (
                   <div key={s.n} className="flex items-start gap-3">
                     <span className="w-7 h-7 rounded-full bg-orange-100 text-orange-600 font-bold text-sm flex items-center justify-center flex-shrink-0">{s.n}</span>
@@ -219,144 +434,130 @@ export default function StudioPage() {
               <button onClick={reset} className="text-sm text-gray-400 hover:text-red-500">تغيير</button>
             </div>
 
-            {/* Product Type */}
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
-              <h3 className="font-bold text-gray-800 mb-3">نوع المنتج</h3>
-              <div className="grid grid-cols-3 gap-2">
-                {PRODUCT_TYPES.map(p => (
-                  <button key={p.value} onClick={() => setProductType(p.value)}
-                    className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition text-sm font-medium
-                      ${productType === p.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                    <span className="text-2xl">{p.emoji}</span>
-                    {p.label}
-                  </button>
+            {/* نوع المنتج */}
+            <Section title="نوع المنتج">
+              <div className="space-y-4">
+                {PRODUCT_GROUPS.map(g => (
+                  <div key={g.group}>
+                    <p className="text-xs font-bold text-gray-400 mb-2 uppercase">{g.label}</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {g.types.map(t => (
+                        <button key={t.value} type="button" onClick={() => setProductType(t.value)}
+                          className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition text-xs font-medium
+                            ${productType === t.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+                          <span className="text-xl">{t.emoji}</span>
+                          {t.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
-            </div>
+            </Section>
 
-            {/* Model + Background */}
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
-              <h3 className="font-bold text-gray-800 mb-3">نمط الموديل</h3>
-              <div className="space-y-2">
-                {MODEL_STYLES.map(m => (
-                  <button key={m.value} onClick={() => setModelStyle(m.value)}
-                    className={`w-full text-right px-4 py-2.5 rounded-xl border-2 transition text-sm font-medium
-                      ${modelStyle === m.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                    {m.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* خيارات الملابس */}
+            {productGroup === "fashion" && (
+              <>
+                <Section title="نمط الموديل">
+                  <OptionGrid options={FASHION_MODELS} value={modelStyle} onChange={setModelStyle} cols={2} />
+                </Section>
+                {(modelStyle !== "neutral_studio" && modelStyle !== "ghost_mannequin") && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Section title="الوضعية">
+                        <OptionGrid options={FASHION_POSES} value={pose} onChange={setPose} cols={1} />
+                      </Section>
+                      <Section title="مقاس الموديل">
+                        <OptionGrid options={FASHION_SIZES} value={modelSize} onChange={setModelSize} cols={1} />
+                      </Section>
+                    </div>
+                  </>
+                )}
+                <Section title="الخلفية">
+                  <OptionGrid options={FASHION_BG} value={background} onChange={setBackground} cols={2} />
+                </Section>
+              </>
+            )}
 
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
-              <h3 className="font-bold text-gray-800 mb-3">الخلفية</h3>
-              <div className="space-y-2">
-                {BACKGROUNDS.map(b => (
-                  <button key={b.value} onClick={() => setBackground(b.value)}
-                    className={`w-full text-right px-4 py-2.5 rounded-xl border-2 transition text-sm font-medium
-                      ${background === b.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                    {b.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* خيارات المنزل */}
+            {productGroup === "home" && (
+              <>
+                <Section title="أسلوب التصوير">
+                  <OptionGrid options={HOME_SHOTS} value={homeShotStyle} onChange={setHomeShotStyle} cols={2} />
+                </Section>
+                <Section title="السطح والقاعدة">
+                  <OptionGrid options={HOME_SURFACES} value={homeSurface} onChange={setHomeSurface} cols={2} />
+                </Section>
+                <Section title="الجو والأجواء">
+                  <OptionGrid options={HOME_MOODS} value={homeMood} onChange={setHomeMood} cols={2} />
+                </Section>
+                <Section title="الإكسسوارات والتنسيق">
+                  <OptionGrid options={HOME_PROPS} value={homeProps} onChange={setHomeProps} cols={2} />
+                </Section>
+              </>
+            )}
+
+            {/* خيارات الطعام */}
+            {productGroup === "food" && (
+              <>
+                <Section title="أسلوب التصوير">
+                  <OptionGrid options={FOOD_SHOTS} value={foodShotStyle} onChange={setFoodShotStyle} cols={2} />
+                </Section>
+                <Section title="السطح">
+                  <OptionGrid options={FOOD_SURFACES} value={foodSurface} onChange={setFoodSurface} cols={2} />
+                </Section>
+                <Section title="الجو والأجواء">
+                  <OptionGrid options={FOOD_MOODS} value={foodMood} onChange={setFoodMood} cols={2} />
+                </Section>
+                <Section title="التزيين والتحسين">
+                  <OptionGrid options={FOOD_GARNISH} value={foodGarnish} onChange={setFoodGarnish} cols={2} />
+                </Section>
+              </>
+            )}
+
+            {/* خيارات الجمال */}
+            {productGroup === "beauty" && (
+              <>
+                <Section title="أسلوب التصوير">
+                  <OptionGrid options={BEAUTY_SHOTS} value={beautyShotStyle} onChange={setBeautyShotStyle} cols={2} />
+                </Section>
+                <Section title="الخلفية">
+                  <OptionGrid options={BEAUTY_BG} value={beautyBackground} onChange={setBeautyBackground} cols={2} />
+                </Section>
+                <Section title="الإكسسوارات">
+                  <OptionGrid options={BEAUTY_PROPS} value={beautyProps} onChange={setBeautyProps} cols={2} />
+                </Section>
+              </>
+            )}
+
+            {/* خيارات الأعمال اليدوية */}
+            {productGroup === "craft" && (
+              <Section title="أسلوب العرض">
+                <OptionGrid options={CRAFT_SHOTS} value={craftShotStyle} onChange={setCraftShotStyle} cols={2} />
+              </Section>
+            )}
+
+            {/* خيارات مشتركة */}
+            <Section title="الإضاءة">
+              <OptionGrid options={LIGHTING} value={lighting} onChange={setLighting} cols={2} />
+            </Section>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl p-4 border border-orange-100">
-                <h3 className="font-bold text-gray-800 mb-2 text-sm">اللقطة</h3>
-                <div className="space-y-2">
-                  {FRAMINGS.map(f => (
-                    <button key={f.value} onClick={() => setFraming(f.value)}
-                      className={`w-full text-right px-3 py-2 rounded-xl border-2 transition text-xs font-medium
-                        ${framing === f.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                      {f.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="bg-white rounded-2xl p-4 border border-orange-100">
-                <h3 className="font-bold text-gray-800 mb-2 text-sm">الإخراج</h3>
-                <div className="space-y-2">
-                  {FORMATS.map(f => (
-                    <button key={f.value} onClick={() => setOutputFormat(f.value)}
-                      className={`w-full text-right px-3 py-2 rounded-xl border-2 transition text-xs font-medium
-                        ${outputFormat === f.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                      {f.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <Section title="الإخراج">
+                <OptionGrid options={OUTPUT_FORMATS} value={outputFormat} onChange={setOutputFormat} cols={1} />
+              </Section>
+              <Section title="المناسبة (اختياري)">
+                <OptionGrid options={SEASON} value={season} onChange={setSeason} cols={1} />
+              </Section>
             </div>
 
-            {/* Model Size + Pose */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl p-4 border border-orange-100">
-                <h3 className="font-bold text-gray-800 mb-2 text-sm">مقاس الموديل</h3>
-                <div className="space-y-2">
-                  {MODEL_SIZES.map(s => (
-                    <button key={s.value} onClick={() => setModelSize(s.value)}
-                      className={`w-full text-right px-3 py-2 rounded-xl border-2 transition text-xs font-medium
-                        ${modelSize === s.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                      {s.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="bg-white rounded-2xl p-4 border border-orange-100">
-                <h3 className="font-bold text-gray-800 mb-2 text-sm">الوضعية</h3>
-                <div className="space-y-2">
-                  {POSE.map(p => (
-                    <button key={p.value} onClick={() => setPose(p.value)}
-                      className={`w-full text-right px-3 py-2 rounded-xl border-2 transition text-xs font-medium
-                        ${pose === p.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                      {p.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Lighting */}
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
-              <h3 className="font-bold text-gray-800 mb-3">الإضاءة</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {LIGHTING.map(l => (
-                  <button key={l.value} onClick={() => setLighting(l.value)}
-                    className={`text-right px-4 py-2.5 rounded-xl border-2 transition text-sm font-medium
-                      ${lighting === l.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                    {l.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Season / Occasion */}
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
-              <h3 className="font-bold text-gray-800 mb-3">المناسبة <span className="text-gray-400 font-normal text-sm">(اختياري)</span></h3>
-              <div className="grid grid-cols-3 gap-2">
-                {SEASON.map(s => (
-                  <button key={s.value} onClick={() => setSeason(s.value)}
-                    className={`text-center px-3 py-2.5 rounded-xl border-2 transition text-sm font-medium
-                      ${season === s.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Extra Notes */}
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
-              <h3 className="font-bold text-gray-800 mb-1">ملاحظات إضافية <span className="text-gray-400 font-normal text-sm">(اختياري)</span></h3>
-              <p className="text-xs text-gray-400 mb-3">أي تفاصيل تريد إضافتها — مثال: "مع إكسسوار ذهبي"، "أريد الكم يظهر بوضوح"</p>
-              <textarea
-                value={extraNotes}
-                onChange={e => setExtraNotes(e.target.value)}
-                placeholder="اكتب ملاحظاتك هنا..."
+            <Section title="ملاحظات إضافية (اختياري)">
+              <p className="text-xs text-gray-400 mb-2">أي تفاصيل تريد إضافتها</p>
+              <textarea value={extraNotes} onChange={e => setExtraNotes(e.target.value)}
+                placeholder="مثال: أريد اللون الأصفر يبرز أكثر، مع تأثير الدخان..."
                 rows={2}
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none transition resize-none"
-                dir="rtl"
-              />
-            </div>
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none transition resize-none" dir="rtl" />
+            </Section>
 
             <button onClick={analyze}
               className="w-full bg-gradient-to-r from-purple-500 to-orange-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
@@ -373,15 +574,14 @@ export default function StudioPage() {
               <div className="absolute inset-0 flex items-center justify-center text-2xl">🔍</div>
             </div>
             <h2 className="text-xl font-bold text-gray-800 mb-2">بيتي يحلل منتجك...</h2>
-            <p className="text-gray-500 text-sm">يستخرج اللون والتصميم والتفاصيل</p>
-            <p className="text-gray-400 text-xs mt-4">~10 ثوانٍ</p>
+            <p className="text-gray-500 text-sm">يستخرج التفاصيل ويبني الـ prompt المثالي</p>
+            <p className="text-gray-400 text-xs mt-4">~15 ثانية</p>
           </div>
         )}
 
         {/* Step 4: Result */}
         {step === "result" && result && (
           <div className="space-y-4">
-            {/* Arabic description only — no raw detection data */}
             {result.arabic_description && (
               <div className="bg-white rounded-2xl p-4 border border-purple-100">
                 <p className="text-sm text-gray-600 flex items-start gap-2">
@@ -391,7 +591,6 @@ export default function StudioPage() {
               </div>
             )}
 
-            {/* The Prompt — hidden by default, show on demand */}
             <details className="bg-white rounded-2xl border border-orange-100 overflow-hidden">
               <summary className="px-5 py-4 cursor-pointer font-bold text-gray-700 flex items-center gap-2 hover:bg-orange-50 transition list-none">
                 <span>📋</span> عرض الـ Prompt
@@ -410,7 +609,6 @@ export default function StudioPage() {
               </div>
             </details>
 
-            {/* Tips */}
             {result.tips?.length > 0 && (
               <div className="bg-white rounded-2xl p-5 border border-orange-100">
                 <h3 className="font-bold text-gray-800 mb-3">💡 نصائح للحصول على أفضل نتيجة</h3>
@@ -424,7 +622,6 @@ export default function StudioPage() {
               </div>
             )}
 
-            {/* Open Gemini — auto copy */}
             <button onClick={openGemini}
               className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
               <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
@@ -435,49 +632,26 @@ export default function StudioPage() {
               <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-green-800 text-sm">
                 <p className="font-bold text-base mb-3 text-center">✅ تم النسخ — Gemini مفتوح!</p>
                 <div className="space-y-2">
-                  <div className="flex items-start gap-2">
-                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">١</span>
-                    <p>في Gemini، اضغط على صندوق النص</p>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">٢</span>
-                    <div>
-                      <p className="font-bold">موبايل/تابلت:</p>
-                      <p>اضغط مطولاً ← اختر "لصق" (Paste)</p>
+                  {[
+                    { n: "١", text: "في Gemini، اضغط على صندوق النص" },
+                    { n: "٢", text: "موبايل: اضغط مطولاً ← اختر \"لصق\"" },
+                    { n: "٣", text: "كمبيوتر: اضغط Ctrl+V" },
+                    { n: "٤", text: "اضغط إرسال ← صورة احترافية! 🎉" },
+                  ].map(s => (
+                    <div key={s.n} className="flex items-start gap-2">
+                      <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">{s.n}</span>
+                      <p>{s.text}</p>
                     </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">٢</span>
-                    <div>
-                      <p className="font-bold">كمبيوتر:</p>
-                      <p>اضغط Ctrl+V (أو Cmd+V على Mac)</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">٣</span>
-                    <p>اضغط إرسال ← صورة احترافية! 🎉</p>
-                  </div>
+                  ))}
                 </div>
-                <button onClick={copyPrompt}
-                  className="mt-3 w-full text-center text-xs text-green-600 underline">
+                <button onClick={copyPrompt} className="mt-3 w-full text-center text-xs text-green-600 underline">
                   {copied ? "✅ تم النسخ مجدداً" : "انسخ مجدداً إذا فقدت النسخ"}
                 </button>
               </div>
             )}
 
-            {!autoCopied && (
-              <div className="bg-blue-50 rounded-xl p-4 text-sm text-blue-700 border border-blue-100">
-                <p className="font-bold mb-2">📌 كيف يعمل الزر:</p>
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-2"><span className="text-blue-400">١.</span> ينسخ الـ prompt تلقائياً</div>
-                  <div className="flex items-center gap-2"><span className="text-blue-400">٢.</span> يفتح Gemini في تاب جديد</div>
-                  <div className="flex items-center gap-2"><span className="text-blue-400">٣.</span> الصق (Paste) واضغط إرسال = صورة احترافية 🎉</div>
-                </div>
-              </div>
-            )}
-
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => { setStep("options"); setResult(null); }}
+              <button onClick={() => { setStep("options"); setResult(null); setAutoCopied(false); }}
                 className="bg-white border-2 border-orange-300 text-orange-600 py-3 rounded-xl font-medium hover:bg-orange-50 transition text-sm">
                 🔄 تغيير الخيارات
               </button>
