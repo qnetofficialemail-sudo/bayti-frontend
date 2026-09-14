@@ -26,6 +26,7 @@ export default function AdminPanel() {
   const [contentPost, setContentPost] = useState<{caption: string; hashtags: string; imageUrl: string | null; contentType?: string} | null>(null);
   const [contentLoading, setContentLoading] = useState(false);
   const [contentCopied, setContentCopied] = useState(false);
+  const [postLang, setPostLang] = useState<"ar"|"en">("ar");
   const [imageLoading, setImageLoading] = useState(false);
   const [forecastLoading, setForecastLoading] = useState(false);
   const [stats, setStats] = useState<any>(null);
@@ -589,7 +590,7 @@ export default function AdminPanel() {
                   <p className="font-semibold text-gray-900">{isArabic ? "الكابشن" : "Caption"}</p>
                   <button onClick={() => { navigator.clipboard.writeText(contentPost.caption + "\n\n" + contentPost.hashtags); setContentCopied(true); setTimeout(() => setContentCopied(false), 2000); }} className="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg font-medium transition">{contentCopied ? "✅ " + (isArabic ? "تم النسخ!" : "Copied!") : (isArabic ? "📋 نسخ الكل" : "📋 Copy All")}</button>
                 </div>
-                <div dir="rtl" className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{contentPost.caption}</div>
+                <div dir={postLang === "ar" ? "rtl" : "ltr"} className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{contentPost.caption}</div>
                 <div className="mt-3 bg-gray-50 rounded-xl p-3 text-xs text-gray-500 leading-relaxed">{contentPost.hashtags}</div>
               </div>
               <a href="https://publish.buffer.com" target="_blank" rel="noopener noreferrer" className="block w-full bg-gray-900 text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition text-center text-lg">📱 {isArabic ? "افتح Buffer للنشر" : "Open Buffer to Publish"}</a>
