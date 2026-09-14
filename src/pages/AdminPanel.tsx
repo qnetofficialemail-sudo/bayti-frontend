@@ -563,13 +563,24 @@ export default function AdminPanel() {
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
             <h3 className="text-lg font-bold text-gray-900 mb-2">🎨 {isArabic ? "مولّد محتوى إنستقرام" : "Instagram Content Generator"}</h3>
             <p className="text-gray-500 text-sm mb-6">{isArabic ? "يولّد نص + صورة احترافية جاهزة للنشر على @baytimarketplace" : "Generate caption + AI image ready for @baytimarketplace"}</p>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-sm text-gray-500 font-medium">{isArabic ? "لغة المنشور:" : "Post language:"}</span>
+              <button onClick={() => setPostLang("ar")}
+                className={`px-4 py-1.5 rounded-xl text-sm font-bold transition ${postLang === "ar" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}>
+                🇦🇪 عربي
+              </button>
+              <button onClick={() => setPostLang("en")}
+                className={`px-4 py-1.5 rounded-xl text-sm font-bold transition ${postLang === "en" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}>
+                🇬🇧 English
+              </button>
+            </div>
             <div className="grid grid-cols-3 gap-3">
               {[
                 { type: "sellers", label: isArabic ? "👩‍💼 للبائعات" : "👩‍💼 Sellers",   desc: isArabic ? "دعوة وتسجيل" : "Recruitment",  color: "bg-orange-500 hover:bg-orange-600" },
                 { type: "events",  label: isArabic ? "🎉 فعاليات وترندات" : "🎉 Events", desc: isArabic ? "أحداث الإمارات" : "UAE Events",  color: "bg-purple-500 hover:bg-purple-600" },
                 { type: "value",   label: isArabic ? "💡 محتوى قيمة" : "💡 Value",       desc: isArabic ? "نصائح وأفكار" : "Tips & Ideas", color: "bg-teal-500 hover:bg-teal-600" },
               ].map(btn => (
-                <button key={btn.type} onClick={async () => { setContentLoading(true); setContentPost(null); setContentCopied(false); try { const res = await fetch("https://web-production-63685.up.railway.app/api/ai/instagram-content-v2", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: btn.type }) }); const data = await res.json(); setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null, contentType: btn.type }); } catch { alert(isArabic ? "حدث خطأ في توليد المحتوى" : "Error generating content"); } finally { setContentLoading(false); } }} disabled={contentLoading}
+                <button key={btn.type} onClick={async () => { setContentLoading(true); setContentPost(null); setContentCopied(false); try { const res = await fetch("https://web-production-63685.up.railway.app/api/ai/instagram-content-v2", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: btn.type, lang: postLang }) }); const data = await res.json(); setContentPost({ caption: data.caption, hashtags: data.hashtags, imageUrl: data.image_url || null, contentType: btn.type }); } catch { alert(isArabic ? "حدث خطأ في توليد المحتوى" : "Error generating content"); } finally { setContentLoading(false); } }} disabled={contentLoading}
                   className={`${btn.color} text-white font-bold py-3 px-2 rounded-2xl transition disabled:opacity-50 text-sm flex flex-col items-center gap-1`}>
                   <span className="text-lg">{btn.label}</span><span className="text-xs opacity-80">{btn.desc}</span>
                 </button>
