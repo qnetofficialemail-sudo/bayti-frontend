@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FF5A1F" />
+
+    <!-- Primary SEO -->
+    <title>بيتي | منصة البائعات المنزليات في الإمارات — Bayti UAE</title>
+    <meta name="description" content="بيتي — منصة محلية في الإمارات تجمع البائعات المنزليات بالمشترين. اكتشف منتجات يدوية، طعام منزلي، عبايات، وهدايا فريدة من بائعات الإمارات. Bayti — UAE local marketplace for home-based sellers." />
+    <meta name="keywords" content="بيتي، بائعات الإمارات، منتجات منزلية، bayti, UAE marketplace, home sellers, Dubai, handmade, local products" />
+    <link rel="canonical" href="https://bayti.ink/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bayti.ink/" />
+    <meta property="og:title" content="بيتي | منصة البائعات المنزليات في الإمارات" />
+    <meta property="og:description" content="اكتشف منتجات يدوية وطعام منزلي وهدايا فريدة من بائعات الإمارات — Bayti UAE local marketplace." />
+    <meta property="og:image" content="https://bayti.ink/logo512.png" />
+    <meta property="og:locale" content="ar_AE" />
+    <meta property="og:locale:alternate" content="en_AE" />
+    <meta property="og:site_name" content="Bayti بيتي" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="بيتي | منصة البائعات المنزليات في الإمارات" />
+    <meta name="twitter:description" content="اكتشف منتجات يدوية وطعام منزلي وهدايا فريدة من بائعات الإمارات." />
+    <meta name="twitter:image" content="https://bayti.ink/logo512.png" />
+
+    <!-- Icons -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GWFSNSS7LY"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "G-GWFSNSS7LY", {
+        page_title: document.title,
+        page_location: window.location.href
+      });
+
+      // Custom GA4 events helper
+      window.trackEvent = function(event_name, params) {
+        if (typeof gtag !== "undefined") {
+          gtag("event", event_name, params || {});
+        }
+      };
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Bayti بيتي",
+      "url": "https://bayti.ink",
+      "description": "UAE local marketplace for home-based sellers — منصة محلية في الإمارات للبائعات المنزليات",
+      "inLanguage": ["ar", "en"],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://bayti.ink/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <noscript>يحتاج هذا التطبيق إلى JavaScript. You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js")
+            .then(reg => console.log("SW registered:", reg.scope))
+            .catch(err => console.log("SW error:", err));
+        });
+      }
+    </script>
+  </body>
+</html>

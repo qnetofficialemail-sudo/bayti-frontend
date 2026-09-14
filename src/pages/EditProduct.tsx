@@ -9,10 +9,10 @@ interface VariantOption { label: string; price_adj: number; }
 interface Variant { id?: number; name: string; name_ar: string; options: VariantOption[]; is_required: boolean; }
 
 const VARIANT_PRESETS: Record<string, { name: string; name_ar: string; options: string[] }> = {
-  size:     { name: "Size",     name_ar: "\u0627\u0644\u0645\u0642\u0627\u0633",  options: ["XS","S","M","L","XL","XXL"] },
-  color:    { name: "Color",    name_ar: "\u0627\u0644\u0644\u0648\u0646",   options: ["Black","White","Beige","Brown","Navy","Red","Pink","Green"] },
-  scent:    { name: "Scent",    name_ar: "\u0627\u0644\u0639\u0637\u0631",   options: ["Rose","Oud","Musk","Jasmine","Vanilla","Lavender"] },
-  material: { name: "Material", name_ar: "\u0627\u0644\u062e\u0627\u0645\u0629", options: ["Cotton","Silk","Linen","Chiffon","Satin"] },
+  size:     { name: "Size",     name_ar: "المقاس",  options: ["XS","S","M","L","XL","XXL"] },
+  color:    { name: "Color",    name_ar: "اللون",   options: ["Black","White","Beige","Brown","Navy","Red","Pink","Green"] },
+  scent:    { name: "Scent",    name_ar: "العطر",   options: ["Rose","Oud","Musk","Jasmine","Vanilla","Lavender"] },
+  material: { name: "Material", name_ar: "الخامة",  options: ["Cotton","Silk","Linen","Chiffon","Satin"] },
 };
 
 export default function EditProduct() {
@@ -41,9 +41,8 @@ export default function EditProduct() {
       api.get(`/api/products/${id}/variants`),
     ]).then(([p, c, v]) => {
       const prod = p.data;
-      // Detect original language — show what seller typed
-        const isArabicProduct = prod.name_ar && /[؀-ۿ]/.test(prod.name_ar) && prod.name_ar !== prod.name;
-        setForm({
+      const isArabicProduct = prod.name_ar && /[؀-ۿ]/.test(prod.name_ar) && prod.name_ar !== prod.name;
+      setForm({
         name: isArabicProduct ? prod.name_ar : (prod.name || ""),
         description: isArabicProduct ? (prod.description_ar || "") : (prod.description || ""),
         price: String(prod.price || ""),
@@ -89,7 +88,7 @@ export default function EditProduct() {
   };
 
   const saveVariant = () => {
-    if (!newVariant.name || newVariant.options.some(o => !o.label)) { setError(isArabic ? "\u0623\u0643\u0645\u0644 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u062e\u064a\u0627\u0631" : "Complete all variant labels"); return; }
+    if (!newVariant.name || newVariant.options.some(o => !o.label)) { setError(isArabic ? "أكمل بيانات الخيار" : "Complete all variant labels"); return; }
     setVariants(prev => [...prev, { ...newVariant }]);
     setNewVariant({ name: "", name_ar: "", options: [{ label: "", price_adj: 0 }], is_required: true });
     setShowVariantBuilder(false); setError("");
@@ -123,8 +122,6 @@ export default function EditProduct() {
       if (newImages[3]) data.append("image_4", newImages[3]);
       if (newImages[4]) data.append("image_5", newImages[4]);
       await api.put(`/api/products/${id}`, data, { headers: { "Content-Type": "multipart/form-data" } });
-
-      // Save new variants
       for (const variant of variants.filter(v => !v.id)) {
         const vdata = new FormData();
         vdata.append("name", variant.name);
@@ -154,18 +151,19 @@ export default function EditProduct() {
   );
 
   const imgUrl = (img: string) => img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`;
+  const selectedCategoryObj = categories.find(c => String(c.id) === form.category_id);
 
   return (
     <div className="max-w-xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u0645\u0646\u062a\u062c" : "Edit Product"}</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "تعديل المنتج" : "Edit Product"}</h1>
       {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
 
         {/* Existing images */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium text-gray-700">{isArabic ? "\u0627\u0644\u0635\u0648\u0631 \u0627\u0644\u062d\u0627\u0644\u064a\u0629" : "Current Photos"}</label>
-            <span className="text-xs text-gray-400">{isArabic ? "★ \u0644\u062a\u0639\u064a\u064a\u0646 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629" : "★ to set main"}</span>
+            <label className="block text-sm font-medium text-gray-700">{isArabic ? "الصور الحالية" : "Current Photos"}</label>
+            <span className="text-xs text-gray-400">{isArabic ? "★ لتعيين الرئيسية" : "★ to set main"}</span>
           </div>
           {existingImages.length > 0 && (
             <div className="flex gap-2 flex-wrap mb-3">
@@ -183,14 +181,13 @@ export default function EditProduct() {
                   }} className="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow hover:bg-red-600 transition">
                     ✕
                   </button>
-                  {primaryIndex === i && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-orange-500 text-gray-900 rounded-b-xl py-0.5">{isArabic ? "\u0631\u0626\u064a\u0633\u064a\u0629" : "Main"}</span>}
+                  {primaryIndex === i && <span className="absolute bottom-0 left-0 right-0 text-center text-xs bg-orange-500 text-gray-900 rounded-b-xl py-0.5">{isArabic ? "رئيسية" : "Main"}</span>}
                 </div>
               ))}
             </div>
           )}
 
-          {/* Upload new images */}
-          <p className="text-xs text-gray-500 mb-2">{isArabic ? "\u0625\u0636\u0627\u0641\u0629 \u0635\u0648\u0631 \u062c\u062f\u064a\u062f\u0629 (\u062a\u0633\u062a\u0628\u062f\u0644 \u0627\u0644\u062d\u0627\u0644\u064a\u0629):" : "Add new photos (replaces current):"}</p>
+          <p className="text-xs text-gray-500 mb-2">{isArabic ? "إضافة صور جديدة (تستبدل الحالية):" : "Add new photos (replaces current):"}</p>
           <div className="grid grid-cols-5 gap-2">
             {[0,1,2,3,4].map(i => (
               <label key={i} className="block cursor-pointer">
@@ -207,60 +204,66 @@ export default function EditProduct() {
 
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "\u0627\u0633\u0645 \u0627\u0644\u0645\u0646\u062a\u062c *" : "Product name *"}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "اسم المنتج *" : "Product name *"}</label>
           <input type="text" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required
             className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "\u0627\u0644\u0648\u0635\u0641" : "Description"}</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الوصف" : "Description"}</label>
           <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
             className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
         </div>
 
-        {/* Price + Processing time */}
+        {/* Category */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الفئة" : "Category"}</label>
+          <select value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+            <option value="">{isArabic ? "اختر فئة" : "Select category"}</option>
+            {categories.map(cat => <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>)}
+          </select>
+        </div>
+
+        {/* Price + Pricing Advisor + Processing time */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "\u0627\u0644\u0633\u0639\u0631 (\u062f\u0631\u0647\u0645) *" : "Price (AED) *"}</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "السعر (درهم) *" : "Price (AED) *"}</label>
             <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required min="1" step="0.5"
               className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-            <PricingAdvisor price={form.price} productName={form.name} isArabic={isArabic} />
+            <PricingAdvisor
+              price={form.price}
+              productName={form.name}
+              category={selectedCategoryObj?.name || ""}
+              categoryId={form.category_id ? parseInt(form.category_id) : null}
+              isArabic={isArabic}
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "\u0648\u0642\u062a \u0627\u0644\u062a\u062c\u0647\u064a\u0632" : "Processing time"}</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وقت التجهيز" : "Processing time"}</label>
             <div className="flex gap-2">
               <input type="number" value={form.preparation_time} onChange={e => setForm(f => ({ ...f, preparation_time: e.target.value }))} min="1"
                 className="flex-1 border border-gray-200 rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
               <select value={form.time_unit} onChange={e => setForm(f => ({ ...f, time_unit: e.target.value }))}
                 className="border border-gray-200 rounded-xl px-2 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white text-sm">
-                <option value="minutes">{isArabic ? "\u062f\u0642\u064a\u0642\u0629" : "mins"}</option>
-                <option value="hours">{isArabic ? "\u0633\u0627\u0639\u0629" : "hrs"}</option>
-                <option value="days">{isArabic ? "\u064a\u0648\u0645" : "days"}</option>
+                <option value="minutes">{isArabic ? "دقيقة" : "mins"}</option>
+                <option value="hours">{isArabic ? "ساعة" : "hrs"}</option>
+                <option value="days">{isArabic ? "يوم" : "days"}</option>
               </select>
             </div>
           </div>
-        </div>
-
-        {/* Category */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "\u0627\u0644\u0641\u0626\u0629" : "Category"}</label>
-          <select value={form.category_id} onChange={e => setForm(f => ({ ...f, category_id: e.target.value }))}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
-            <option value="">{isArabic ? "\u0627\u062e\u062a\u0631 \u0641\u0626\u0629" : "Select category"}</option>
-            {categories.map(cat => <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>)}
-          </select>
         </div>
 
         {/* Variants */}
         <div className="border border-gray-200 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-sm font-medium text-gray-900">🎨 {isArabic ? "\u0627\u0644\u062e\u064a\u0627\u0631\u0627\u062a (\u0645\u0642\u0627\u0633\u060c \u0644\u0648\u0646\u060c \u0639\u0637\u0631...)" : "Variants (size, color, scent...)"}</p>
+              <p className="text-sm font-medium text-gray-900">🎨 {isArabic ? "الخيارات (مقاس، لون، عطر...)" : "Variants (size, color, scent...)"}</p>
             </div>
             <button type="button" onClick={() => setShowVariantBuilder(true)}
               className="text-xs bg-orange-500 text-gray-900 px-3 py-1.5 rounded-lg hover:bg-orange-600 transition">
-              + {isArabic ? "\u0625\u0636\u0627\u0641\u0629" : "Add"}
+              + {isArabic ? "إضافة" : "Add"}
             </button>
           </div>
 
@@ -282,7 +285,7 @@ export default function EditProduct() {
 
           {showVariantBuilder && (
             <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
-              <p className="text-sm font-medium text-gray-700">{isArabic ? "\u0628\u0646\u0627\u0621 \u0627\u0644\u062e\u064a\u0627\u0631" : "Build Variant"}</p>
+              <p className="text-sm font-medium text-gray-700">{isArabic ? "بناء الخيار" : "Build Variant"}</p>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(VARIANT_PRESETS).map(([key, preset]) => (
                   <button key={key} type="button" onClick={() => applyPreset(key)}
@@ -295,7 +298,7 @@ export default function EditProduct() {
                 <input type="text" value={newVariant.name} onChange={e => setNewVariant(v => ({ ...v, name: e.target.value }))}
                   placeholder="Name (EN)" className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
                 <input type="text" value={newVariant.name_ar} onChange={e => setNewVariant(v => ({ ...v, name_ar: e.target.value }))}
-                  placeholder="\u0627\u0633\u0645 \u0639\u0631\u0628\u064a" className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                  placeholder="اسم عربي" className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
               </div>
               <div className="space-y-2">
                 {newVariant.options.map((opt, i) => (
@@ -312,16 +315,16 @@ export default function EditProduct() {
                 ))}
               </div>
               <button type="button" onClick={addOption} className="text-xs text-orange-500 hover:underline">
-                + {isArabic ? "\u0625\u0636\u0627\u0641\u0629 \u062e\u064a\u0627\u0631" : "Add option"}
+                + {isArabic ? "إضافة خيار" : "Add option"}
               </button>
               <div className="flex gap-2">
                 <button type="button" onClick={() => setShowVariantBuilder(false)}
                   className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm transition">
-                  {isArabic ? "\u0625\u0644\u063a\u0627\u0621" : "Cancel"}
+                  {isArabic ? "إلغاء" : "Cancel"}
                 </button>
                 <button type="button" onClick={saveVariant}
                   className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-2 rounded-lg text-sm transition">
-                  {isArabic ? "\u062d\u0641\u0638" : "Save"}
+                  {isArabic ? "حفظ" : "Save"}
                 </button>
               </div>
             </div>
@@ -369,7 +372,7 @@ export default function EditProduct() {
 
         {/* Available toggle */}
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-          <p className="font-medium text-gray-900 text-sm">{isArabic ? "\u0645\u062a\u0627\u062d \u0644\u0644\u0637\u0644\u0628" : "Available for orders"}</p>
+          <p className="font-medium text-gray-900 text-sm">{isArabic ? "متاح للطلب" : "Available for orders"}</p>
           <button type="button" onClick={() => setForm(f => ({ ...f, is_available: !f.is_available }))}
             className={`relative w-12 h-6 rounded-full transition-colors ${form.is_available ? "bg-orange-500" : "bg-gray-300"}`}>
             <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.is_available ? "translate-x-6" : ""}`} />
@@ -379,11 +382,11 @@ export default function EditProduct() {
         <div className="flex gap-3">
           <button type="button" onClick={() => navigate("/seller/dashboard")}
             className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition">
-            {isArabic ? "\u0625\u0644\u063a\u0627\u0621" : "Cancel"}
+            {isArabic ? "إلغاء" : "Cancel"}
           </button>
           <button type="submit" disabled={saving}
             className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
-            {saving ? (isArabic ? "\u062c\u0627\u0631\u064a \u0627\u0644\u062d\u0641\u0638..." : "Saving...") : (isArabic ? "\u062d\u0641\u0638 \u0627\u0644\u062a\u063a\u064a\u064a\u0631\u0627\u062a" : "Save Changes")}
+            {saving ? (isArabic ? "جاري الحفظ..." : "Saving...") : (isArabic ? "حفظ التغييرات" : "Save Changes")}
           </button>
         </div>
       </form>

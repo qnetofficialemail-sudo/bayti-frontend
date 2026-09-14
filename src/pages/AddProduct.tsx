@@ -171,7 +171,6 @@ export default function AddProduct() {
     if (bulkFiles.length === 0) return;
     setBulkLoading(true);
 
-    // Group files by their assigned product group
     const groupMap: Record<string, {files: File[], previews: string[]}> = {};
     bulkFiles.forEach((file, i) => {
       const group = bulkGroups[i] || "product_1";
@@ -223,9 +222,7 @@ export default function AddProduct() {
     if (prod.category_id) data.append("category_id", prod.category_id);
     data.append("preparation_time", prod.processing_days);
     data.append("time_unit", prod.time_unit);
-    // Main image
     if (prod.files && prod.files[0]) data.append("image", prod.files[0]);
-    // Extra images
     const extraKeys = ["image_2", "image_3", "image_4", "image_5"];
     if (prod.files) {
       prod.files.slice(1, 5).forEach((f: File, i: number) => {
@@ -290,7 +287,6 @@ export default function AddProduct() {
       {/* Bulk Upload Mode */}
       {mode === "bulk" && (
         <div className="space-y-5">
-          {/* Step 1: Upload photos */}
           {bulkFiles.length === 0 && (
             <div className="space-y-4">
               <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
@@ -311,7 +307,6 @@ export default function AddProduct() {
             </div>
           )}
 
-          {/* Step 2: Group photos */}
           {bulkFiles.length > 0 && !bulkAnalyzed && (
             <div className="space-y-4">
               <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
@@ -319,7 +314,6 @@ export default function AddProduct() {
                 <p className="text-xs text-blue-600 mt-1">{isArabic ? "الصور التي تحمل نفس رقم المنتج ستُجمع معاً في صفحة منتج واحدة" : "Photos with the same product number will be grouped into one product page"}</p>
               </div>
 
-              {/* Photo grid with group selector */}
               <div className="grid grid-cols-2 gap-3">
                 {bulkPreviews.map((src, i) => {
                   const currentGroup = bulkGroups[i] || "product_1";
@@ -356,7 +350,6 @@ export default function AddProduct() {
                 })}
               </div>
 
-              {/* Summary */}
               <div className="bg-gray-50 rounded-2xl p-3">
                 <p className="text-xs font-medium text-gray-600 mb-2">{isArabic ? "ملخص المجموعات:" : "Groups summary:"}</p>
                 <div className="flex flex-wrap gap-2">
@@ -385,7 +378,6 @@ export default function AddProduct() {
             </div>
           )}
 
-          {/* Step 3: Review and publish */}
           {bulkAnalyzed && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
@@ -398,7 +390,6 @@ export default function AddProduct() {
 
               {bulkProducts.map((prod: any, index: number) => (
                 <div key={index} className={`border rounded-2xl overflow-hidden ${prod.done ? "border-green-200 bg-green-50" : "border-gray-200"}`}>
-                  {/* Product images strip */}
                   <div className="flex gap-1 p-2 bg-gray-50 border-b border-gray-100">
                     {prod.images.map((src: string, imgIdx: number) => (
                       <img key={imgIdx} src={src} alt="" className={`h-16 w-16 object-cover rounded-lg ${imgIdx === 0 ? "ring-2 ring-orange-400" : ""}`} />
@@ -451,7 +442,7 @@ export default function AddProduct() {
         </div>
       )}
 
-            {/* Single Product Mode */}
+      {/* Single Product Mode */}
       {mode === "single" && (
       <>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "إضافة منتج جديد" : "Add a new product"}</h1>
@@ -571,13 +562,17 @@ export default function AddProduct() {
         )}
 
         {/* Price + Pricing Advisor */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "السعر (درهم) *" : "Price (AED) *"}</label>
-            <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required min="1" step="0.5"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
-          </div>
-          <PricingAdvisor price={form.price} productName={form.name} isArabic={isArabic} />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "السعر (درهم) *" : "Price (AED) *"}</label>
+          <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required min="1" step="0.5"
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+          <PricingAdvisor
+            price={form.price}
+            productName={form.name}
+            category={selectedCategory?.name || ""}
+            categoryId={selectedCategory?.id || null}
+            isArabic={isArabic}
+          />
         </div>
 
         {/* Processing Time */}
