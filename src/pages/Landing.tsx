@@ -61,12 +61,12 @@ export default function Landing() {
             
             <div className="flex items-center gap-2">
               <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
-                <rect x="4" y="4" width="44" height="44" rx="12" fill="#FF5A1F"/>
+                <rect x="4" y="4" width="44" height="44" rx="12" fill="var(--primary-500)"/>
                 <path d="M16 36 L16 20 L26 12 L36 20 L36 36 Z" fill="white"/>
-                <path d="M22 36 L22 26 L30 26 L30 36 Z" fill="#FF5A1F"/>
-                <circle cx="26" cy="22" r="3" fill="#FF5A1F"/>
+                <path d="M22 36 L22 26 L30 26 L30 36 Z" fill="var(--primary-500)"/>
+                <circle cx="26" cy="22" r="3" fill="var(--primary-500)"/>
               </svg>
-              <span className="font-bold text-gray-900 text-xl tracking-tight">Bayti<span className="text-[#FF5A1F]">.</span></span>
+              <span className="font-bold text-gray-900 text-xl tracking-tight">Bayti<span className="text-primary-500">.</span></span>
               <span className="text-gray-400 text-sm hidden sm:block">بيتي</span>
             </div>
           </Link>
@@ -94,7 +94,7 @@ export default function Landing() {
             {isArabic ? (
               <>اكتشف منتجات<br /><span className="text-orange-500">منزلية أصيلة</span></>
             ) : (
-              <>Your neighborhood,<br /><span className="text-[#FF5A1F]">online.</span></>
+              <>Your neighborhood,<br /><span className="text-primary-500">online.</span></>
             )}
           </h1>
           <p className="text-xl text-gray-500 mb-8 max-w-2xl mx-auto">
@@ -283,7 +283,7 @@ export default function Landing() {
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
           <button
             onClick={handleInstall}
-            className="flex items-center gap-2 bg-[#FF5A1F] text-white px-6 py-3 rounded-2xl shadow-lg font-medium text-sm"
+            className="flex items-center gap-2 bg-primary-500 text-white px-6 py-3 rounded-2xl shadow-lg font-medium text-sm"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>

@@ -544,7 +544,7 @@ export default function AdminPanel() {
                     {f.monthly_demand?.map((m: any) => (
                       <div key={`${m.month}-${m.year}`} className="flex-1 text-center">
                         <div className="relative h-16 bg-gray-100 rounded-lg overflow-hidden">
-                          <div className="absolute bottom-0 left-0 right-0 rounded-lg transition-all" style={{ height: `${m.demand_index}%`, backgroundColor: m.demand_index >= 80 ? '#FF5A1F' : m.demand_index >= 60 ? '#f97316' : m.demand_index >= 40 ? '#fb923c' : '#fed7aa' }} />
+                          <div className="absolute bottom-0 left-0 right-0 rounded-lg transition-all" style={{ height: `${m.demand_index}%`, backgroundColor: m.demand_index >= 80 ? 'var(--primary-600)' : m.demand_index >= 60 ? 'var(--primary-500)' : m.demand_index >= 40 ? 'var(--primary-300)' : 'var(--primary-100)' }} />
                         </div>
                         <p className="text-xs text-gray-500 mt-1">{new Date(m.year, m.month - 1).toLocaleString('default', { month: 'short' })}</p>
                         {m.season_label && <p className="text-xs text-orange-600 font-medium">{isArabic ? m.season_label_ar : m.season_label}</p>}

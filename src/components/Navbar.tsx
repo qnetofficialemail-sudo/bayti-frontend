@@ -31,12 +31,12 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <svg width="32" height="32" viewBox="0 0 52 52" fill="none">
-            <rect x="4" y="4" width="44" height="44" rx="12" fill="#FF5A1F"/>
+            <rect x="4" y="4" width="44" height="44" rx="12" fill="var(--primary-500)"/>
             <path d="M16 36 L16 20 L26 12 L36 20 L36 36 Z" fill="white"/>
-            <path d="M22 36 L22 26 L30 26 L30 36 Z" fill="#FF5A1F"/>
-            <circle cx="26" cy="22" r="3" fill="#FF5A1F"/>
+            <path d="M22 36 L22 26 L30 26 L30 36 Z" fill="var(--primary-500)"/>
+            <circle cx="26" cy="22" r="3" fill="var(--primary-500)"/>
           </svg>
-          <span className="font-bold text-xl text-gray-900 tracking-tight">Bayti<span className="text-[#FF5A1F]">.</span></span>
+          <span className="font-bold text-xl text-gray-900 tracking-tight">Bayti<span className="text-primary-500">.</span></span>
           <span className="text-gray-400 text-sm">بيتي</span>
         </Link>
 

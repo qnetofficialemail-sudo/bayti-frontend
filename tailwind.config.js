@@ -1,5 +1,65 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
-  theme: { extend: { colors: { brand: { 50: "#fff7ed", 100: "#ffedd5", 500: "#f97316", 600: "#ea580c", 700: "#c2410c" } } } },
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50: "var(--primary-50)",
+          100: "var(--primary-100)",
+          200: "var(--primary-200)",
+          300: "var(--primary-300)",
+          400: "var(--primary-400)",
+          500: "var(--primary-500)",
+          600: "var(--primary-600)",
+          700: "var(--primary-700)",
+          800: "var(--primary-800)",
+          900: "var(--primary-900)",
+          DEFAULT: "var(--primary)",
+          hover: "var(--primary-hover)",
+        },
+        secondary: {
+          50: "var(--secondary-50)",
+          300: "var(--secondary-300)",
+          500: "var(--secondary-500)",
+          700: "var(--secondary-700)",
+          DEFAULT: "var(--secondary)",
+          tint: "var(--secondary-tint)",
+        },
+        gold: {
+          50: "var(--gold-50)",
+          300: "var(--gold-300)",
+          500: "var(--gold-500)",
+          700: "var(--gold-700)",
+          DEFAULT: "var(--gold)",
+          tint: "var(--gold-tint)",
+        },
+        success: { DEFAULT: "var(--success)", tint: "var(--success-tint)" },
+        warning: { DEFAULT: "var(--warning)", tint: "var(--warning-tint)" },
+        error: { DEFAULT: "var(--error)", tint: "var(--error-tint)" },
+        info: { DEFAULT: "var(--info)", tint: "var(--info-tint)" },
+        ink: {
+          DEFAULT: "var(--ink)",
+          muted: "var(--ink-muted)",
+          faint: "var(--ink-faint)",
+          "on-primary": "var(--on-primary)",
+        },
+        cream: {
+          DEFAULT: "var(--bg)",
+          elevated: "var(--bg-elevated)",
+          subtle: "var(--bg-subtle)",
+        },
+        border: {
+          DEFAULT: "var(--border)",
+          strong: "var(--border-strong)",
+        },
+      },
+      fontFamily: {
+        display: "var(--font-display)",
+        ar: "var(--font-body-ar)",
+        en: "var(--font-body-en)",
+        mono: "var(--font-mono)",
+      },
+    },
+  },
   plugins: [],
 }
