@@ -44,8 +44,8 @@ export default function App() {
     <AuthProvider>
       <LanguageProvider>
         <BrowserRouter>
-          <div className="min-h-screen bg-gray-50">
-            <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-orange-500 focus:text-gray-900 focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium">Skip to main content</a>
+          <div className="min-h-screen bg-cream">
+            <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-primary-500 focus:text-gray-900 focus:px-4 focus:py-2 focus:rounded-lg focus:font-medium">Skip to main content</a>
             <Routes>
               <Route path="/" element={<HomeRoute />} />
               <Route path="/marketplace" element={<><Navbar /><main id="main-content"><Home /></main></>} />

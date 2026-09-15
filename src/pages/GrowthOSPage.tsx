@@ -141,7 +141,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
+    <div className="min-h-screen bg-cream" dir="rtl">
       {/* Header */}
       <div className="bg-gradient-to-r from-primary-500 to-primary-500 px-6 py-5">
         <div className="max-w-5xl mx-auto">

@@ -133,7 +133,7 @@ export default function SellPage() {
       <title>بيع منتجاتك على بيتي | Sell on Bayti UAE</title>
       <meta name="description" content="انضم إلى بائعي الإمارات على منصة بيتي. سجّل مجاناً وابدأ البيع اليوم. Join Bayti UAE marketplace as a seller." />
     </Helmet>
-    <div dir={dir} className="min-h-screen bg-white">
+    <div dir={dir} className="min-h-screen bg-cream">
       <SEO
         title={isArabic ? "بيع من البيت — بيتي" : "Sell from Home — Bayti"}
         description={isArabic ? "حوّل موهبتك إلى دخل. سجّل مجّاناً وابدأ البيع لزباين في كل الإمارات." : "Turn your talent into income. Register free and start selling to customers across the UAE."}

@@ -7,7 +7,7 @@ export default function NotFound() {
   const { isArabic } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 text-center">
+    <div className="min-h-screen bg-cream flex flex-col items-center justify-center px-4 text-center">
       <SEO
         title={isArabic ? "الصفحة غير موجودة | بيتي" : "Page Not Found | Bayti"}
         description={isArabic ? "الصفحة التي تبحث عنها غير موجودة" : "The page you are looking for does not exist"}
