@@ -49,6 +49,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
   const [proposalFilename, setProposalFilename] = useState("");
   const [proposalError, setProposalError]     = useState("");
   const [proposalCopied, setProposalCopied]   = useState(false);
+  const [proposalLang, setProposalLang]       = useState<"en"|"ar">("ar");
 
   const getHeaders = () => {
     const token = localStorage.getItem("token");
@@ -92,7 +93,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
     try {
       const res = await fetch(`${BACKEND}/api/ai/generate-proposal`, {
         method: "POST", headers: getHeaders(),
-        body: JSON.stringify({ account_id: acc.id }),
+        body: JSON.stringify({ account_id: acc.id, language: proposalLang }),
       });
       if (res.ok) {
         const d = await res.json();
@@ -451,6 +452,19 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
               <div className="p-4 border-b border-gray-100">
                 <h2 className="font-bold text-gray-800">📄 توليد عرض Proposal</h2>
                 <p className="text-xs text-gray-400 mt-1">اختر حساباً لتوليد صفحة عرض HTML مخصصة بالذكاء الاصطناعي، بناءً على قالب auntyzkitchen.html</p>
+                <div className="flex items-center gap-2 mt-3">
+                  <span className="text-xs text-gray-400">لغة العرض:</span>
+                  <div className="flex gap-1">
+                    <button onClick={() => setProposalLang("en")}
+                      className={`text-xs px-3 py-1 rounded-lg font-medium transition ${proposalLang === "en" ? "bg-primary-500 text-white" : "bg-gray-50 text-gray-500 hover:bg-gray-100"}`}>
+                      English
+                    </button>
+                    <button onClick={() => setProposalLang("ar")}
+                      className={`text-xs px-3 py-1 rounded-lg font-medium transition ${proposalLang === "ar" ? "bg-primary-500 text-white" : "bg-gray-50 text-gray-500 hover:bg-gray-100"}`}>
+                      العربية
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className="max-h-[560px] overflow-y-auto divide-y divide-gray-50">
                 {accounts.map(acc => (
