@@ -27,7 +27,7 @@ export function LoginPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <SEO title={isArabic ? 'تسجيل الدخول | بيتي' : 'Login | Bayti'} description={isArabic ? 'سجل دخولك إلى حسابك في بيتي' : 'Sign in to your Bayti account'} />
+      <SEO title={isArabic ? 'تسجيل الدخول | بيتي' : 'Login | Bayti'} description={isArabic ? 'سجل دخولك إلى حسابك في بيتي' : 'Sign in to your Bayti account'} url="/login" />
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">🏠</div>
@@ -83,6 +83,7 @@ export function RegisterPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-8">
+      <SEO title={isArabic ? 'إنشاء حساب | بيتي' : 'Register | Bayti'} description={isArabic ? 'أنشئ حساباً جديداً في بيتي للتسوق من بائعات محليات في الإمارات' : 'Create a Bayti account to shop from local UAE home sellers'} url="/register" />
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-4xl mb-3">✨</div>

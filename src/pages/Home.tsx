@@ -56,6 +56,11 @@ export default function Home() {
   return (
     <>
     <div className="max-w-6xl mx-auto px-4 py-8">
+      <SEO
+        title={isArabic ? "السوق | بيتي" : "Marketplace | Bayti"}
+        description={isArabic ? "تصفح المنتجات من بائعات محليات في الإمارات: مشغولات يدوية، طعام منزلي، عبايات، عطور وأكثر." : "Browse products from verified local UAE home sellers: handmade crafts, home cooking, abayas, perfumes and more."}
+        url="/marketplace"
+      />
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-gray-900 mb-3">
           {isArabic

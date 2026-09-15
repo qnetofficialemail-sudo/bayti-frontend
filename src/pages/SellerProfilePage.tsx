@@ -42,7 +42,7 @@ export default function SellerProfilePage() {
 
   if (loading) return (
     <div className="max-w-4xl mx-auto px-4 py-8 animate-pulse">
-      <SEO title={isArabic ? 'متجر البائع | بيتي' : 'Seller Shop | Bayti'} description={isArabic ? 'تصفح منتجات البائع المحلي' : 'Browse products from this local UAE seller'} />
+      <SEO title={isArabic ? 'متجر البائع | بيتي' : 'Seller Shop | Bayti'} description={isArabic ? 'تصفح منتجات البائع المحلي' : 'Browse products from this local UAE seller'} url={`/shop/${id}`} />
       <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-6">
         <div className="flex gap-6">
           <div className="w-24 h-24 bg-gray-100 rounded-full" />
@@ -76,8 +76,16 @@ export default function SellerProfilePage() {
     : [];
   const offeredCategories = categories.filter(c => offeredCategoryIds.includes(c.id));
 
+  const sellerDesc = (isArabic ? seller.description_ar : seller.description) || seller.description || seller.description_ar;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <SEO
+        title={isArabic ? `${seller.shop_name} | بيتي` : `${seller.shop_name} | Bayti`}
+        description={sellerDesc || (isArabic ? `تصفح منتجات ${seller.shop_name}، بائعة محلية على بيتي.` : `Browse products from ${seller.shop_name}, a local UAE seller on Bayti.`)}
+        image={seller.logo_url || undefined}
+        url={`/shop/${id}`}
+      />
       <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-primary-500 mb-6 inline-block">
         {isArabic ? "→ رجوع" : "← Back"}
       </button>
