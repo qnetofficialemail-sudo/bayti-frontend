@@ -133,7 +133,7 @@ export default function Landing() {
             </div>
             <div className="w-px bg-gray-200" />
             <div>
-              <p className="text-3xl font-bold text-primary-500">{isArabic ? "٠٪" : "0%"}</p>
+              <p className="text-3xl font-bold text-primary-500"><span dir="ltr">0%</span></p>
               <p className="text-sm text-gray-500">{isArabic ? "عمولة" : "Commission"}</p>
             </div>
             <div className="w-px bg-gray-200" />
