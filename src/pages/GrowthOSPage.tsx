@@ -95,7 +95,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
     await loadAccounts(); await loadStats();
   }
   async function deleteAccount(id: number) {
-    if (!confirm("حذف هذا الحساب؟")) return;
+    if (!window.confirm("حذف هذا الحساب؟")) return;
     await fetch(`${BACKEND}/api/growth/accounts/${id}`, { method: "DELETE", headers: getHeaders() });
     await loadAccounts(); await loadStats();
   }
