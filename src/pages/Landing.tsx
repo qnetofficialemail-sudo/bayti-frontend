@@ -277,9 +277,14 @@ export default function Landing() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-8 px-4 text-center text-sm">
         <p>© 2026 بيتي Bayti · {isArabic ? "جميع الحقوق محفوظة" : "All rights reserved"} · UAE 🇦🇪</p>
-        <Link to="/privacy-policy" className="inline-block mt-2 hover:text-white transition">
-          {isArabic ? "سياسة الخصوصية" : "Privacy Policy"}
-        </Link>
+        <div className="flex justify-center gap-4 mt-2">
+          <Link to="/about" className="hover:text-white transition">
+            {isArabic ? "عن بيتي" : "About"}
+          </Link>
+          <Link to="/privacy-policy" className="hover:text-white transition">
+            {isArabic ? "سياسة الخصوصية" : "Privacy Policy"}
+          </Link>
+        </div>
       </footer>
 
       {/* Floating install button */}

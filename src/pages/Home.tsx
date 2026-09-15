@@ -173,7 +173,10 @@ export default function Home() {
           })}
         </div>
       )}
-      <footer className="mt-12 pt-6 border-t border-gray-100 text-center text-sm text-gray-400">
+      <footer className="mt-12 pt-6 border-t border-gray-100 text-center text-sm text-gray-400 flex justify-center gap-4">
+        <Link to="/about" className="hover:text-primary-500 transition">
+          {isArabic ? "عن بيتي" : "About"}
+        </Link>
         <Link to="/privacy-policy" className="hover:text-primary-500 transition">
           {isArabic ? "سياسة الخصوصية" : "Privacy Policy"}
         </Link>

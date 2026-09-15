@@ -16,7 +16,7 @@
       "continue": true
     },
     {
-      "src": "/(favicon\\.ico|logo192\\.png|logo512\\.png|logo-icon\\.png|manifest\\.json|robots\\.txt|sitemap\\.xml|llms\\.txt)",
+      "src": "/(favicon\\.ico|logo192\\.png|logo512\\.png|logo-icon\\.png|manifest\\.json|robots\\.txt|sitemap\\.xml|llms\\.txt|AGENTS\\.md)",
       "headers": { "Cache-Control": "public, max-age=3600, must-revalidate" },
       "continue": true
     },
