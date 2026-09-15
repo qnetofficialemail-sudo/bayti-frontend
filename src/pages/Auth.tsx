@@ -34,29 +34,29 @@ export function LoginPage() {
           <h1 className="text-2xl font-bold text-gray-900">{isArabic ? "أهلاً بعودتك" : "Welcome back"}</h1>
           <p className="text-gray-500 text-sm mt-1">{isArabic ? "تسجيل الدخول إلى بيتي" : "Sign in to Bayti"}</p>
         </div>
-        {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
+        {error && <div className="bg-error-tint text-error text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "البريد الإلكتروني" : "Email"}</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "كلمة المرور" : "Password"}</label>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <button type="submit" disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
+            className="w-full bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
             {loading ? (isArabic ? "جاري الدخول..." : "Signing in...") : (isArabic ? "تسجيل الدخول" : "Sign In")}
           </button>
           <div className="text-center mt-2">
-            <a href="/forgot-password" className="text-orange-500 hover:underline text-sm">{isArabic ? "نسيت كلمة المرور؟" : "Forgot password?"}</a>
+            <a href="/forgot-password" className="text-primary-500 hover:underline text-sm">{isArabic ? "نسيت كلمة المرور؟" : "Forgot password?"}</a>
           </div>
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
           {isArabic ? "ليس لديك حساب؟" : "No account?"}{" "}
-          <Link to="/register" className="text-orange-500 hover:underline">{isArabic ? "انضم إلينا" : "Join us"}</Link>
+          <Link to="/register" className="text-primary-500 hover:underline">{isArabic ? "انضم إلينا" : "Join us"}</Link>
         </div>
         <div className="mt-6 p-4 bg-gray-50 rounded-xl text-xs text-gray-500">
 
@@ -89,13 +89,13 @@ export function RegisterPage() {
           <h1 className="text-2xl font-bold text-gray-900">{isArabic ? "إنشاء حساب جديد" : "Create your account"}</h1>
           <p className="text-gray-500 text-sm mt-1">{isArabic ? "انضم إلى مجتمع الأعمال المنزلية في الإمارات" : "Join the UAE home business community"}</p>
         </div>
-        {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
+        {error && <div className="bg-error-tint text-error text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
 
-        <div className="mb-6 p-4 bg-orange-50 rounded-xl border border-orange-100 text-center">
-          <p className="text-sm text-orange-700 font-medium">
+        <div className="mb-6 p-4 bg-primary-50 rounded-xl border border-primary-100 text-center">
+          <p className="text-sm text-primary-700 font-medium">
             {isArabic ? "هذا التسجيل للمشترين فقط" : "This registration is for buyers only"}
           </p>
-          <p className="text-xs text-orange-500 mt-1">
+          <p className="text-xs text-primary-500 mt-1">
             {isArabic ? "للبيع، " : "Want to sell? "}
             <a href="/seller-apply" className="underline font-medium">
               {isArabic ? "قدم طلبك هنا" : "Apply as a seller"}
@@ -107,32 +107,32 @@ export function RegisterPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الاسم الكامل" : "Full name"}</label>
             <input type="text" value={form.full_name} onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))} required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "البريد الإلكتروني" : "Email"}</label>
             <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} required
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "رقم الهاتف" : "Phone"}</label>
             <input type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
               placeholder="+971 50 000 0000"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "كلمة المرور" : "Password"}</label>
             <input type="password" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} required minLength={6}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <button type="submit" disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
+            className="w-full bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
             {loading ? (isArabic ? "جاري الإنشاء..." : "Creating...") : (isArabic ? "إنشاء الحساب" : "Create Account")}
           </button>
         </form>
         <div className="mt-4 text-center text-sm text-gray-500">
           {isArabic ? "لديك حساب بالفعل؟" : "Have an account?"}{" "}
-          <Link to="/login" className="text-orange-500 hover:underline">{isArabic ? "تسجيل الدخول" : "Sign in"}</Link>
+          <Link to="/login" className="text-primary-500 hover:underline">{isArabic ? "تسجيل الدخول" : "Sign in"}</Link>
         </div>
       </div>
     </div>

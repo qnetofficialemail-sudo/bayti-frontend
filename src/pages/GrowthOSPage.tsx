@@ -4,11 +4,11 @@ const BACKEND = "https://web-production-63685.up.railway.app";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; dot: string }> = {
   new:           { label: "جديد",        color: "text-gray-600",   bg: "bg-gray-100",   dot: "bg-gray-400" },
-  contacted:     { label: "تم التواصل",  color: "text-blue-600",   bg: "bg-blue-100",   dot: "bg-blue-500" },
+  contacted:     { label: "تم التواصل",  color: "text-info",   bg: "bg-info-tint",   dot: "bg-info" },
   replied:       { label: "ردّ",          color: "text-purple-600", bg: "bg-purple-100", dot: "bg-purple-500" },
-  interested:    { label: "مهتم",        color: "text-orange-600", bg: "bg-orange-100", dot: "bg-orange-500" },
-  confirmed:     { label: "مؤكد ✅",     color: "text-green-700",  bg: "bg-green-100",  dot: "bg-green-500" },
-  not_interested:{ label: "غير مهتم",   color: "text-red-500",    bg: "bg-red-50",     dot: "bg-red-400" },
+  interested:    { label: "مهتم",        color: "text-primary-600", bg: "bg-primary-100", dot: "bg-primary-500" },
+  confirmed:     { label: "مؤكد ✅",     color: "text-success",  bg: "bg-success-tint",  dot: "bg-success" },
+  not_interested:{ label: "غير مهتم",   color: "text-error",    bg: "bg-error-tint",     dot: "bg-error" },
 };
 
 interface Account {
@@ -119,8 +119,8 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
   // PIN Protection
   if (!unlocked) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center" dir="rtl">
-        <div className="bg-white rounded-2xl p-8 border border-orange-100 shadow-lg w-full max-w-sm text-center">
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-50 flex items-center justify-center" dir="rtl">
+        <div className="bg-white rounded-2xl p-8 border border-primary-100 shadow-lg w-full max-w-sm text-center">
           <div className="text-5xl mb-4">🔐</div>
           <h1 className="text-xl font-bold text-gray-800 mb-1">Bayti Growth OS</h1>
           <p className="text-gray-400 text-sm mb-6">ادخل رمز الوصول</p>
@@ -128,11 +128,11 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
             onChange={e => { setPin(e.target.value); setPinError(false); }}
             onKeyDown={e => { if (e.key === "Enter") { if (pin === "bayti2026") { setUnlocked(true); } else { setPinError(true); setPin(""); } } }}
             placeholder="••••••••"
-            className={`w-full text-center text-lg border-2 rounded-xl px-4 py-3 focus:outline-none mb-3 transition ${pinError ? "border-red-400 bg-red-50" : "border-gray-200 focus:border-orange-400"}`}
+            className={`w-full text-center text-lg border-2 rounded-xl px-4 py-3 focus:outline-none mb-3 transition ${pinError ? "border-error bg-error-tint" : "border-gray-200 focus:border-primary-400"}`}
             autoFocus />
-          {pinError && <p className="text-red-500 text-sm mb-3">رمز الوصول غير صحيح</p>}
+          {pinError && <p className="text-error text-sm mb-3">رمز الوصول غير صحيح</p>}
           <button onClick={() => { if (pin === "bayti2026") { setUnlocked(true); } else { setPinError(true); setPin(""); } }}
-            className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
+            className="w-full bg-gradient-to-r from-primary-500 to-primary-500 text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
             دخول
           </button>
         </div>
@@ -143,18 +143,18 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
   return (
     <div className="min-h-screen bg-gray-50" dir="rtl">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-6 py-5">
+      <div className="bg-gradient-to-r from-primary-500 to-primary-500 px-6 py-5">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white">🚀 Bayti Growth OS</h1>
-              <p className="text-orange-100 text-sm mt-0.5">نظام تشغيل النمو — استقطاب البائعين</p>
+              <p className="text-primary-100 text-sm mt-0.5">نظام تشغيل النمو — استقطاب البائعين</p>
             </div>
             {stats && (
               <div className="flex items-center gap-6 text-white">
-                <div className="text-center"><div className="text-2xl font-bold">{stats.confirmed}</div><div className="text-xs text-orange-100">مؤكدون</div></div>
-                <div className="text-center"><div className="text-2xl font-bold">{stats.goal}</div><div className="text-xs text-orange-100">الهدف</div></div>
-                <div className="bg-white/20 rounded-xl px-4 py-2 text-center"><div className="text-xl font-bold">{stats?.progress_pct ?? 0}%</div><div className="text-xs text-orange-100">التقدم</div></div>
+                <div className="text-center"><div className="text-2xl font-bold">{stats.confirmed}</div><div className="text-xs text-primary-100">مؤكدون</div></div>
+                <div className="text-center"><div className="text-2xl font-bold">{stats.goal}</div><div className="text-xs text-primary-100">الهدف</div></div>
+                <div className="bg-white/20 rounded-xl px-4 py-2 text-center"><div className="text-xl font-bold">{stats?.progress_pct ?? 0}%</div><div className="text-xs text-primary-100">التقدم</div></div>
               </div>
             )}
           </div>
@@ -173,11 +173,11 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
             {[
               { label: "الكل",       val: stats.total,         color: "text-gray-700" },
               { label: "جدد",        val: stats.new,           color: "text-gray-500" },
-              { label: "تواصلنا",    val: stats.contacted,     color: "text-blue-600" },
+              { label: "تواصلنا",    val: stats.contacted,     color: "text-info" },
               { label: "ردوا",       val: stats.replied,       color: "text-purple-600" },
-              { label: "مهتمون",     val: stats.interested,    color: "text-orange-600" },
-              { label: "مؤكدون",     val: stats.confirmed,     color: "text-green-600" },
-              { label: "⏰ متابعة اليوم", val: stats.due_today, color: "text-red-500" },
+              { label: "مهتمون",     val: stats.interested,    color: "text-primary-600" },
+              { label: "مؤكدون",     val: stats.confirmed,     color: "text-success" },
+              { label: "⏰ متابعة اليوم", val: stats.due_today, color: "text-error" },
             ].map(s => (
               <div key={s.label} className="flex items-center gap-1.5 flex-shrink-0">
                 <span className={`text-lg font-bold ${s.color}`}>{s.val}</span>
@@ -198,7 +198,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
             { id: "objections", label: "💬 ردود الاعتراضات" },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id as any)}
-              className={`px-4 py-3 text-sm font-medium border-b-2 transition ${tab === t.id ? "border-orange-500 text-orange-600" : "border-transparent text-gray-500 hover:text-gray-700"}`}>
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition ${tab === t.id ? "border-primary-500 text-primary-600" : "border-transparent text-gray-500 hover:text-gray-700"}`}>
               {t.label}
             </button>
           ))}
@@ -210,15 +210,15 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
         {/* Tab 1: Daily Brief */}
         {tab === "brief" && (
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl p-6 border border-orange-100">
+            <div className="bg-white rounded-2xl p-6 border border-primary-100">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-gray-800">🧠 التقرير اليومي الذكي</h2>
-                <button onClick={loadBrief} disabled={briefLoading} className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-orange-600 transition disabled:opacity-50">
+                <button onClick={loadBrief} disabled={briefLoading} className="bg-primary-500 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary-600 transition disabled:opacity-50">
                   {briefLoading ? "⏳ جارٍ التحليل..." : "✨ ولّد التقرير"}
                 </button>
               </div>
               {brief ? (
-                <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-5 text-gray-700 leading-relaxed whitespace-pre-line border border-orange-100">{brief}</div>
+                <div className="bg-gradient-to-br from-primary-50 to-primary-50 rounded-xl p-5 text-gray-700 leading-relaxed whitespace-pre-line border border-primary-100">{brief}</div>
               ) : (
                 <div className="text-center py-12 text-gray-400">
                   <div className="text-4xl mb-3">🧠</div>
@@ -232,7 +232,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                 {accounts.filter(a => a.status === "contacted").slice(0,5).map(a => (
                   <div key={a.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                     <div><p className="text-sm font-medium text-gray-800">@{a.username}</p><p className="text-xs text-gray-400">{a.category}</p></div>
-                    <button onClick={() => { setSelectedAcc(a); setMsgType("followup1"); setTab("compose"); }} className="text-xs bg-orange-100 text-orange-600 px-3 py-1 rounded-lg hover:bg-orange-200 transition">تابع</button>
+                    <button onClick={() => { setSelectedAcc(a); setMsgType("followup1"); setTab("compose"); }} className="text-xs bg-primary-100 text-primary-600 px-3 py-1 rounded-lg hover:bg-primary-200 transition">تابع</button>
                   </div>
                 ))}
                 {accounts.filter(a => a.status === "contacted").length === 0 && <p className="text-sm text-gray-400 text-center py-4">لا يوجد متابعات اليوم ✅</p>}
@@ -242,7 +242,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                 {accounts.filter(a => a.status === "new").slice(0,5).map(a => (
                   <div key={a.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                     <div><p className="text-sm font-medium text-gray-800">@{a.username}</p><p className="text-xs text-gray-400">{a.category}</p></div>
-                    <button onClick={() => { setSelectedAcc(a); setMsgType("first"); setTab("compose"); }} className="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-200 transition">أرسل</button>
+                    <button onClick={() => { setSelectedAcc(a); setMsgType("first"); setTab("compose"); }} className="text-xs bg-info-tint text-info px-3 py-1 rounded-lg hover:bg-info-tint transition">أرسل</button>
                   </div>
                 ))}
               </div>
@@ -257,19 +257,19 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
               <div className="flex gap-2 flex-wrap">
                 {["all", "new", "contacted", "replied", "interested", "confirmed", "not_interested"].map(s => (
                   <button key={s} onClick={() => setFilterStatus(s)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${filterStatus === s ? "bg-orange-500 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"}`}>
+                    className={`px-3 py-1.5 rounded-xl text-xs font-medium transition ${filterStatus === s ? "bg-primary-500 text-white" : "bg-white border border-gray-200 text-gray-600 hover:border-primary-300"}`}>
                     {s === "all" ? "الكل" : STATUS_CONFIG[s]?.label}
                   </button>
                 ))}
               </div>
               <div className="flex gap-2">
                 <button onClick={seedAccounts} disabled={seeding} className="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-xl hover:bg-gray-200 transition">{seeding ? "⏳" : "📥 استيراد القائمة"}</button>
-                <button onClick={() => setShowAddForm(!showAddForm)} className="text-xs bg-orange-500 text-white px-3 py-1.5 rounded-xl hover:bg-orange-600 transition">+ إضافة حساب</button>
+                <button onClick={() => setShowAddForm(!showAddForm)} className="text-xs bg-primary-500 text-white px-3 py-1.5 rounded-xl hover:bg-primary-600 transition">+ إضافة حساب</button>
               </div>
             </div>
 
             {showAddForm && (
-              <div className="bg-white rounded-2xl p-5 border border-orange-200">
+              <div className="bg-white rounded-2xl p-5 border border-primary-200">
                 <h3 className="font-bold text-gray-800 mb-3">إضافة حساب جديد</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {[
@@ -279,13 +279,13 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                     { key: "emirate", placeholder: "الإمارة" },
                   ].map(f => (
                     <input key={f.key} value={(newAcc as any)[f.key]} onChange={e => setNewAcc({...newAcc, [f.key]: e.target.value})}
-                      placeholder={f.placeholder} className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-orange-400 focus:outline-none" />
+                      placeholder={f.placeholder} className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary-400 focus:outline-none" />
                   ))}
                   <input value={newAcc.product_note} onChange={e => setNewAcc({...newAcc, product_note: e.target.value})}
-                    placeholder="ملاحظة عن المنتج" className="col-span-2 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-orange-400 focus:outline-none" />
+                    placeholder="ملاحظة عن المنتج" className="col-span-2 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:border-primary-400 focus:outline-none" />
                 </div>
                 <div className="flex gap-2 mt-3">
-                  <button onClick={addAccount} className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium">إضافة</button>
+                  <button onClick={addAccount} className="bg-primary-500 text-white px-4 py-2 rounded-xl text-sm font-medium">إضافة</button>
                   <button onClick={() => setShowAddForm(false)} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-xl text-sm">إلغاء</button>
                 </div>
               </div>
@@ -293,9 +293,9 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
 
             <div className="space-y-2">
               {filtered.map(acc => (
-                <div key={acc.id} className="bg-white rounded-2xl border border-gray-100 hover:border-orange-200 transition overflow-hidden">
+                <div key={acc.id} className="bg-white rounded-2xl border border-gray-100 hover:border-primary-200 transition overflow-hidden">
                   <div className="p-4 flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-amber-400 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-400 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                       {acc.username[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -316,8 +316,8 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                       <a href={`https://www.instagram.com/${acc.username}/`} target="_blank" rel="noopener noreferrer"
                         className="text-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-lg">📱 إنستقرام</a>
                       <button onClick={() => { setSelectedAcc(acc); setMsgType("first"); setTab("compose"); }}
-                        className="text-xs bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg hover:bg-orange-200 transition">✍️ رسالة</button>
-                      <button onClick={() => deleteAccount(acc.id)} className="text-xs text-red-400 hover:text-red-600 px-2 py-1.5 rounded-lg hover:bg-red-50 transition">🗑</button>
+                        className="text-xs bg-primary-100 text-primary-600 px-3 py-1.5 rounded-lg hover:bg-primary-200 transition">✍️ رسالة</button>
+                      <button onClick={() => deleteAccount(acc.id)} className="text-xs text-error hover:text-error px-2 py-1.5 rounded-lg hover:bg-error-tint transition">🗑</button>
                     </div>
                   </div>
                   <div className="px-4 pb-3 flex items-center gap-2">
@@ -337,7 +337,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                 <div className="text-center py-12 text-gray-400">
                   <div className="text-4xl mb-3">📭</div>
                   <p>لا يوجد حسابات في هذه الفئة</p>
-                  <button onClick={seedAccounts} className="mt-3 text-sm text-orange-500 underline">استيراد القائمة الأولية</button>
+                  <button onClick={seedAccounts} className="mt-3 text-sm text-primary-500 underline">استيراد القائمة الأولية</button>
                 </div>
               )}
             </div>
@@ -352,7 +352,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
               <div className="mb-4">
                 <label className="text-sm font-medium text-gray-700 mb-2 block">اختر الحساب</label>
                 <select value={selectedAcc?.id || ""} onChange={e => { const acc = accounts.find(a => a.id === parseInt(e.target.value)); setSelectedAcc(acc || null); setGeneratedMsg(""); }}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none">
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none">
                   <option value="">-- اختر حساباً --</option>
                   {accounts.map(a => (<option key={a.id} value={a.id}>@{a.username} — {a.category}</option>))}
                 </select>
@@ -367,7 +367,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                     { v: "objection", l: "💬 رد اعتراض" },
                   ].map(t => (
                     <button key={t.v} onClick={() => setMsgType(t.v)}
-                      className={`py-2.5 rounded-xl text-sm font-medium transition ${msgType === t.v ? "bg-orange-500 text-white" : "bg-gray-50 text-gray-600 hover:bg-orange-50"}`}>
+                      className={`py-2.5 rounded-xl text-sm font-medium transition ${msgType === t.v ? "bg-primary-500 text-white" : "bg-gray-50 text-gray-600 hover:bg-primary-50"}`}>
                       {t.l}
                     </button>
                   ))}
@@ -377,22 +377,22 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                 <div className="mb-4">
                   <label className="text-sm font-medium text-gray-700 mb-2 block">الاعتراض</label>
                   <input value={objection} onChange={e => setObjection(e.target.value)} placeholder='مثال: "ليس لدي وقت"'
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none" />
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none" />
                 </div>
               )}
               <button onClick={generateMessage} disabled={!selectedAcc || genLoading}
-                className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-3 rounded-xl font-bold hover:opacity-90 transition disabled:opacity-50">
+                className="w-full bg-gradient-to-r from-primary-500 to-primary-500 text-white py-3 rounded-xl font-bold hover:opacity-90 transition disabled:opacity-50">
                 {genLoading ? "⏳ Claude يكتب الرسالة..." : "✨ ولّد الرسالة بالذكاء الاصطناعي"}
               </button>
             </div>
 
             {generatedMsg && (
-              <div className="bg-white rounded-2xl p-6 border border-green-100">
+              <div className="bg-white rounded-2xl p-6 border border-success-tint">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-bold text-gray-800">الرسالة الجاهزة</h3>
                   <div className="flex gap-2">
                     <button onClick={() => copyMsg(generatedMsg)}
-                      className={`text-sm px-4 py-1.5 rounded-xl font-medium transition ${copied ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600 hover:bg-orange-200"}`}>
+                      className={`text-sm px-4 py-1.5 rounded-xl font-medium transition ${copied ? "bg-success-tint text-success" : "bg-primary-100 text-primary-600 hover:bg-primary-200"}`}>
                       {copied ? "✅ تم النسخ!" : "📋 نسخ"}
                     </button>
                     <button onClick={generateMessage} className="text-sm px-4 py-1.5 rounded-xl bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🔄 أعد التوليد</button>
@@ -404,7 +404,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                     <a href={`https://www.instagram.com/${selectedAcc.username}/`} target="_blank" rel="noopener noreferrer"
                       className="flex-1 text-center text-sm bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2.5 rounded-xl font-medium">📱 افتح الحساب على إنستقرام</a>
                     <button onClick={() => updateStatus(selectedAcc.id, "contacted")}
-                      className="flex-1 text-sm bg-blue-500 text-white py-2.5 rounded-xl font-medium hover:bg-blue-600 transition">✅ سجّل كـ "تم التواصل"</button>
+                      className="flex-1 text-sm bg-info text-white py-2.5 rounded-xl font-medium hover:bg-info transition">✅ سجّل كـ "تم التواصل"</button>
                   </div>
                 )}
               </div>
@@ -415,20 +415,20 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
         {/* Tab 4: Objections */}
         {tab === "objections" && (
           <div className="space-y-3">
-            <div className="bg-white rounded-2xl p-5 border border-orange-100 mb-4">
+            <div className="bg-white rounded-2xl p-5 border border-primary-100 mb-4">
               <p className="text-sm text-gray-600 text-center">اضغط على أي اعتراض لرؤية الرد الجاهز — ثم انسخه بضغطة واحدة</p>
             </div>
             {OBJECTIONS.map((obj, i) => (
               <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
                 <button onClick={() => setExpandedObj(expandedObj === i ? null : i)}
-                  className="w-full flex items-center justify-between p-4 text-right hover:bg-orange-50 transition">
+                  className="w-full flex items-center justify-between p-4 text-right hover:bg-primary-50 transition">
                   <span className="font-medium text-gray-800 text-sm">{obj.q}</span>
                   <span className="text-gray-400 text-lg">{expandedObj === i ? "▲" : "▼"}</span>
                 </button>
                 {expandedObj === i && (
                   <div className="px-4 pb-4">
-                    <div className="bg-green-50 rounded-xl p-4 text-sm text-gray-700 leading-relaxed border border-green-100 mb-3">{obj.a}</div>
-                    <button onClick={() => copyMsg(obj.a)} className="text-sm bg-orange-100 text-orange-600 px-4 py-2 rounded-xl hover:bg-orange-200 transition font-medium">📋 نسخ الرد</button>
+                    <div className="bg-success-tint rounded-xl p-4 text-sm text-gray-700 leading-relaxed border border-success-tint mb-3">{obj.a}</div>
+                    <button onClick={() => copyMsg(obj.a)} className="text-sm bg-primary-100 text-primary-600 px-4 py-2 rounded-xl hover:bg-primary-200 transition font-medium">📋 نسخ الرد</button>
                   </div>
                 )}
               </div>

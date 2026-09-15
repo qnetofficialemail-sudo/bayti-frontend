@@ -42,22 +42,22 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-2">
-          <button onClick={toggleLanguage} className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 hover:border-orange-300 text-sm font-medium text-gray-600 transition">
+          <button onClick={toggleLanguage} className="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 hover:border-primary-300 text-sm font-medium text-gray-600 transition">
             {isArabic ? "🇬🇧 EN" : "🇦🇪 AR"}
           </button>
           {user ? (
             <>
               {user.role === "admin" && (
-                <Link to="/admin" className="text-sm text-gray-600 hover:text-orange-500 px-3 py-2 rounded-lg hover:bg-orange-50 transition">
+                <Link to="/admin" className="text-sm text-gray-600 hover:text-primary-500 px-3 py-2 rounded-lg hover:bg-primary-50 transition">
                   {isArabic ? "الإدارة" : "Admin"}
                 </Link>
               )}
               {user.role === "seller" && (
-                <Link to="/seller/dashboard" className="text-sm text-gray-600 hover:text-orange-500 px-3 py-2 rounded-lg hover:bg-orange-50 transition">
+                <Link to="/seller/dashboard" className="text-sm text-gray-600 hover:text-primary-500 px-3 py-2 rounded-lg hover:bg-primary-50 transition">
                   {isArabic ? "متجري" : "My Shop"}
                 </Link>
               )}
-              <Link to="/orders" className="text-sm text-gray-600 hover:text-orange-500 px-3 py-2 rounded-lg hover:bg-orange-50 transition">
+              <Link to="/orders" className="text-sm text-gray-600 hover:text-primary-500 px-3 py-2 rounded-lg hover:bg-primary-50 transition">
                 {isArabic ? "طلباتي" : "Orders"}
               </Link>
               <span className="text-sm text-gray-500">{isArabic ? "مرحبا" : "Hi,"} {user.full_name.split(" ")[0]}</span>
@@ -67,10 +67,10 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm text-gray-600 hover:text-orange-500 px-3 py-2 rounded-lg transition">
+              <Link to="/login" className="text-sm text-gray-600 hover:text-primary-500 px-3 py-2 rounded-lg transition">
                 {isArabic ? "تسجيل الدخول" : "Login"}
               </Link>
-              <Link to="/register" className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-lg transition font-medium">
+              <Link to="/register" className="text-sm bg-primary-500 hover:bg-primary-600 text-gray-900 px-4 py-2 rounded-lg transition font-medium">
                 {isArabic ? "انضم إلينا" : "Join Us"}
               </Link>
             </>
@@ -107,29 +107,29 @@ export default function Navbar() {
               </div>
               {user.role === "admin" && (
                 <Link to="/admin" onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-orange-500 py-2.5 px-3 rounded-lg hover:bg-orange-50 transition">
+                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-500 py-2.5 px-3 rounded-lg hover:bg-primary-50 transition">
                   🛠 {isArabic ? "الإدارة" : "Admin"}
                 </Link>
               )}
               {user.role === "seller" && (
                 <Link to="/seller/dashboard" onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-orange-500 py-2.5 px-3 rounded-lg hover:bg-orange-50 transition">
+                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-500 py-2.5 px-3 rounded-lg hover:bg-primary-50 transition">
                   🏪 {isArabic ? "متجري" : "My Shop"}
                 </Link>
               )}
               {user.role === "seller" && (
                 <Link to="/studio" onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-orange-500 py-2.5 px-3 rounded-lg hover:bg-orange-50 transition">
+                  className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-500 py-2.5 px-3 rounded-lg hover:bg-primary-50 transition">
                   ✨ {isArabic ? "استوديو بيتي" : "Bayti Studio"}
                 </Link>
               )}
               <Link to="/orders" onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2 text-sm text-gray-700 hover:text-orange-500 py-2.5 px-3 rounded-lg hover:bg-orange-50 transition">
+                className="flex items-center gap-2 text-sm text-gray-700 hover:text-primary-500 py-2.5 px-3 rounded-lg hover:bg-primary-50 transition">
                 📦 {isArabic ? "طلباتي" : "My Orders"}
               </Link>
               <div className="pt-1 border-t border-gray-100">
                 <button onClick={handleLogout}
-                  className="w-full flex items-center gap-2 text-sm text-red-500 hover:bg-red-50 py-2.5 px-3 rounded-lg transition font-medium">
+                  className="w-full flex items-center gap-2 text-sm text-error hover:bg-error-tint py-2.5 px-3 rounded-lg transition font-medium">
                   🚪 {isArabic ? "تسجيل الخروج" : "Logout"}
                 </button>
               </div>
@@ -137,11 +137,11 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/login" onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2 text-sm text-gray-700 py-2.5 px-3 rounded-lg hover:bg-orange-50 transition">
+                className="flex items-center gap-2 text-sm text-gray-700 py-2.5 px-3 rounded-lg hover:bg-primary-50 transition">
                 {isArabic ? "تسجيل الدخول" : "Login"}
               </Link>
               <Link to="/register" onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center gap-2 text-sm bg-orange-500 text-gray-900 py-2.5 px-3 rounded-lg font-medium">
+                className="flex items-center justify-center gap-2 text-sm bg-primary-500 text-gray-900 py-2.5 px-3 rounded-lg font-medium">
                 {isArabic ? "انضم إلينا" : "Join Us"}
               </Link>
             </>

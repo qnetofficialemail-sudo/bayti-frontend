@@ -32,7 +32,7 @@ export default function NotFound() {
       <div className="flex gap-3">
         <Link
           to="/"
-          className="bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium px-6 py-3 rounded-xl transition"
+          className="bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium px-6 py-3 rounded-xl transition"
         >
           {isArabic ? "العودة للرئيسية" : "Go Home"}
         </Link>

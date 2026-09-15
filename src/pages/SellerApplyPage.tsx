@@ -56,7 +56,7 @@ export default function SellerApplyPage() {
             ? "سنراجع طلبك ونتواصل معك قريبًا على بريدك الإلكتروني."
             : "We'll review your application and get back to you soon via email."}
         </p>
-        <Link to="/" className="text-orange-500 hover:underline text-sm">
+        <Link to="/" className="text-primary-500 hover:underline text-sm">
           {isArabic ? "← العودة للرئيسية" : "← Back to home"}
         </Link>
       </div>
@@ -78,7 +78,7 @@ export default function SellerApplyPage() {
           </p>
         </div>
 
-        {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
+        {error && <div className="bg-error-tint text-error text-sm px-4 py-3 rounded-lg mb-4">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -87,7 +87,7 @@ export default function SellerApplyPage() {
             </label>
             <input type="text" required value={form.full_name}
               onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
 
           <div>
@@ -96,7 +96,7 @@ export default function SellerApplyPage() {
             </label>
             <input type="email" required value={form.email}
               onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
 
           <div>
@@ -105,7 +105,7 @@ export default function SellerApplyPage() {
             </label>
             <input type="tel" value={form.phone} placeholder="+971 50 000 0000"
               onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
 
           <div>
@@ -114,7 +114,7 @@ export default function SellerApplyPage() {
             </label>
             <select required value={form.area}
               onChange={e => setForm(f => ({ ...f, area: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white">
               <option value="">{isArabic ? "اختر المنطقة" : "Select area"}</option>
               {AREAS.map(a => <option key={a} value={a}>{a}</option>)}
             </select>
@@ -127,7 +127,7 @@ export default function SellerApplyPage() {
             <textarea required value={form.what_they_sell} rows={3}
               placeholder={isArabic ? "مثال: شموع، عبايات، إكسسوارات، منتجات يدوية..." : "e.g. Candles, abayas, accessories, handmade crafts..."}
               onChange={e => setForm(f => ({ ...f, what_they_sell: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none" />
           </div>
 
           {/* Document uploads */}
@@ -144,9 +144,9 @@ export default function SellerApplyPage() {
               {[0, 1, 2].map(i => (
                 <div key={i} className="flex items-center gap-3">
                   <label className="flex-1 cursor-pointer">
-                    <div className={`border-2 border-dashed rounded-xl px-4 py-3 text-center transition ${docs[i] ? "border-orange-300 bg-orange-50" : "border-gray-200 hover:border-orange-300"}`}>
+                    <div className={`border-2 border-dashed rounded-xl px-4 py-3 text-center transition ${docs[i] ? "border-primary-300 bg-primary-50" : "border-gray-200 hover:border-primary-300"}`}>
                       {docs[i] ? (
-                        <span className="text-sm text-orange-600 font-medium">📄 {docs[i]!.name}</span>
+                        <span className="text-sm text-primary-600 font-medium">📄 {docs[i]!.name}</span>
                       ) : (
                         <span className="text-sm text-gray-400">
                           {isArabic ? `مستند ${i + 1} (اختياري)` : `Document ${i + 1} (optional)`}
@@ -159,7 +159,7 @@ export default function SellerApplyPage() {
                   </label>
                   {docs[i] && (
                     <button type="button" onClick={() => handleDoc(i, null)}
-                      className="text-gray-400 hover:text-red-500 text-lg transition">✕</button>
+                      className="text-gray-400 hover:text-error text-lg transition">✕</button>
                   )}
                 </div>
               ))}
@@ -167,7 +167,7 @@ export default function SellerApplyPage() {
           </div>
 
           <button type="submit" disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60 mt-2">
+            className="w-full bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60 mt-2">
             {loading
               ? (isArabic ? "جارٍ الإرسال..." : "Submitting...")
               : (isArabic ? "إرسال الطلب" : "Submit Application")}
@@ -176,7 +176,7 @@ export default function SellerApplyPage() {
 
         <div className="mt-4 text-center text-sm text-gray-500">
           {isArabic ? "لديك حساب بالفعل؟" : "Already have an account?"}{" "}
-          <a href="/login" className="text-orange-500 hover:underline">
+          <a href="/login" className="text-primary-500 hover:underline">
             {isArabic ? "تسجيل الدخول" : "Sign in"}
           </a>
         </div>

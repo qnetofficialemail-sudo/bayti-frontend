@@ -71,13 +71,13 @@ export default function Landing() {
             </div>
           </Link>
           <div className="flex items-center gap-3">
-            <button onClick={toggleLanguage} className="text-sm text-gray-500 hover:text-orange-500 transition px-2">
+            <button onClick={toggleLanguage} className="text-sm text-gray-500 hover:text-primary-500 transition px-2">
               {isArabic ? "EN" : "عربي"}
             </button>
-            <Link to="/login" className="text-sm text-gray-600 hover:text-orange-500 px-3 py-2 rounded-lg transition">
+            <Link to="/login" className="text-sm text-gray-600 hover:text-primary-500 px-3 py-2 rounded-lg transition">
               {isArabic ? "تسجيل الدخول" : "Login"}
             </Link>
-            <Link to="/register" className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
+            <Link to="/register" className="text-sm bg-primary-500 hover:bg-primary-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
               {isArabic ? "انضم إلينا" : "Join Us"}
             </Link>
           </div>
@@ -85,14 +85,14 @@ export default function Landing() {
       </nav>
 
       {/* Hero */}
-      <section className="bg-gradient-to-br from-orange-50 via-amber-50 to-white py-16 px-4">
+      <section className="bg-gradient-to-br from-primary-50 via-primary-50 to-white py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-block bg-orange-100 text-orange-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+          <div className="inline-block bg-primary-100 text-primary-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
             🇦🇪 {isArabic ? "سوق المنزل الإماراتي الأول" : "UAE's Local Sellers Marketplace"}
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight mb-4">
             {isArabic ? (
-              <>اكتشف منتجات<br /><span className="text-orange-500">منزلية أصيلة</span></>
+              <>اكتشف منتجات<br /><span className="text-primary-500">منزلية أصيلة</span></>
             ) : (
               <>Your neighborhood,<br /><span className="text-primary-500">online.</span></>
             )}
@@ -110,7 +110,7 @@ export default function Landing() {
                 aria-label={isArabic ? "ابحث عن منتجات" : "Search products and sellers"}
                 placeholder={isArabic ? "ابحث عن منتجات، بائعين، حرفيين..." : "Search for products, sellers, artisans..."}
                 className="flex-1 px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
-              <button type="submit" className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-6 py-2 rounded-xl font-medium transition">
+              <button type="submit" className="bg-primary-500 hover:bg-primary-600 text-gray-900 px-6 py-2 rounded-xl font-medium transition">
                 {isArabic ? "بحث" : "Search"}
               </button>
             </div>
@@ -120,17 +120,17 @@ export default function Landing() {
           {stats.sellers > 0 && (
             <div className="flex justify-center gap-8 text-center">
               <div>
-                <p className="text-3xl font-bold text-orange-500">{stats.sellers}+</p>
+                <p className="text-3xl font-bold text-primary-500">{stats.sellers}+</p>
                 <p className="text-sm text-gray-500">{isArabic ? "بائع محلي" : "Local Sellers"}</p>
               </div>
               <div className="w-px bg-gray-200" />
               <div>
-                <p className="text-3xl font-bold text-orange-500">{stats.products}+</p>
+                <p className="text-3xl font-bold text-primary-500">{stats.products}+</p>
                 <p className="text-sm text-gray-500">{isArabic ? "منتج متاح" : "Products Available"}</p>
               </div>
               <div className="w-px bg-gray-200" />
               <div>
-                <p className="text-3xl font-bold text-orange-500">🇦🇪</p>
+                <p className="text-3xl font-bold text-primary-500">🇦🇪</p>
                 <p className="text-sm text-gray-500">{isArabic ? "كل الإمارات" : "All UAE"}</p>
               </div>
             </div>
@@ -158,7 +158,7 @@ export default function Landing() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {categories.map(cat => (
                 <Link key={cat.id} to={`/marketplace?category=${cat.id}`}
-                  className="group bg-white rounded-2xl border-2 border-gray-100 hover:border-orange-400 hover:shadow-lg p-6 text-center transition-all duration-200 cursor-pointer">
+                  className="group bg-white rounded-2xl border-2 border-gray-100 hover:border-primary-400 hover:shadow-lg p-6 text-center transition-all duration-200 cursor-pointer">
                   <div className="flex justify-center mb-3 group-hover:scale-110 transition-transform duration-200">{String(cat.icon).startsWith("/") ? <img src={cat.icon} alt={cat.name} className="w-16 h-16 object-contain" /> : <span className="text-5xl">{cat.icon}</span>}</div>
                   <h3 className="font-semibold text-gray-900 text-sm">
                     {isArabic && cat.name_ar ? cat.name_ar : cat.name}
@@ -167,7 +167,7 @@ export default function Landing() {
               ))}
               {/* Browse All */}
               <Link to="/marketplace"
-                className="group bg-orange-500 hover:bg-orange-600 rounded-2xl p-6 text-center transition-all duration-200 cursor-pointer">
+                className="group bg-primary-500 hover:bg-primary-600 rounded-2xl p-6 text-center transition-all duration-200 cursor-pointer">
                 <div className="text-5xl mb-3">🛍️</div>
                 <h3 className="font-semibold text-white text-sm">
                   {isArabic ? "تصفح الكل" : "Browse All"}
@@ -185,7 +185,7 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="inline-block bg-orange-500 text-gray-900 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+              <div className="inline-block bg-primary-500 text-gray-900 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
                 {isArabic ? "للبائعين المنزليين" : "For Home Sellers"}
               </div>
               <h2 className="text-3xl font-bold mb-6">
@@ -205,7 +205,7 @@ export default function Landing() {
                 ))}
               </div>
               <Link to="/register"
-                className="inline-block bg-orange-500 hover:bg-orange-600 text-gray-900 font-semibold px-8 py-4 rounded-2xl text-lg transition">
+                className="inline-block bg-primary-500 hover:bg-primary-600 text-gray-900 font-semibold px-8 py-4 rounded-2xl text-lg transition">
                 {isArabic ? "ابدأ الآن — مجاناً" : "Start Now — Free"}
               </Link>
             </div>
@@ -252,21 +252,21 @@ export default function Landing() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 px-4 bg-orange-500">
+      <section className="py-20 px-4 bg-primary-500">
         <div className="max-w-2xl mx-auto text-center text-white">
           <h2 className="text-3xl font-bold mb-4">
             {isArabic ? "جاهز تبدأ؟" : "Ready to start?"}
           </h2>
-          <p className="text-orange-100 mb-8 text-lg">
+          <p className="text-primary-100 mb-8 text-lg">
             {isArabic ? "اكتشف أفضل المنتجات المحلية في الإمارات" : "Discover the best local products in the UAE"}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/marketplace"
-              className="bg-white text-orange-500 hover:bg-orange-50 font-bold px-8 py-4 rounded-2xl text-lg transition">
+              className="bg-white text-primary-500 hover:bg-primary-50 font-bold px-8 py-4 rounded-2xl text-lg transition">
               {isArabic ? "🛍️ تصفح المنتجات" : "🛍️ Browse Products"}
             </Link>
             <Link to="/register"
-              className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition border-2 border-orange-400">
+              className="bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition border-2 border-primary-400">
               {isArabic ? "🏪 ابدأ البيع" : "🏪 Start Selling"}
             </Link>
           </div>

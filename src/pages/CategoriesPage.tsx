@@ -58,12 +58,12 @@ export default function CategoriesPage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {categories.map(cat => (
             <Link key={cat.id} to={`/marketplace?category=${cat.id}`}
-              className="bg-white rounded-2xl border border-gray-100 p-6 text-center hover:border-orange-300 hover:shadow-md transition group">
+              className="bg-white rounded-2xl border border-gray-100 p-6 text-center hover:border-primary-300 hover:shadow-md transition group">
               <div className="flex justify-center mb-3">{String(cat.icon).startsWith("/") ? <img src={cat.icon} alt={cat.name} className="w-16 h-16 object-contain" /> : <span className="text-5xl">{cat.icon}</span>}</div>
               <h3 className="font-semibold text-gray-900 text-sm mb-1">
                 {isArabic && cat.name_ar ? cat.name_ar : cat.name}
               </h3>
-              <p className="text-xs text-orange-500 font-medium">
+              <p className="text-xs text-primary-500 font-medium">
                 {counts[cat.id] || 0} {isArabic ? "منتج" : "products"}
               </p>
             </Link>

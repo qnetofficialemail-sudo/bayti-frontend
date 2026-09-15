@@ -140,8 +140,8 @@ export default function SellPage() {
       />
 
       {/* Beta Banner */}
-      <div className="bg-amber-50 border-b border-amber-200 py-3 px-4 text-center">
-        <p className="text-amber-800 text-sm font-medium">
+      <div className="bg-primary-50 border-b border-primary-200 py-3 px-4 text-center">
+        <p className="text-primary-800 text-sm font-medium">
           {isArabic
             ? "🚀 بيتي حالياً في مرحلة تجريبية — الإطلاق الرسمي قريباً. سجّل الآن لتكون من أوائل البائعين وتحصل على مزايا حصرية!"
             : "🚀 Bayti is currently in beta — the official launch is coming soon. Register now to be among the first sellers and receive exclusive benefits!"}
@@ -149,22 +149,22 @@ export default function SellPage() {
       </div>
 
       {/* Hero */}
-      <section className="bg-gradient-to-b from-orange-50 to-white pt-14 pb-20 px-4">
+      <section className="bg-gradient-to-b from-primary-50 to-white pt-14 pb-20 px-4">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-block bg-orange-100 text-orange-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
+          <div className="inline-block bg-primary-100 text-primary-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
             {isArabic ? "للبائعين في الإمارات العربية المتحدة" : "For UAE sellers"}
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-            {isArabic ? (<>موهبتك تستحقّ<br /><span className="text-orange-500">أكثر من الانستقرام</span></>) : (<>Your talent deserves<br /><span className="text-orange-500">more than Instagram</span></>)}
+            {isArabic ? (<>موهبتك تستحقّ<br /><span className="text-primary-500">أكثر من الانستقرام</span></>) : (<>Your talent deserves<br /><span className="text-primary-500">more than Instagram</span></>)}
           </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-lg mx-auto">
             {isArabic ? "بيتي سوق إماراتي للبائعين — بلا رسوم شهرية، بلا تعقيد، مع أدوات ذكاء اصطناعي تساعدك تنجح." : "Bayti is a UAE marketplace for sellers — no monthly fees, no complexity, with AI tools to help you succeed."}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/seller-apply" className="bg-orange-500 text-white font-bold px-8 py-4 rounded-2xl text-lg hover:bg-orange-600 transition shadow-lg shadow-orange-200">
+            <Link to="/seller-apply" className="bg-primary-500 text-white font-bold px-8 py-4 rounded-2xl text-lg hover:bg-primary-600 transition shadow-lg shadow-primary-200">
               {isArabic ? "سجّل الآن — مجّاناً" : "Register Now — Free"}
             </Link>
-            <Link to="/marketplace" className="bg-white text-gray-700 font-medium px-8 py-4 rounded-2xl text-lg border border-gray-200 hover:border-orange-300 transition">
+            <Link to="/marketplace" className="bg-white text-gray-700 font-medium px-8 py-4 rounded-2xl text-lg border border-gray-200 hover:border-primary-300 transition">
               {isArabic ? "تصفّح السوق أولاً" : "Browse the marketplace first"}
             </Link>
           </div>
@@ -183,7 +183,7 @@ export default function SellPage() {
             { num: "٣ أدوات", numEn: "3 AI Tools", label: isArabic ? "ذكاء اصطناعي مجانية" : "free AI tools" },
           ].map((s, i) => (
             <div key={i}>
-              <p className="text-3xl md:text-4xl font-bold text-orange-400 mb-1">{isArabic ? s.num : s.numEn}</p>
+              <p className="text-3xl md:text-4xl font-bold text-primary-400 mb-1">{isArabic ? s.num : s.numEn}</p>
               <p className="text-gray-400 text-sm">{s.label}</p>
             </div>
           ))}
@@ -191,9 +191,9 @@ export default function SellPage() {
       </section>
 
       {/* AI Tools Highlight */}
-      <section className="py-16 px-4 bg-gradient-to-br from-purple-50 to-orange-50">
+      <section className="py-16 px-4 bg-gradient-to-br from-purple-50 to-primary-50">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-block bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full mb-4">
+          <div className="inline-block bg-primary-500 text-white text-xs font-bold px-4 py-1.5 rounded-full mb-4">
             {isArabic ? "✨ حصري لبائعي بيتي" : "✨ Exclusive to Bayti Sellers"}
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-3">
@@ -210,8 +210,8 @@ export default function SellPage() {
                 desc: isArabic
                   ? "يحلل أسعار السوق الإماراتي الفعلية ويقترح السعر الأمثل لمنتجك"
                   : "Analyzes real UAE market prices and suggests the optimal price for your product",
-                color: "bg-blue-50 border-blue-200",
-                iconBg: "bg-blue-100",
+                color: "bg-info-tint border-info-tint",
+                iconBg: "bg-info-tint",
               },
               {
                 icon: "✨",
@@ -228,8 +228,8 @@ export default function SellPage() {
                 desc: isArabic
                   ? "يكتب اسم منتجك ووصفه بالعربية والإنجليزية من صورة واحدة فقط"
                   : "Writes your product name and description in Arabic and English from a single photo",
-                color: "bg-orange-50 border-orange-200",
-                iconBg: "bg-orange-100",
+                color: "bg-primary-50 border-primary-200",
+                iconBg: "bg-primary-100",
               },
             ].map((tool, i) => (
               <div key={i} className={`rounded-2xl border-2 p-6 text-${isArabic ? "right" : "left"} ${tool.color}`}>
@@ -255,9 +255,9 @@ export default function SellPage() {
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             {FEATURES.map((f, i) => (
-              <div key={i} className="flex gap-4 p-5 rounded-2xl border border-gray-100 hover:border-orange-200 transition bg-white relative">
+              <div key={i} className="flex gap-4 p-5 rounded-2xl border border-gray-100 hover:border-primary-200 transition bg-white relative">
                 {(isArabic ? f.badge : f.badgeEn) && (
-                  <span className={`absolute top-3 ${isArabic ? "left-3" : "right-3"} bg-orange-500 text-white text-xs font-bold px-2 py-0.5 rounded-full`}>
+                  <span className={`absolute top-3 ${isArabic ? "left-3" : "right-3"} bg-primary-500 text-white text-xs font-bold px-2 py-0.5 rounded-full`}>
                     {isArabic ? f.badge : f.badgeEn}
                   </span>
                 )}
@@ -273,7 +273,7 @@ export default function SellPage() {
       </section>
 
       {/* How it works */}
-      <section className="py-20 px-4 bg-orange-50">
+      <section className="py-20 px-4 bg-primary-50">
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
             {isArabic ? "كيف يعمل السوق؟" : "How does it work?"}
@@ -304,7 +304,7 @@ export default function SellPage() {
           <div className="space-y-8">
             {STEPS.map((step, i) => (
               <div key={i} className="flex gap-5 items-start">
-                <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-xl font-bold flex-shrink-0">
+                <div className="w-12 h-12 rounded-2xl bg-primary-500 text-white flex items-center justify-center text-xl font-bold flex-shrink-0">
                   {isArabic ? step.num : step.numEn}
                 </div>
                 <div className="pt-1">
@@ -315,7 +315,7 @@ export default function SellPage() {
             ))}
           </div>
           <div className="mt-12 text-center">
-            <Link to="/seller-apply" className="inline-block bg-orange-500 text-white font-bold px-10 py-4 rounded-2xl text-lg hover:bg-orange-600 transition shadow-lg shadow-orange-200">
+            <Link to="/seller-apply" className="inline-block bg-primary-500 text-white font-bold px-10 py-4 rounded-2xl text-lg hover:bg-primary-600 transition shadow-lg shadow-primary-200">
               {isArabic ? "سجّل الآن" : "Register Now"}
             </Link>
           </div>
@@ -371,18 +371,18 @@ export default function SellPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-20 px-4 bg-orange-500">
+      <section className="py-20 px-4 bg-primary-500">
         <div className="max-w-lg mx-auto text-center">
-          <p className="text-orange-200 text-sm mb-3">
+          <p className="text-primary-200 text-sm mb-3">
             {isArabic ? "🚀 مرحلة تجريبية — الإطلاق الرسمي قريباً" : "🚀 Beta phase — the official launch is coming soon"}
           </p>
           <h2 className="text-3xl font-bold text-white mb-3">
             {isArabic ? "سجّل الآن لتكون من الأوائل" : "Register now to be among the first"}
           </h2>
-          <p className="text-orange-100 mb-8">
+          <p className="text-primary-100 mb-8">
             {isArabic ? "التسجيل مجّاني. أضف منتجاتك اليوم. وحين نُطلق رسمياً ستكون جاهزاً تماماً." : "Registration is free. Add your products today and when we officially launch, you will be ready."}
           </p>
-          <Link to="/seller-apply" className="inline-block bg-white text-orange-500 font-bold px-10 py-4 rounded-2xl text-lg hover:bg-orange-50 transition">
+          <Link to="/seller-apply" className="inline-block bg-white text-primary-500 font-bold px-10 py-4 rounded-2xl text-lg hover:bg-primary-50 transition">
             {isArabic ? "ابدأ الآن — مجّاناً" : "Start Now — Free"}
           </Link>
         </div>

@@ -80,12 +80,12 @@ export default function SellerSetup() {
         {/* Step indicators */}
         <div className="flex justify-center gap-2 mt-4">
           {[1, 2, 3].map(s => (
-            <div key={s} className={`w-2.5 h-2.5 rounded-full transition ${step >= s ? "bg-orange-500" : "bg-gray-200"}`} />
+            <div key={s} className={`w-2.5 h-2.5 rounded-full transition ${step >= s ? "bg-primary-500" : "bg-gray-200"}`} />
           ))}
         </div>
       </div>
 
-      {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
+      {error && <div className="bg-error-tint text-error text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-6">
 
@@ -98,20 +98,20 @@ export default function SellerSetup() {
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "اسم المتجر *" : "Shop name *"}</label>
               <input type="text" value={form.shop_name} onChange={e => setForm(f => ({ ...f, shop_name: e.target.value }))} required
                 placeholder={isArabic ? "مثال: بوتيك مريم" : "e.g. Maryam Boutique"}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "عن متجرك" : "About your shop"}</label>
               <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
                 placeholder={isArabic ? "ماذا تبيع؟ ما الذي يميز متجرك؟" : "What do you sell? What makes your shop special?"}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none" />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "منطقتك *" : "Your area *"}</label>
               <select value={form.area} onChange={e => setForm(f => ({ ...f, area: e.target.value }))} required
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white">
                 <option value="">{isArabic ? "اختر منطقتك" : "Select your area"}</option>
                 {UAE_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
               </select>
@@ -122,18 +122,18 @@ export default function SellerSetup() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "واتساب (للطلبات)" : "WhatsApp (for orders)"}</label>
                 <input type="tel" value={form.whatsapp_number} onChange={e => setForm(f => ({ ...f, whatsapp_number: e.target.value }))}
                   placeholder="+971 50 000 0000"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "إنستغرام / تيك توك" : "Instagram / TikTok"}</label>
                 <input type="text" value={form.instagram_handle} onChange={e => setForm(f => ({ ...f, instagram_handle: e.target.value }))}
                   placeholder="@handle"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
               </div>
             </div>
 
             <button type="button" onClick={() => { if (!form.shop_name || !form.area) { setError(isArabic ? "يرجى ملء اسم المتجر والمنطقة" : "Please fill shop name and area"); return; } setError(""); setStep(2); }}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition">
+              className="w-full bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium py-3 rounded-xl transition">
               {isArabic ? "التالي ←" : "Next →"}
             </button>
           </div>
@@ -151,8 +151,8 @@ export default function SellerSetup() {
                   <button key={cat.id} type="button" onClick={() => toggleCategory(cat.id)}
                     className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 text-sm font-medium transition ${
                       form.categories_offered.includes(cat.id)
-                        ? "border-orange-500 bg-orange-50 text-orange-700"
-                        : "border-gray-200 text-gray-600 hover:border-orange-300"
+                        ? "border-primary-500 bg-primary-50 text-primary-700"
+                        : "border-gray-200 text-gray-600 hover:border-primary-300"
                     }`}>
                     {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt="" aria-hidden="true" className="w-6 h-6 object-contain" /> : <span>{cat.icon}</span>}
                     <span>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</span>
@@ -169,7 +169,7 @@ export default function SellerSetup() {
                   { value: "self", icon: "🏠", label: isArabic ? "أوصل بنفسي" : "I deliver myself" },
                 ].map(opt => (
                   <button key={opt.value} type="button" onClick={() => setForm(f => ({ ...f, delivery_type: opt.value }))}
-                    className={`p-4 rounded-xl border-2 text-center transition ${form.delivery_type === opt.value ? "border-orange-500 bg-orange-50" : "border-gray-200 hover:border-gray-300"}`}>
+                    className={`p-4 rounded-xl border-2 text-center transition ${form.delivery_type === opt.value ? "border-primary-500 bg-primary-50" : "border-gray-200 hover:border-gray-300"}`}>
                     <div className="text-2xl mb-1">{opt.icon}</div>
                     <div className="text-sm font-medium text-gray-700">{opt.label}</div>
                   </button>
@@ -181,7 +181,7 @@ export default function SellerSetup() {
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الحد الأدنى للطلب (درهم)" : "Minimum order (AED)"}</label>
               <input type="number" value={form.min_order_amount} onChange={e => setForm(f => ({ ...f, min_order_amount: e.target.value }))}
                 placeholder={isArabic ? "مثال: 50" : "e.g. 50"} min="0"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
             </div>
 
             <div className="flex gap-3">
@@ -190,7 +190,7 @@ export default function SellerSetup() {
                 {isArabic ? "→ السابق" : "← Back"}
               </button>
               <button type="button" onClick={() => setStep(3)}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition">
+                className="flex-1 bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium py-3 rounded-xl transition">
                 {isArabic ? "التالي ←" : "Next →"}
               </button>
             </div>
@@ -206,7 +206,7 @@ export default function SellerSetup() {
             <div className="grid grid-cols-3 gap-3">
               {[0, 1, 2].map(i => (
                 <label key={i} className="cursor-pointer">
-                  <div className={`h-32 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${previews[i] ? "border-orange-300" : "border-gray-200 hover:border-orange-300"}`}>
+                  <div className={`h-32 rounded-2xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${previews[i] ? "border-primary-300" : "border-gray-200 hover:border-primary-300"}`}>
                     {previews[i]
                       ? <img src={previews[i]} alt={`Sample ${i + 1}`} className="w-full h-full object-cover" />
                       : <div className="text-center text-gray-400">
@@ -221,7 +221,7 @@ export default function SellerSetup() {
               ))}
             </div>
 
-            <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-700">
+            <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 text-sm text-primary-700">
               {isArabic
                 ? "💡 نصيحة: الصور عالية الجودة تزيد فرص قبول متجرك وتجذب المزيد من الطلبات"
                 : "💡 Tip: High-quality photos increase your chances of approval and attract more orders"}
@@ -233,7 +233,7 @@ export default function SellerSetup() {
                 {isArabic ? "→ السابق" : "← Back"}
               </button>
               <button type="submit" disabled={loading}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
+                className="flex-1 bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
                 {loading ? (isArabic ? "جاري الإرسال..." : "Submitting...") : (isArabic ? "إرسال للمراجعة" : "Submit for Approval")}
               </button>
             </div>

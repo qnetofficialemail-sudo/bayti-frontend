@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import ScheduleSettings from "../components/ScheduleSettings";
 
-const STATUS_COLORS: Record<string, string> = { pending: "bg-yellow-50 text-yellow-700", confirmed: "bg-blue-50 text-blue-700", preparing: "bg-purple-50 text-purple-700", ready: "bg-green-50 text-green-700", delivering: "bg-orange-50 text-orange-700", delivered: "bg-gray-50 text-gray-600", cancelled: "bg-red-50 text-red-600" };
+const STATUS_COLORS: Record<string, string> = { pending: "bg-warning-tint text-warning", confirmed: "bg-info-tint text-info", preparing: "bg-purple-50 text-purple-700", ready: "bg-success-tint text-success", delivering: "bg-primary-50 text-primary-700", delivered: "bg-gray-50 text-gray-600", cancelled: "bg-error-tint text-error" };
 const NEXT_STATUS: Record<string, string> = { pending: "confirmed", confirmed: "preparing", preparing: "ready", ready: "delivering", delivering: "delivered" };
 const STATUS_AR: Record<string, string> = { pending: "قيد الانتظار", confirmed: "مؤكد", preparing: "جاري التحضير", ready: "جاهز", delivering: "في الطريق", delivered: "تم التوصيل", cancelled: "ملغي" };
 const NEXT_STATUS_AR: Record<string, string> = { pending: "تأكيد", confirmed: "بدء التحضير", preparing: "جاهز", ready: "في الطريق", delivering: "تم التوصيل" };
@@ -123,9 +123,9 @@ export default function SellerDashboard() {
   const getStockBadge = (product: any) => {
     if (!product.track_stock) return null;
     const qty = product.stock_quantity;
-    if (qty === 0) return <span className="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full">{isArabic ? "نفد" : "Out"}</span>;
-    if (qty <= 3) return <span className="text-xs bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded-full">{isArabic ? `${qty} متبقي` : `${qty} left`}</span>;
-    return <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">{isArabic ? `${qty} متاح` : `${qty} in stock`}</span>;
+    if (qty === 0) return <span className="text-xs bg-error-tint text-error px-2 py-0.5 rounded-full">{isArabic ? "نفد" : "Out"}</span>;
+    if (qty <= 3) return <span className="text-xs bg-warning-tint text-warning px-2 py-0.5 rounded-full">{isArabic ? `${qty} متبقي` : `${qty} left`}</span>;
+    return <span className="text-xs bg-info-tint text-info px-2 py-0.5 rounded-full">{isArabic ? `${qty} متاح` : `${qty} in stock`}</span>;
   };
 
   if (loading) return (
@@ -165,7 +165,7 @@ export default function SellerDashboard() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
             {profile?.shop_name || (isArabic ? "متجري" : "My Shop")}
-            {!profile?.is_approved && <span className="ml-3 text-sm bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full font-normal">{isArabic ? "قيد المراجعة" : "Pending approval"}</span>}
+            {!profile?.is_approved && <span className="ml-3 text-sm bg-warning-tint text-warning px-3 py-1 rounded-full font-normal">{isArabic ? "قيد المراجعة" : "Pending approval"}</span>}
           </h1>
           <p className="text-gray-500 text-sm mt-1">📍 {profile?.area}, {profile?.city}</p>
         </div>
@@ -174,10 +174,10 @@ export default function SellerDashboard() {
         <Link to="/seller/shop/edit" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition">
             {isArabic ? "✏️ تعديل المتجر" : "✏️ Edit Shop"}
           </Link>
-          <Link to="/studio" className="flex items-center gap-1.5 bg-gradient-to-r from-purple-500 to-orange-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition hover:opacity-90 shadow-sm">
+          <Link to="/studio" className="flex items-center gap-1.5 bg-gradient-to-r from-purple-500 to-primary-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition hover:opacity-90 shadow-sm">
             ✨ {isArabic ? "استوديو بيتي" : "Bayti Studio"}
           </Link>
-          <Link to="/seller/products/new" className="bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition">
+          <Link to="/seller/products/new" className="bg-primary-500 hover:bg-primary-600 text-gray-900 px-4 py-2 rounded-xl text-sm font-medium transition">
             {isArabic ? "+ إضافة منتج" : "+ Add Product"}
           </Link>
         </div>
@@ -189,7 +189,7 @@ export default function SellerDashboard() {
           { label: isArabic ? "طلبات جديدة" : "New Orders", value: pendingCount, icon: "/icons/bayti/ui/notifications.png", highlight: pendingCount > 0 },
           { label: isArabic ? "التقييم" : "Rating", value: `${profile?.rating || 0} ⭐`, icon: "⭐" },
         ].map(stat => (
-          <div key={stat.label} className={`bg-white rounded-2xl p-5 border ${(stat as any).highlight ? "border-orange-300" : "border-gray-100"} shadow-sm`}>
+          <div key={stat.label} className={`bg-white rounded-2xl p-5 border ${(stat as any).highlight ? "border-primary-300" : "border-gray-100"} shadow-sm`}>
             <div className="w-8 h-8 mb-1 flex items-center justify-center">{stat.icon.startsWith("/") ? <img src={stat.icon} alt="" aria-hidden="true" className="w-8 h-8 object-contain" /> : <span className="text-2xl">{stat.icon}</span>}</div>
             <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
             <div className="text-sm text-gray-500">{stat.label}</div>
@@ -199,7 +199,7 @@ export default function SellerDashboard() {
 
       <div className="flex gap-2 mb-6">
         {(["orders", "products", "schedule"] as const).map(t => (
-          <button key={t} onClick={() => setTab(t)} className={`px-5 py-2 rounded-xl text-sm font-medium capitalize transition ${tab === t ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
+          <button key={t} onClick={() => setTab(t)} className={`px-5 py-2 rounded-xl text-sm font-medium capitalize transition ${tab === t ? "bg-primary-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300"}`}>
             {t === "orders"
               ? (isArabic ? `الطلبات${pendingCount > 0 ? ` (${pendingCount})` : ""}` : `Orders${pendingCount > 0 ? ` (${pendingCount})` : ""}`)
               : t === "products"
@@ -224,11 +224,11 @@ export default function SellerDashboard() {
               </div>
               <div className="text-sm text-gray-500 mb-1">👤 {order.buyer?.full_name} {(order.buyer_phone || order.buyer?.phone) ? `· 📞 ${order.buyer_phone || order.buyer?.phone}` : ""}</div>
               <div className="text-sm text-gray-500 mb-1">📍 {order.delivery_address} · {order.delivery_area}</div>
-              {order.notes && <div className="text-sm text-orange-600 mb-1">📝 {order.notes}</div>}
+              {order.notes && <div className="text-sm text-primary-600 mb-1">📝 {order.notes}</div>}
               <div className="text-sm text-gray-600 mb-3">{order.items?.map((item: any) => `${item.quantity}x ${item.product?.name}`).join(", ")}</div>
               {!["delivered", "cancelled"].includes(order.status) && (
                   <button onClick={() => rejectOrder(order.id)}
-                    className="text-sm bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-4 py-2 rounded-xl transition font-medium">
+                    className="text-sm bg-error-tint hover:bg-error-tint text-error border border-error-tint px-4 py-2 rounded-xl transition font-medium">
                     {isArabic ? "✕ رفض" : "✕ Reject"}
                   </button>
                 )}
@@ -236,12 +236,12 @@ export default function SellerDashboard() {
                   <a
                     href={`https://wa.me/${(order.buyer_phone || order.buyer?.phone || "").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(isArabic ? `مرحباً، شكراً لطلبك رقم #${order.id} من ${profile?.shop_name}. نرجو تأكيد تفاصيل طلبك.` : `Hello! Thank you for your order #${order.id} from ${profile?.shop_name}. Please confirm your order details.`)}`}
                     target="_blank" rel="noopener noreferrer"
-                    className="text-sm bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 px-4 py-2 rounded-xl transition font-medium flex items-center gap-1">
+                    className="text-sm bg-success-tint hover:bg-success-tint text-success border border-success-tint px-4 py-2 rounded-xl transition font-medium flex items-center gap-1">
                     💬 {isArabic ? "واتساب" : "WhatsApp"}
                   </a>
                 )}
                 {NEXT_STATUS[order.status] && (
-                <button onClick={() => advanceOrder(order.id, NEXT_STATUS[order.status])} className="text-sm bg-orange-500 hover:bg-orange-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
+                <button onClick={() => advanceOrder(order.id, NEXT_STATUS[order.status])} className="text-sm bg-primary-500 hover:bg-primary-600 text-gray-900 px-4 py-2 rounded-xl transition font-medium">
                   {isArabic ? `تحديد كـ ${NEXT_STATUS_AR[order.status]}` : `Mark as ${NEXT_STATUS[order.status]}`}
                 </button>
               )}
@@ -260,13 +260,13 @@ export default function SellerDashboard() {
             <div className="col-span-2 text-center py-16 text-gray-400">
               <div className="text-4xl mb-3">🍳</div>
               <p>{isArabic ? "لا توجد منتجات بعد." : "No products yet."}</p>
-              <Link to="/seller/products/new" className="text-orange-500 hover:underline text-sm mt-2 inline-block">{isArabic ? "أضف منتجك الأول" : "Add your first product"}</Link>
+              <Link to="/seller/products/new" className="text-primary-500 hover:underline text-sm mt-2 inline-block">{isArabic ? "أضف منتجك الأول" : "Add your first product"}</Link>
             </div>
           )}
           {products.map(product => (
             <div key={product.id} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0 text-3xl overflow-hidden">
+                <div className="w-16 h-16 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0 text-3xl overflow-hidden">
                   {product.image_url ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`} alt={product.name} className="w-full h-full object-cover rounded-xl" /> : <img src={product.category?.icon || "/icons/bayti/ui/shopping-bag.png"} alt="" aria-hidden="true" className="w-10 h-10 object-contain" />}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -275,38 +275,38 @@ export default function SellerDashboard() {
                     {product.discount_percent > 0 ? (
                       <>
                         <span className="line-through text-gray-400 text-xs">AED {product.price}</span>
-                        <p className="text-orange-500 font-bold text-sm">AED {(product.price * (1 - product.discount_percent / 100)).toFixed(0)}</p>
-                        <span className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">-{product.discount_percent}%</span>
+                        <p className="text-primary-500 font-bold text-sm">AED {(product.price * (1 - product.discount_percent / 100)).toFixed(0)}</p>
+                        <span className="bg-error text-white text-xs px-1.5 py-0.5 rounded-full">-{product.discount_percent}%</span>
                       </>
                     ) : (
-                      <p className="text-orange-500 font-bold text-sm">AED {product.price}</p>
+                      <p className="text-primary-500 font-bold text-sm">AED {product.price}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-1 mt-1 flex-wrap">
                     {getStockBadge(product)}
                     {product.free_shipping_min_amount > 0 && (
-                      <span className="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">{isArabic ? "مجاني +" + product.free_shipping_min_amount : "Free +" + product.free_shipping_min_amount}</span>
+                      <span className="text-xs bg-success-tint text-success px-2 py-0.5 rounded-full">{isArabic ? "مجاني +" + product.free_shipping_min_amount : "Free +" + product.free_shipping_min_amount}</span>
                     )}
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <span className={`text-xs px-2 py-1 rounded-full ${product.is_available ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
+                  <span className={`text-xs px-2 py-1 rounded-full ${product.is_available ? "bg-success-tint text-success" : "bg-error-tint text-error"}`}>
                     {product.is_available ? (isArabic ? "متاح" : "Available") : (isArabic ? "غير متاح" : "Unavailable")}
                   </span>
                   <div className="flex gap-1">
-                    <button onClick={() => toggleProduct(product.id, product.is_available)} className="text-xs text-gray-500 hover:text-orange-500 transition">
+                    <button onClick={() => toggleProduct(product.id, product.is_available)} className="text-xs text-gray-500 hover:text-primary-500 transition">
                       {product.is_available ? (isArabic ? "إخفاء" : "Hide") : (isArabic ? "إظهار" : "Show")}
                     </button>
                     <span className="text-gray-300">|</span>
-                    <button onClick={() => setRestockId(restockId === product.id ? null : product.id)} className="text-xs text-blue-500 hover:text-blue-700 transition">
+                    <button onClick={() => setRestockId(restockId === product.id ? null : product.id)} className="text-xs text-info hover:text-info transition">
                       {isArabic ? "تعبئة" : "Restock"}
                     </button>
                     <span className="text-gray-300">|</span>
-                    <Link to={`/seller/products/${product.id}/edit`} className="text-xs text-orange-500 hover:text-orange-700 transition">
+                    <Link to={`/seller/products/${product.id}/edit`} className="text-xs text-primary-500 hover:text-primary-700 transition">
                       {isArabic ? "تعديل" : "Edit"}
                     </Link>
                     <span className="text-gray-300">|</span>
-                    <button onClick={() => deleteProduct(product)} className="text-xs text-red-500 hover:text-red-700 transition">
+                    <button onClick={() => deleteProduct(product)} className="text-xs text-error hover:text-error transition">
                       {isArabic ? "حذف" : "Delete"}
                     </button>
                   </div>
@@ -316,8 +316,8 @@ export default function SellerDashboard() {
               {restockId === product.id && (
                 <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2">
                   <input type="number" value={restockQty} onChange={e => setRestockQty(e.target.value)} min="1"
-                    className="w-24 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300" />
-                  <button onClick={() => handleRestock(product.id)} className="text-sm bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg transition">
+                    className="w-24 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-info" />
+                  <button onClick={() => handleRestock(product.id)} className="text-sm bg-info hover:bg-info text-white px-3 py-1.5 rounded-lg transition">
                     {isArabic ? "تعبئة المخزون" : "Add Stock"}
                   </button>
                   <button onClick={() => setRestockId(null)} className="text-sm text-gray-400 hover:text-gray-600 px-2">✕</button>

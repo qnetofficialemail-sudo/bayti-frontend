@@ -60,8 +60,8 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-orange-50 flex items-center justify-center px-4" dir={isArabic ? "rtl" : "ltr"}>
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-orange-100">
+    <div className="min-h-screen bg-primary-50 flex items-center justify-center px-4" dir={isArabic ? "rtl" : "ltr"}>
+      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-primary-100">
 
         {validating && (
           <div className="text-center py-8">
@@ -79,7 +79,7 @@ export default function ResetPasswordPage() {
             <p className="text-gray-500 text-sm mb-6">
               {isArabic ? "الرابط صالح لمدة 30 دقيقة فقط. اطلب رابطاً جديداً." : "Links are valid for 30 minutes only. Request a new one."}
             </p>
-            <Link to="/forgot-password" className="bg-orange-500 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-orange-600 transition">
+            <Link to="/forgot-password" className="bg-primary-500 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-primary-600 transition">
               {isArabic ? "طلب رابط جديد" : "Request New Link"}
             </Link>
           </div>
@@ -106,7 +106,7 @@ export default function ResetPasswordPage() {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm"
                   autoFocus
                 />
               </div>
@@ -120,14 +120,14 @@ export default function ResetPasswordPage() {
                   onChange={e => setConfirm(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && handleReset()}
                   placeholder="••••••••"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm"
                 />
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && <p className="text-error text-sm">{error}</p>}
               <button
                 onClick={handleReset}
                 disabled={loading}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition disabled:opacity-50"
+                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 rounded-xl transition disabled:opacity-50"
               >
                 {loading ? (isArabic ? "جارٍ الحفظ..." : "Saving...") : (isArabic ? "حفظ كلمة المرور" : "Save Password")}
               </button>
@@ -144,7 +144,7 @@ export default function ResetPasswordPage() {
             <p className="text-gray-500 text-sm mb-4">
               {isArabic ? "سيتم توجيهك لصفحة الدخول..." : "Redirecting to login..."}
             </p>
-            <Link to="/login" className="text-orange-500 hover:underline text-sm font-medium">
+            <Link to="/login" className="text-primary-500 hover:underline text-sm font-medium">
               {isArabic ? "تسجيل الدخول الآن" : "Login Now"}
             </Link>
           </div>

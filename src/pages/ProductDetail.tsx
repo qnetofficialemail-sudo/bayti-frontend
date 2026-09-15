@@ -137,7 +137,7 @@ export default function ProductDetail() {
       <h2 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "تم الطلب بنجاح!" : "Order placed!"}</h2>
       <p className="text-gray-500 mb-6">{isArabic ? `استلم ${product.seller.shop_name} طلبك وسيؤكده قريباً.` : `${product.seller.shop_name} has received your order.`}</p>
       <div className="flex gap-3 justify-center">
-        <Link to="/orders" className="bg-orange-500 text-gray-900 px-6 py-3 rounded-xl font-medium hover:bg-orange-600 transition">
+        <Link to="/orders" className="bg-primary-500 text-gray-900 px-6 py-3 rounded-xl font-medium hover:bg-primary-600 transition">
           {isArabic ? "تتبع الطلب" : "Track Order"}
         </Link>
         <Link to="/" className="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition">
@@ -162,14 +162,14 @@ export default function ProductDetail() {
         type="product"
         price={product.price}
       />
-      <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
+      <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-primary-500 mb-6 inline-block">
         {isArabic ? "→ رجوع" : "← Back"}
       </button>
       <div className="grid md:grid-cols-2 gap-8">
         {/* Product Info */}
         <div>
           {/* Main image */}
-          <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 h-72 flex items-center justify-center mb-3">
+          <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-primary-50 to-primary-50 h-72 flex items-center justify-center mb-3">
             {imgSrc
               ? <img src={imgSrc} alt={displayName} className="w-full h-full object-contain bg-white" />
               : <span className="text-6xl">🛍️</span>
@@ -181,7 +181,7 @@ export default function ProductDetail() {
             <div className="flex gap-2 mb-6 flex-wrap">
               {allImgs.map((img: string, i: number) => (
                 <button key={i} type="button" onClick={() => setActiveImageIndex(i)}
-                  className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${activeImageIndex === i ? "border-orange-500" : "border-gray-200 hover:border-orange-300"}`}>
+                  className={`w-14 h-14 rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${activeImageIndex === i ? "border-primary-500" : "border-gray-200 hover:border-primary-300"}`}>
                   <img src={img.startsWith("http") ? img : `https://web-production-63685.up.railway.app${img}`}
                     alt={`View ${i + 1}`} className="w-full h-full object-contain bg-white" />
                 </button>
@@ -249,7 +249,7 @@ export default function ProductDetail() {
             {product.category && <span>{product.category.icon && String(product.category.icon).startsWith("/") ? <img src={product.category.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : null}{displayCat}</span>}
           </div>
           <div className="bg-gray-50 rounded-xl p-4">
-            <Link to={`/shop/${product.seller.id}`} className="text-sm text-gray-600 font-medium mb-1 hover:text-orange-500 transition block">🏠 {product.seller.shop_name}</Link>
+            <Link to={`/shop/${product.seller.id}`} className="text-sm text-gray-600 font-medium mb-1 hover:text-primary-500 transition block">🏠 {product.seller.shop_name}</Link>
             <p className="text-sm text-gray-500">📍 {product.seller.area}</p>
             <p className="text-sm text-gray-500">⭐ {product.seller.rating} · {product.seller.total_orders} {isArabic ? "طلب" : "orders"}</p>
           </div>
@@ -268,23 +268,23 @@ export default function ProductDetail() {
                     <div key={variant.id}>
                       <p className="text-sm font-medium text-gray-700 mb-2">
                         {isArabic && variant.name_ar ? variant.name_ar : variant.name}
-                        {variant.is_required && <span className="text-red-400 ml-1">*</span>}
+                        {variant.is_required && <span className="text-error ml-1">*</span>}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {options.map((opt: any) => (
                           <button key={opt.label} type="button"
                             onClick={() => { setSelectedVariants(prev => ({ ...prev, [variant.name]: opt.label })); setVariantError(""); }}
-                            className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition ${selectedVariants[variant.name] === opt.label ? "border-orange-500 bg-orange-50 text-orange-700" : "border-gray-200 hover:border-orange-300 text-gray-700"}`}>
+                            className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition ${selectedVariants[variant.name] === opt.label ? "border-primary-500 bg-primary-50 text-primary-700" : "border-gray-200 hover:border-primary-300 text-gray-700"}`}>
                             {opt.label}
-                            {opt.price_adj > 0 && <span className="text-xs ml-1 text-orange-500">+AED {opt.price_adj}</span>}
-                            {opt.price_adj < 0 && <span className="text-xs ml-1 text-green-500">-AED {Math.abs(opt.price_adj)}</span>}
+                            {opt.price_adj > 0 && <span className="text-xs ml-1 text-primary-500">+AED {opt.price_adj}</span>}
+                            {opt.price_adj < 0 && <span className="text-xs ml-1 text-success">-AED {Math.abs(opt.price_adj)}</span>}
                           </button>
                         ))}
                       </div>
                     </div>
                   );
                 })}
-                {variantError && <p className="text-red-500 text-sm">{variantError}</p>}
+                {variantError && <p className="text-error text-sm">{variantError}</p>}
               </div>
             </div>
           )}
@@ -297,41 +297,41 @@ export default function ProductDetail() {
               {product.discount_percent > 0 ? (
                 <>
                   <span className="line-through text-gray-400 text-sm mr-2">AED {product.price}</span>
-                  <span className="text-2xl font-bold text-orange-500">AED {discountedPrice.toFixed(0)}</span>
-                  <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">-{product.discount_percent}%</span>
+                  <span className="text-2xl font-bold text-primary-500">AED {discountedPrice.toFixed(0)}</span>
+                  <span className="ml-2 bg-error text-white text-xs px-2 py-0.5 rounded-full">-{product.discount_percent}%</span>
                 </>
               ) : (
-                <span className="text-2xl font-bold text-orange-500">AED {product.price}</span>
+                <span className="text-2xl font-bold text-primary-500">AED {product.price}</span>
               )}
             </div>
             </div>
 
             {product.free_shipping_min_amount > 0 && (
-              <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-2.5 rounded-xl mb-3 flex items-center gap-2">
+              <div className="bg-success-tint border border-success-tint text-success text-sm px-4 py-2.5 rounded-xl mb-3 flex items-center gap-2">
                 <span>🚚</span>
                 <span>{isArabic ? `توصيل مجاني عند طلب بـ AED ${product.free_shipping_min_amount} أو أكثر` : `Free shipping on orders AED ${product.free_shipping_min_amount}+`}</span>
               </div>
             )}
             {sellerOpen && !sellerOpen.is_open && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
+              <div className="bg-error-tint border border-error-tint text-error text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
                 <span>🔴</span>
                 <span>{isArabic ? "لا تقبل طلبات الآن" : "Not accepting orders right now"}{sellerOpen.message ? ` · ${sellerOpen.message}` : ""}</span>
               </div>
             )}
             {sellerOpen && sellerOpen.is_open && sellerOpen.reason !== "always_open" && (
-              <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
+              <div className="bg-success-tint border border-success-tint text-success text-sm px-4 py-3 rounded-xl mb-4 flex items-center gap-2">
                 <span>🟢</span>
                 <span>{isArabic ? "تقبل الطلبات الآن" : "Accepting orders now"}</span>
               </div>
             )}
 
             {!user && (
-              <div className="bg-orange-50 text-orange-700 text-sm px-4 py-3 rounded-xl mb-4">
+              <div className="bg-primary-50 text-primary-700 text-sm px-4 py-3 rounded-xl mb-4">
                 <Link to="/login" className="font-medium underline">{isArabic ? "سجل الدخول" : "Sign in"}</Link>
                 {isArabic ? " لتقديم طلب" : " to place an order"}
               </div>
             )}
-            {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
+            {error && <div className="bg-error-tint text-error text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
 
             <form onSubmit={handleOrder} className="space-y-4">
               <div>
@@ -350,7 +350,7 @@ export default function ProductDetail() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الإمارة" : "Your Emirate"}</label>
                 <select value={buyerEmirate} onChange={e => setBuyerEmirate(e.target.value)}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white">
                   <option value="">{isArabic ? "اختر إمارتك" : "Select your emirate"}</option>
                   {EMIRATES.map(e => {
                     const fees = product.seller?.delivery_fees ? (() => { try { return JSON.parse(product.seller.delivery_fees); } catch { return {}; } })() : {};
@@ -363,10 +363,10 @@ export default function ProductDetail() {
                   })}
                 </select>
                 {buyerEmirate && deliveryFee === null && (
-                  <p className="text-red-500 text-xs mt-1">{isArabic ? "عذراً، لا يتوفر التوصيل إلى هذه الإمارة" : "Sorry, delivery is not available to this emirate"}</p>
+                  <p className="text-error text-xs mt-1">{isArabic ? "عذراً، لا يتوفر التوصيل إلى هذه الإمارة" : "Sorry, delivery is not available to this emirate"}</p>
                 )}
                 {buyerEmirate && deliveryFee !== null && (
-                  <p className="text-green-600 text-xs mt-1">✓ {isArabic ? `رسم التوصيل: AED ${deliveryFee}` : `Delivery fee: AED ${deliveryFee}`}</p>
+                  <p className="text-success text-xs mt-1">✓ {isArabic ? `رسم التوصيل: AED ${deliveryFee}` : `Delivery fee: AED ${deliveryFee}`}</p>
                 )}
               </div>
 
@@ -374,7 +374,7 @@ export default function ProductDetail() {
                 {savedAddress?.saved_address && !address && (
                   <button type="button"
                     onClick={() => { setAddress(savedAddress.saved_address); setArea(savedAddress.saved_area || ""); }}
-                    className="w-full mb-2 text-sm bg-orange-50 hover:bg-orange-100 text-orange-700 border border-orange-200 px-4 py-2.5 rounded-xl transition text-left flex items-center gap-2">
+                    className="w-full mb-2 text-sm bg-primary-50 hover:bg-primary-100 text-primary-700 border border-primary-200 px-4 py-2.5 rounded-xl transition text-left flex items-center gap-2">
                     <span>📍</span>
                     <span className="flex-1 truncate">{savedAddress.saved_address}{savedAddress.saved_area ? ` · ${savedAddress.saved_area}` : ""}</span>
                     <span className="text-xs font-medium flex-shrink-0">{isArabic ? "استخدم" : "Use"}</span>
@@ -382,14 +382,14 @@ export default function ProductDetail() {
                 )}
                 <textarea value={address} onChange={e => setAddress(e.target.value)} required rows={2}
                   placeholder={isArabic ? "المبنى، الشارع، رقم الشقة..." : "Building, street, flat number..."}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "المنطقة" : "Area"}</label>
                 <input type="text" value={area} onChange={e => setArea(e.target.value)} required
                   placeholder={isArabic ? "مثال: جي بي آر، وسط المدينة..." : "e.g. JBR, Downtown, Mirdif..."}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
               </div>
 
               <div>
@@ -404,12 +404,12 @@ export default function ProductDetail() {
                 required placeholder="+971 50 000 0000"
                 pattern="^\+[0-9]{10,15}$"
                 title={isArabic ? "أدخل رقم هاتف دولي صحيح مثل +971501234567" : "Enter a valid international phone number e.g. +971501234567"}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
 
               <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "ملاحظات (اختياري)" : "Notes (optional)"}</label>
                 <input type="text" value={notes} onChange={e => setNotes(e.target.value)}
                   placeholder={isArabic ? "بدون بصل، حار جداً..." : "No onions, extra spicy..."}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
               </div>
 
               <div className="border-t border-gray-100 pt-4 space-y-2 text-sm text-gray-500">
@@ -419,7 +419,7 @@ export default function ProductDetail() {
                 </div>
                 <div className="flex justify-between">
                   <span>{isArabic ? "التوصيل" : "Delivery"}</span>
-                  <span>{!buyerEmirate ? (isArabic ? "حدد إمارتك" : "Select emirate") : freeShipping ? <span className="text-green-600 font-medium">{isArabic ? "مجاني" : "FREE"}</span> : deliveryFee !== null ? `AED ${deliveryFee}` : (isArabic ? "غير متاح" : "Not available")}</span>
+                  <span>{!buyerEmirate ? (isArabic ? "حدد إمارتك" : "Select emirate") : freeShipping ? <span className="text-success font-medium">{isArabic ? "مجاني" : "FREE"}</span> : deliveryFee !== null ? `AED ${deliveryFee}` : (isArabic ? "غير متاح" : "Not available")}</span>
                 </div>
                 <div className="flex justify-between font-bold text-gray-900 text-base">
                   <span>{isArabic ? "الإجمالي" : "Total"}</span>
@@ -428,7 +428,7 @@ export default function ProductDetail() {
               </div>
 
               <button type="submit" disabled={!user || ordering || (sellerOpen && !sellerOpen.is_open)}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
+                className="w-full bg-primary-500 hover:bg-primary-600 text-gray-900 font-medium py-3 rounded-xl transition disabled:opacity-60">
                 {ordering
                   ? (isArabic ? "جاري تقديم الطلب..." : "Placing order...")
                   : (isArabic ? `اطلب بـ AED ${total}` : `Order for AED ${total}`)
@@ -451,13 +451,13 @@ export default function ProductDetail() {
               const imgUrl = p.image_url ? (p.image_url.startsWith("http") ? p.image_url : `https://web-production-63685.up.railway.app${p.image_url}`) : null;
               return (
                 <Link key={p.id} to={`/product/${p.id}`}
-                  className="flex gap-3 bg-white rounded-xl border border-gray-100 p-3 hover:border-orange-300 transition shadow-sm">
-                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-orange-50 flex-shrink-0 flex items-center justify-center">
+                  className="flex gap-3 bg-white rounded-xl border border-gray-100 p-3 hover:border-primary-300 transition shadow-sm">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-primary-50 flex-shrink-0 flex items-center justify-center">
                     {imgUrl ? <img src={imgUrl} alt={name} className="w-full h-full object-cover" /> : <img src={p.category?.icon || "/icons/bayti/ui/shopping-bag.png"} alt="" aria-hidden="true" className="w-8 h-8 object-contain" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-gray-900 text-sm truncate">{name}</p>
-                    <p className="text-orange-500 font-bold text-sm">AED {p.price}</p>
+                    <p className="text-primary-500 font-bold text-sm">AED {p.price}</p>
                   </div>
                 </Link>
               );

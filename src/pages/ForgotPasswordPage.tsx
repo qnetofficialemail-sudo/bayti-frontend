@@ -28,8 +28,8 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-orange-50 flex items-center justify-center px-4" dir={isArabic ? "rtl" : "ltr"}>
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-orange-100">
+    <div className="min-h-screen bg-primary-50 flex items-center justify-center px-4" dir={isArabic ? "rtl" : "ltr"}>
+      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md border border-primary-100">
         <div className="text-center mb-6">
           <div className="text-4xl mb-3">🔑</div>
           <h1 className="text-2xl font-bold text-gray-900">
@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
             <p className="text-gray-500 text-sm mb-6">
               {isArabic ? "إذا كان البريد مسجلاً، ستصلك رسالة خلال دقائق. تحقق من مجلد الـ Spam أيضاً." : "If this email is registered, you will receive a message shortly. Check your Spam folder too."}
             </p>
-            <Link to="/login" className="text-orange-500 hover:underline text-sm font-medium">
+            <Link to="/login" className="text-primary-500 hover:underline text-sm font-medium">
               {isArabic ? "العودة لتسجيل الدخول" : "Back to Login"}
             </Link>
           </div>
@@ -65,15 +65,15 @@ export default function ForgotPasswordPage() {
                 onChange={e => setEmail(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && handleSubmit()}
                 placeholder={isArabic ? "example@email.com" : "example@email.com"}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm"
                 autoFocus
               />
-              {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+              {error && <p className="text-error text-xs mt-1">{error}</p>}
             </div>
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition disabled:opacity-50"
+              className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-3 rounded-xl transition disabled:opacity-50"
             >
               {loading ? (isArabic ? "جارٍ الإرسال..." : "Sending...") : (isArabic ? "إرسال رابط إعادة التعيين" : "Send Reset Link")}
             </button>

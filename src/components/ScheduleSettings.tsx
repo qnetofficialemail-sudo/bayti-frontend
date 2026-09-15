@@ -73,14 +73,14 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
       </h2>
 
       {/* Master toggle */}
-      <div className="flex items-center justify-between p-4 bg-orange-50 rounded-xl">
+      <div className="flex items-center justify-between p-4 bg-primary-50 rounded-xl">
         <div>
           <p className="font-medium text-gray-900">{isArabic ? "قبول الطلبات" : "Accepting Orders"}</p>
           <p className="text-sm text-gray-500">{isArabic ? "أوقف هذا لرفض جميع الطلبات مؤقتاً" : "Turn off to pause all orders"}</p>
         </div>
         <button
           onClick={() => setAccepting(!accepting)}
-          className={`relative w-14 h-7 rounded-full transition-colors ${accepting ? "bg-orange-500" : "bg-gray-300"}`}
+          className={`relative w-14 h-7 rounded-full transition-colors ${accepting ? "bg-primary-500" : "bg-gray-300"}`}
         >
           <span className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow transition-transform ${accepting ? "translate-x-7" : ""}`} />
         </button>
@@ -94,7 +94,7 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
         </div>
         <button
           onClick={() => setUseSchedule(!useSchedule)}
-          className={`relative w-14 h-7 rounded-full transition-colors ${useSchedule ? "bg-blue-500" : "bg-gray-300"}`}
+          className={`relative w-14 h-7 rounded-full transition-colors ${useSchedule ? "bg-info" : "bg-gray-300"}`}
         >
           <span className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full shadow transition-transform ${useSchedule ? "translate-x-7" : ""}`} />
         </button>
@@ -112,7 +112,7 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
                   onClick={() => toggleDay(i)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
                     selectedDays.includes(i)
-                      ? "bg-blue-500 text-white"
+                      ? "bg-info text-white"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
@@ -132,7 +132,7 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
                 type="time"
                 value={fromTime}
                 onChange={e => setFromTime(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-info"
               />
             </div>
             <div>
@@ -143,13 +143,13 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
                 type="time"
                 value={untilTime}
                 onChange={e => setUntilTime(e.target.value)}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-info"
               />
             </div>
           </div>
 
           {/* Preview */}
-          <div className="bg-blue-50 rounded-xl p-3 text-sm text-blue-700">
+          <div className="bg-info-tint rounded-xl p-3 text-sm text-info">
             {isArabic
               ? `ستقبلين الطلبات أيام: ${selectedDays.map(d => DAYS_AR[d]).join("، ")} من ${fromTime} حتى ${untilTime}`
               : `Accepting orders: ${selectedDays.map(d => DAYS_EN[d]).join(", ")} from ${fromTime} to ${untilTime}`
@@ -161,7 +161,7 @@ export default function ScheduleSettings({ seller, onUpdate }: Props) {
       <button
         onClick={save}
         disabled={saving}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60"
+        className="w-full bg-primary-500 hover:bg-primary-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60"
       >
         {saving
           ? (isArabic ? "جاري الحفظ..." : "Saving...")

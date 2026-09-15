@@ -41,12 +41,12 @@ export default function Home() {
     const qty = product.stock_quantity;
     if (qty <= 0) return null;
     if (qty <= 3) return (
-      <span className="inline-block bg-red-50 text-red-600 text-xs px-2 py-0.5 rounded-full mt-1">
+      <span className="inline-block bg-error-tint text-error text-xs px-2 py-0.5 rounded-full mt-1">
         🔥 {isArabic ? `${qty} متبقي فقط!` : `Only ${qty} left!`}
       </span>
     );
     if (qty <= 10) return (
-      <span className="inline-block bg-yellow-50 text-yellow-700 text-xs px-2 py-0.5 rounded-full mt-1">
+      <span className="inline-block bg-warning-tint text-warning text-xs px-2 py-0.5 rounded-full mt-1">
         ⚡ {isArabic ? `${qty} حصة متاحة` : `${qty} portions left`}
       </span>
     );
@@ -59,7 +59,7 @@ export default function Home() {
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-gray-900 mb-3">
           {isArabic
-            ? <><span>حارتك،</span> <span className="text-orange-500">بين يديك.</span></>
+            ? <><span>حارتك،</span> <span className="text-primary-500">بين يديك.</span></>
             : <>Your neighborhood, <span className="text-primary-500">online.</span></>
           }
         </h1>
@@ -67,24 +67,24 @@ export default function Home() {
       </div>
 
       <div className="mb-2 flex justify-end">
-        <Link to="/categories" className="text-sm text-orange-500 hover:underline">
+        <Link to="/categories" className="text-sm text-primary-500 hover:underline">
           {isArabic ? "تصفح جميع الفئات ←" : "Browse all categories →"}
         </Link>
       </div>
       <div className="mb-6">
         <input type="text" aria-label={isArabic ? "ابحث عن منتجات" : "Search products and sellers"} placeholder={isArabic ? "ابحث عن منتجات، بائعين، حرف يدوية..." : "Search for products, sellers, artisans..."} value={search} onChange={e => setSearch(e.target.value)}
-          className="w-full border border-gray-200 rounded-xl px-5 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white shadow-sm" />
+          className="w-full border border-gray-200 rounded-xl px-5 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white shadow-sm" />
       </div>
 
       <CookOfWeek />
 
       <div className="flex gap-2 overflow-x-auto pb-2 mb-8">
-        <button onClick={() => setSelectedCategory(null)} className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${!selectedCategory ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
+        <button onClick={() => setSelectedCategory(null)} className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${!selectedCategory ? "bg-primary-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300"}`}>
           {isArabic ? "الكل" : "All"}
         </button>
         {categories.map(cat => (
           <button key={cat.id} onClick={() => setSelectedCategory(selectedCategory === cat.id ? null : cat.id)}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${selectedCategory === cat.id ? "bg-orange-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-orange-300"}`}>
+            className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${selectedCategory === cat.id ? "bg-primary-500 text-gray-900" : "bg-white text-gray-600 border border-gray-200 hover:border-primary-300"}`}>
             {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt="" aria-hidden="true" className="w-4 h-4 object-contain inline-block mr-1" /> : <span className="mr-1">{cat.icon}</span>}{isArabic && cat.name_ar ? cat.name_ar : cat.name}
           </button>
         ))}
@@ -104,14 +104,14 @@ export default function Home() {
             const displayCat = isArabic && product.category?.name_ar ? product.category.name_ar : product.category?.name;
             return (
               <Link key={product.id} to={`/product/${product.id}`} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group">
-                <div className="h-48 bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center overflow-hidden relative">
+                <div className="h-48 bg-gradient-to-br from-primary-50 to-primary-50 flex items-center justify-center overflow-hidden relative">
                   {(product as any).is_featured && (
-                    <span className="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                    <span className="absolute top-2 left-2 bg-gold text-white text-xs font-bold px-2 py-1 rounded-full z-10">
                       ⭐ {isArabic ? "مميز" : "Featured"}
                     </span>
                   )}
                   {!(product as any).is_featured && (product as any).created_at && new Date((product as any).created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
-                    <span className="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                    <span className="absolute top-2 left-2 bg-success text-white text-xs font-bold px-2 py-1 rounded-full z-10">
                       {isArabic ? "جديد" : "New"}
                     </span>
                   )}
@@ -123,12 +123,12 @@ export default function Home() {
                     return <img src={src} alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />;
                   })()}
                   {(product as any).discount_percent > 0 && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold z-10">
+                    <div className="absolute top-2 left-2 bg-error text-white text-xs px-2 py-1 rounded-full font-bold z-10">
                       -{(product as any).discount_percent}%
                     </div>
                   )}
                   {product.track_stock === 1 && product.stock_quantity >= 0 && product.stock_quantity <= 3 && product.stock_quantity > 0 && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                    <div className="absolute top-2 right-2 bg-error text-white text-xs px-2 py-1 rounded-full font-bold">
                       🔥 {isArabic ? `${product.stock_quantity} فقط` : `${product.stock_quantity} left`}
                     </div>
                   )}
@@ -140,19 +140,19 @@ export default function Home() {
                       {(product as any).discount_percent > 0 ? (
                         <>
                           <span className="line-through text-gray-400 text-xs">AED {product.price}</span>
-                          <span className="text-orange-500 font-bold text-sm whitespace-nowrap block">AED {(product.price * (1 - (product as any).discount_percent / 100)).toFixed(0)}</span>
+                          <span className="text-primary-500 font-bold text-sm whitespace-nowrap block">AED {(product.price * (1 - (product as any).discount_percent / 100)).toFixed(0)}</span>
                         </>
                       ) : (
-                        <span className="text-orange-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
+                        <span className="text-primary-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
                       )}
                     </div>
                   </div>
                   <p className="text-gray-500 text-sm line-clamp-2 mb-2">{displayDesc}</p>
                   {getStockBadge(product)}
                   <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
-                    <Link to={`/shop/${product.seller?.id}`} onClick={e => e.stopPropagation()} className="hover:text-orange-500 transition">🏠 {product.seller?.shop_name}</Link>
+                    <Link to={`/shop/${product.seller?.id}`} onClick={e => e.stopPropagation()} className="hover:text-primary-500 transition">🏠 {product.seller?.shop_name}</Link>
                     {product.seller?.rating > 0 && (
-                      <span className="text-yellow-400 text-xs">{"★".repeat(Math.round(product.seller.rating))}{"☆".repeat(5 - Math.round(product.seller.rating))} {product.seller.rating}</span>
+                      <span className="text-gold text-xs">{"★".repeat(Math.round(product.seller.rating))}{"☆".repeat(5 - Math.round(product.seller.rating))} {product.seller.rating}</span>
                     )}
                     {(product as any).sold_count > 0 && (
                       <span className="text-gray-400 text-xs">· {(product as any).sold_count} {isArabic ? "مبيع" : "sold"}</span>
@@ -160,7 +160,7 @@ export default function Home() {
                     <span>⏱ {product.preparation_time}{isArabic ? "د" : "min"}</span>
                   </div>
                   {displayCat && (
-                    <div className="mt-2"><span className="inline-block bg-orange-50 text-orange-600 text-xs px-2 py-1 rounded-full">{product.category?.icon && String(product.category.icon).startsWith("/") ? <img src={product.category.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : null}{displayCat}</span></div>
+                    <div className="mt-2"><span className="inline-block bg-primary-50 text-primary-600 text-xs px-2 py-1 rounded-full">{product.category?.icon && String(product.category.icon).startsWith("/") ? <img src={product.category.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : null}{displayCat}</span></div>
                   )}
                 </div>
               </Link>

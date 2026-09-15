@@ -46,22 +46,22 @@ export default function PricingAdvisor({ price, productName, category = "", cate
 
   const config = {
     good: {
-      bg: "bg-green-50", border: "border-green-200", text: "text-green-700",
+      bg: "bg-success-tint", border: "border-success-tint", text: "text-success",
       icon: "✅",
       label_ar: "سعر تنافسي!", label_en: "Competitive price!"
     },
     high: {
-      bg: "bg-red-50", border: "border-red-200", text: "text-red-700",
+      bg: "bg-error-tint", border: "border-error-tint", text: "text-error",
       icon: "⚠️",
       label_ar: "السعر مرتفع قليلاً", label_en: "Price might be too high"
     },
     low: {
-      bg: "bg-yellow-50", border: "border-yellow-200", text: "text-yellow-700",
+      bg: "bg-warning-tint", border: "border-warning-tint", text: "text-warning",
       icon: "💡",
       label_ar: "يمكنك رفع السعر", label_en: "You could charge more"
     },
     unique: {
-      bg: "bg-blue-50", border: "border-blue-200", text: "text-blue-700",
+      bg: "bg-info-tint", border: "border-info-tint", text: "text-info",
       icon: "✨",
       label_ar: "منتج نادر في السوق!", label_en: "Unique in the UAE market!"
     },

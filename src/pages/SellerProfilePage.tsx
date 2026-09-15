@@ -5,9 +5,9 @@ import SEO from "../components/SEO";
 import { useLanguage } from "../context/LanguageContext";
 
 const BADGE_CONFIG: Record<string, { label: string; labelAr: string; color: string; icon: string }> = {
-  verified:  { label: "Verified",  labelAr: "موثق",  color: "bg-blue-50 text-blue-700 border-blue-200",     icon: "✔" },
+  verified:  { label: "Verified",  labelAr: "موثق",  color: "bg-secondary-tint text-secondary border-secondary-300",     icon: "✔" },
   inspected: { label: "Inspected", labelAr: "مفتش",  color: "bg-purple-50 text-purple-700 border-purple-200", icon: "/icons/bayti/ui/search.png" },
-  certified: { label: "Certified", labelAr: "معتمد", color: "bg-green-50 text-green-700 border-green-200",   icon: "🏅" },
+  certified: { label: "Certified", labelAr: "معتمد", color: "bg-secondary-tint text-secondary border-secondary-300",   icon: "🏅" },
 };
 
 export default function SellerProfilePage() {
@@ -78,14 +78,14 @@ export default function SellerProfilePage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-orange-500 mb-6 inline-block">
+      <button onClick={() => navigate(-1)} className="text-sm text-gray-500 hover:text-primary-500 mb-6 inline-block">
         {isArabic ? "→ رجوع" : "← Back"}
       </button>
 
       {/* Shop header */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-orange-50 flex items-center justify-center flex-shrink-0 border-2 border-orange-100">
+          <div className="w-16 h-16 rounded-full overflow-hidden bg-primary-50 flex items-center justify-center flex-shrink-0 border-2 border-primary-100">
             {seller.logo_url
               ? <img src={seller.logo_url.startsWith("http") ? seller.logo_url : `https://web-production-63685.up.railway.app${seller.logo_url}`} alt={seller.shop_name} className="w-full h-full object-cover" />
               : <img src="/logo-icon.png" alt={seller.shop_name} className="w-full h-full object-contain p-2" />
@@ -107,10 +107,10 @@ export default function SellerProfilePage() {
               {seller.avg_response_minutes != null && (
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium border ${
                   seller.avg_response_minutes <= 30
-                    ? "bg-green-50 text-green-700 border-green-200"
+                    ? "bg-success-tint text-success border-success-tint"
                     : seller.avg_response_minutes <= 120
-                    ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-                    : "bg-red-50 text-red-600 border-red-200"
+                    ? "bg-warning-tint text-warning border-warning-tint"
+                    : "bg-error-tint text-error border-error-tint"
                 }`}>
                   ⚡ {isArabic ? "يرد عادةً خلال " : "Usually responds in "}
                   {seller.avg_response_minutes < 60
@@ -140,7 +140,7 @@ export default function SellerProfilePage() {
                 <span>🕐 {seller.available_from} – {seller.available_until}</span>
               )}
               {!seller.accepting_orders && (
-                <span className="text-red-500 font-medium">{isArabic ? "مغلق الآن" : "Closed now"}</span>
+                <span className="text-error font-medium">{isArabic ? "مغلق الآن" : "Closed now"}</span>
               )}
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function SellerProfilePage() {
             <p className="text-xs font-medium text-gray-500 mb-2">{isArabic ? "يبيع" : "Sells"}</p>
             <div className="flex flex-wrap gap-2">
               {offeredCategories.map(cat => (
-                <span key={cat.id} className="text-xs bg-orange-50 text-orange-700 px-3 py-1 rounded-full">
+                <span key={cat.id} className="text-xs bg-primary-50 text-primary-700 px-3 py-1 rounded-full">
                   {String(cat.icon).startsWith("/") ? <img src={cat.icon} alt="" aria-hidden="true" className="w-3 h-3 object-contain inline-block mr-1" /> : <span className="mr-1">{cat.icon}</span>}{isArabic && cat.name_ar ? cat.name_ar : cat.name}
                 </span>
               ))}
@@ -196,7 +196,7 @@ export default function SellerProfilePage() {
                 <div className="flex items-center gap-2 mb-2">
                   <div className="flex">
                     {[1,2,3,4,5].map(s => (
-                      <span key={s} className={`text-lg ${s <= review.rating ? "text-yellow-400" : "text-gray-200"}`}>★</span>
+                      <span key={s} className={`text-lg ${s <= review.rating ? "text-gold" : "text-gray-200"}`}>★</span>
                     ))}
                   </div>
                   <span className="text-sm font-medium text-gray-900">{review.buyer_name}</span>
@@ -218,12 +218,12 @@ export default function SellerProfilePage() {
       {offeredCategories.length > 1 && (
         <div className="flex gap-2 flex-wrap mb-4">
           <button onClick={() => setSelectedCategory(null)}
-            className={`text-sm px-4 py-1.5 rounded-full border transition ${selectedCategory === null ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
+            className={`text-sm px-4 py-1.5 rounded-full border transition ${selectedCategory === null ? "bg-primary-500 text-white border-primary-500" : "bg-white text-gray-600 border-gray-200 hover:border-primary-300"}`}>
             {isArabic ? "الكل" : "All"}
           </button>
           {offeredCategories.map(cat => (
             <button key={cat.id} onClick={() => setSelectedCategory(cat.id === selectedCategory ? null : cat.id)}
-              className={`text-sm px-4 py-1.5 rounded-full border transition ${selectedCategory === cat.id ? "bg-orange-500 text-white border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
+              className={`text-sm px-4 py-1.5 rounded-full border transition ${selectedCategory === cat.id ? "bg-primary-500 text-white border-primary-500" : "bg-white text-gray-600 border-gray-200 hover:border-primary-300"}`}>
               {isArabic && cat.name_ar ? cat.name_ar : cat.name}
             </button>
           ))}
@@ -247,7 +247,7 @@ export default function SellerProfilePage() {
             return (
               <Link key={product.id} to={`/product/${product.id}`}
                 className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group border border-gray-100">
-                <div className="h-40 bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center overflow-hidden">
+                <div className="h-40 bg-gradient-to-br from-primary-50 to-primary-50 flex items-center justify-center overflow-hidden">
                   {product.image_url
                     ? <img src={product.image_url.startsWith("http") ? product.image_url : `https://web-production-63685.up.railway.app${product.image_url}`}
                         alt={displayName} className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
@@ -261,10 +261,10 @@ export default function SellerProfilePage() {
                       {product.discount_percent > 0 ? (
                         <>
                           <span className="line-through text-gray-400 text-xs">AED {product.price}</span>
-                          <span className="text-orange-500 font-bold text-sm whitespace-nowrap block">AED {(product.price * (1 - product.discount_percent / 100)).toFixed(0)}</span>
+                          <span className="text-primary-500 font-bold text-sm whitespace-nowrap block">AED {(product.price * (1 - product.discount_percent / 100)).toFixed(0)}</span>
                         </>
                       ) : (
-                        <span className="text-orange-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
+                        <span className="text-primary-500 font-bold text-sm whitespace-nowrap">AED {product.price}</span>
                       )}
                     </div>
                   </div>

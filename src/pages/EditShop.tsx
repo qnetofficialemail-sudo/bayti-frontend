@@ -90,15 +90,15 @@ export default function EditShop() {
   return (
     <div className="max-w-xl mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">{isArabic ? "تعديل معلومات المتجر" : "Edit Shop Profile"}</h1>
-      {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
-      {success && <div className="bg-green-50 text-green-700 text-sm px-4 py-3 rounded-xl mb-4">✅ {isArabic ? "تم الحفظ!" : "Saved!"}</div>}
+      {error && <div className="bg-error-tint text-error text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
+      {success && <div className="bg-success-tint text-success text-sm px-4 py-3 rounded-xl mb-4">✅ {isArabic ? "تم الحفظ!" : "Saved!"}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Shop images */}
         {/* Logo */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">{isArabic ? "صورة البروفايل" : "Profile Photo"}</label>
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-orange-200 flex items-center justify-center bg-orange-50 flex-shrink-0">
+            <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-primary-200 flex items-center justify-center bg-primary-50 flex-shrink-0">
               {logoPreview
                 ? <img src={logoPreview} alt="logo" className="w-full h-full object-cover" />
                 : existingLogo
@@ -107,7 +107,7 @@ export default function EditShop() {
               }
             </div>
             <label className="cursor-pointer">
-              <div className="text-sm text-orange-500 hover:text-orange-600 border border-orange-200 rounded-xl px-4 py-2 hover:bg-orange-50 transition">
+              <div className="text-sm text-primary-500 hover:text-primary-600 border border-primary-200 rounded-xl px-4 py-2 hover:bg-primary-50 transition">
                 {isArabic ? "رفع صورة" : "Upload Photo"}
               </div>
               <input type="file" accept="image/*" className="hidden" onChange={e => {
@@ -134,7 +134,7 @@ export default function EditShop() {
                   }
                 </div>
                 <label className="block cursor-pointer">
-                  <div className="text-center text-xs text-orange-500 hover:text-orange-600 py-1 border border-orange-200 rounded-lg hover:bg-orange-50 transition">
+                  <div className="text-center text-xs text-primary-500 hover:text-primary-600 py-1 border border-primary-200 rounded-lg hover:bg-primary-50 transition">
                     {isArabic ? "تغيير" : "Upload"}
                   </div>
                   <input type="file" accept="image/*" className="hidden" onChange={e => handleNewImage(i, e.target.files?.[0] || null)} />
@@ -147,25 +147,25 @@ export default function EditShop() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "اسم المتجر *" : "Shop name *"}</label>
           <input type="text" value={form.shop_name} onChange={e => setForm(f => ({ ...f, shop_name: e.target.value }))} required
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وصف المتجر" : "Shop description"}</label>
           <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={3}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وصف المتجر بالعربي" : "Shop description (Arabic)"}</label>
           <textarea value={form.description_ar} onChange={e => setForm(f => ({ ...f, description_ar: e.target.value }))} rows={3}
             placeholder={isArabic ? "وصف متجرك بالعربية..." : "Shop description in Arabic..."}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none" dir="rtl" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none" dir="rtl" />
           <p className="text-xs text-gray-400 mt-1">{isArabic ? "إذا تركتها فارغة سيترجمها الذكاء الاصطناعي تلقائياً" : "Leave empty to auto-translate with AI"}</p>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "المنطقة *" : "Area *"}</label>
           <select value={form.area} onChange={e => setForm(f => ({ ...f, area: e.target.value }))} required
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white">
             <option value="">{isArabic ? "اختر منطقتك" : "Select your area"}</option>
             {UAE_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
           </select>
@@ -175,20 +175,20 @@ export default function EditShop() {
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "واتساب" : "WhatsApp"}</label>
             <input type="tel" value={form.whatsapp_number} onChange={e => setForm(f => ({ ...f, whatsapp_number: e.target.value }))}
               placeholder="+971 50 000 0000"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "إنستغرام" : "Instagram"}</label>
             <input type="text" value={form.instagram_handle} onChange={e => setForm(f => ({ ...f, instagram_handle: e.target.value }))}
               placeholder="@handle"
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           </div>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الحد الأدنى للطلب (درهم)" : "Minimum order (AED)"}</label>
           <input type="number" value={form.min_order_amount} onChange={e => setForm(f => ({ ...f, min_order_amount: e.target.value }))}
             placeholder="e.g. 50" min="0"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
         </div>
         {/* Delivery Fees */}
         <div>
@@ -219,11 +219,11 @@ export default function EditShop() {
                       });
                     }}
                     placeholder={isArabic ? "لا يتوفر" : "Not available"}
-                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                    className="flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
                   />
                 </div>
                 {deliveryFees[emirate] && (
-                  <span className="text-xs text-green-600 font-medium w-16">AED {deliveryFees[emirate]}</span>
+                  <span className="text-xs text-success font-medium w-16">AED {deliveryFees[emirate]}</span>
                 )}
                 {!deliveryFees[emirate] && (
                   <span className="text-xs text-gray-300 w-16">{isArabic ? "غير متاح" : "N/A"}</span>
@@ -239,7 +239,7 @@ export default function EditShop() {
             {isArabic ? "إلغاء" : "Cancel"}
           </button>
           <button type="submit" disabled={saving}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
+            className="flex-1 bg-primary-500 hover:bg-primary-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
             {saving ? (isArabic ? "جاري الحفظ..." : "Saving...") : (isArabic ? "حفظ" : "Save Changes")}
           </button>
         </div>

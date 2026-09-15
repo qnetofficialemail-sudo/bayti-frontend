@@ -4,7 +4,7 @@ import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 
-const STATUS_COLORS: Record<string, string> = { pending: "bg-yellow-50 text-yellow-700 border-yellow-200", confirmed: "bg-blue-50 text-blue-700 border-blue-200", preparing: "bg-purple-50 text-purple-700 border-purple-200", ready: "bg-green-50 text-green-700 border-green-200", delivering: "bg-orange-50 text-orange-700 border-orange-200", delivered: "bg-gray-50 text-gray-600 border-gray-200", cancelled: "bg-red-50 text-red-600 border-red-200" };
+const STATUS_COLORS: Record<string, string> = { pending: "bg-warning-tint text-warning border-warning-tint", confirmed: "bg-info-tint text-info border-info-tint", preparing: "bg-purple-50 text-purple-700 border-purple-200", ready: "bg-success-tint text-success border-success-tint", delivering: "bg-primary-50 text-primary-700 border-primary-200", delivered: "bg-gray-50 text-gray-600 border-gray-200", cancelled: "bg-error-tint text-error border-error-tint" };
 const STATUS_AR: Record<string, string> = { pending: "قيد الانتظار", confirmed: "مؤكد", preparing: "جاري التحضير", ready: "جاهز", delivering: "في الطريق", delivered: "تم التوصيل", cancelled: "ملغي" };
 const STATUS_STEPS = ["pending", "confirmed", "preparing", "ready", "delivering", "delivered"];
 const STEP_LABELS_EN = ["Placed", "Confirmed", "Cooking", "Ready", "On way"];
@@ -97,7 +97,7 @@ export default function Orders() {
         <div className="text-center py-20 text-gray-400">
           <div className="text-5xl mb-4">📦</div>
           <p className="text-lg mb-4">{isArabic ? "لا توجد طلبات بعد" : "No orders yet"}</p>
-          <Link to="/" className="bg-orange-500 text-gray-900 px-6 py-3 rounded-xl font-medium hover:bg-orange-600 transition">{isArabic ? "تصفح المنتجات" : "Browse Products"}</Link>
+          <Link to="/" className="bg-primary-500 text-gray-900 px-6 py-3 rounded-xl font-medium hover:bg-primary-600 transition">{isArabic ? "تصفح المنتجات" : "Browse Products"}</Link>
         </div>
       ) : (
         <div className="space-y-6">
@@ -120,14 +120,14 @@ export default function Orders() {
                     <div className="flex items-center gap-1">
                       {STATUS_STEPS.slice(0, -1).map((step, i) => (
                         <React.Fragment key={step}>
-                          <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i <= stepIndex ? "bg-orange-500 text-gray-900" : "bg-gray-200 text-gray-400"}`}>{i < stepIndex ? "✓" : i + 1}</div>
-                          {i < STATUS_STEPS.length - 2 && <div className={`flex-1 h-1 rounded ${i < stepIndex ? "bg-orange-500" : "bg-gray-200"}`} />}
+                          <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${i <= stepIndex ? "bg-primary-500 text-gray-900" : "bg-gray-200 text-gray-400"}`}>{i < stepIndex ? "✓" : i + 1}</div>
+                          {i < STATUS_STEPS.length - 2 && <div className={`flex-1 h-1 rounded ${i < stepIndex ? "bg-primary-500" : "bg-gray-200"}`} />}
                         </React.Fragment>
                       ))}
                     </div>
                     <div className="flex justify-between mt-1">
                       {stepLabels.map((label, i) => (
-                        <span key={label} className={`text-xs ${i <= stepIndex ? "text-orange-500 font-medium" : "text-gray-400"}`}>{label}</span>
+                        <span key={label} className={`text-xs ${i <= stepIndex ? "text-primary-500 font-medium" : "text-gray-400"}`}>{label}</span>
                       ))}
                     </div>
                   </div>
@@ -140,16 +140,16 @@ export default function Orders() {
                     </span>
                     {order.status === "pending" && user?.role === "buyer" && order.cancel_deadline && new Date(order.cancel_deadline) > new Date() && (
                       <button onClick={() => cancelOrder(order.id)}
-                        className="text-xs bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1 rounded-full font-medium transition">
+                        className="text-xs bg-error-tint text-error hover:bg-error-tint px-3 py-1 rounded-full font-medium transition">
                         ✕ {isArabic ? "إلغاء" : "Cancel"}
                       </button>
                     )}
                     {order.status === "delivered" && user?.role === "buyer" && (
                       reviewedOrders.includes(order.id) ? (
-                        <span className="text-xs text-green-600 font-medium">⭐ {isArabic ? "تم التقييم" : "Reviewed"}</span>
+                        <span className="text-xs text-success font-medium">⭐ {isArabic ? "تم التقييم" : "Reviewed"}</span>
                       ) : (
                         <button onClick={() => { setReviewModal(order); setReviewRating(5); setReviewComment(""); }}
-                          className="text-xs bg-orange-50 text-orange-600 hover:bg-orange-100 px-3 py-1 rounded-full font-medium transition">
+                          className="text-xs bg-primary-50 text-primary-600 hover:bg-primary-100 px-3 py-1 rounded-full font-medium transition">
                           ⭐ {isArabic ? "قيّم الطلب" : "Rate Order"}
                         </button>
                       )
@@ -172,7 +172,7 @@ export default function Orders() {
           <div className="flex justify-center gap-2 mb-4">
             {[1, 2, 3, 4, 5].map(star => (
               <button key={star} onClick={() => setReviewRating(star)}
-                className={`text-3xl transition ${star <= reviewRating ? "text-yellow-400" : "text-gray-200"}`}>
+                className={`text-3xl transition ${star <= reviewRating ? "text-gold" : "text-gray-200"}`}>
                 ★
               </button>
             ))}
@@ -188,7 +188,7 @@ export default function Orders() {
           <textarea value={reviewComment} onChange={e => setReviewComment(e.target.value)}
             placeholder={isArabic ? "أضف تعليقاً (اختياري)..." : "Add a comment (optional)..."}
             rows={3}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none mb-4" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none mb-4" />
 
           <div className="flex gap-3">
             <button onClick={() => setReviewModal(null)}
@@ -196,7 +196,7 @@ export default function Orders() {
               {isArabic ? "إلغاء" : "Cancel"}
             </button>
             <button onClick={submitReview} disabled={reviewSubmitting}
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl text-sm font-medium transition disabled:opacity-60">
+              className="flex-1 bg-primary-500 hover:bg-primary-600 text-gray-900 py-3 rounded-xl text-sm font-medium transition disabled:opacity-60">
               {reviewSubmitting ? "..." : (isArabic ? "إرسال" : "Submit")}
             </button>
           </div>

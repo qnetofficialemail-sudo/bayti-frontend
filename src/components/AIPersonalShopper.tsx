@@ -113,7 +113,7 @@ export default function AIPersonalShopper() {
                 </div>
                 <div>
                   <div className="font-semibold text-white text-sm">{isArabic ? "مساعد التسوق الذكي" : "AI Personal Shopper"}</div>
-                  <div className="text-orange-100 text-xs">{isArabic ? "أخبرني ماذا تحتاج" : "Tell me what you're looking for"}</div>
+                  <div className="text-primary-100 text-xs">{isArabic ? "أخبرني ماذا تحتاج" : "Tell me what you're looking for"}</div>
                 </div>
               </div>
               <button onClick={() => { setOpen(false); setRecommendations([]); setQuery(""); setAsked(false); }}
@@ -138,7 +138,7 @@ export default function AIPersonalShopper() {
                       "Handmade jewelry for a wedding",
                     ]).map((ex, i) => (
                       <button key={i} onClick={() => setQuery(ex)}
-                        className="text-xs bg-orange-50 text-orange-600 border border-orange-200 px-3 py-1.5 rounded-lg hover:bg-orange-100 transition">
+                        className="text-xs bg-primary-50 text-primary-600 border border-primary-200 px-3 py-1.5 rounded-lg hover:bg-primary-100 transition">
                         {ex}
                       </button>
                     ))}
@@ -153,7 +153,7 @@ export default function AIPersonalShopper() {
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && handleSearch()}
                   placeholder={isArabic ? "أخبرني ماذا تحتاج..." : "What are you looking for?"}
-                  className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
+                  className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300"
                   dir={isArabic ? "rtl" : "ltr"}
                 />
                 <button onClick={handleSearch} disabled={loading || !query.trim()}
@@ -175,7 +175,7 @@ export default function AIPersonalShopper() {
               )}
 
               {/* Error */}
-              {error && <p className="text-sm text-red-500 text-center py-2">{error}</p>}
+              {error && <p className="text-sm text-error text-center py-2">{error}</p>}
 
               {/* Recommendations */}
               {recommendations.length > 0 && (
@@ -184,8 +184,8 @@ export default function AIPersonalShopper() {
                   <div className="space-y-3 max-h-72 overflow-y-auto">
                     {recommendations.map((product: any, i: number) => (
                       <Link key={i} to={`/product/${product.id}`} onClick={() => setOpen(false)}
-                        className="flex gap-3 p-3 rounded-2xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50 transition group">
-                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-orange-50 flex-shrink-0">
+                        className="flex gap-3 p-3 rounded-2xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50 transition group">
+                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-primary-50 flex-shrink-0">
                           {imgUrl(product.image_url)
                             ? <img src={imgUrl(product.image_url)!} alt={product.name} className="w-full h-full object-cover"/>
                             : <div className="w-full h-full flex items-center justify-center text-2xl">🛍️</div>

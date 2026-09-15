@@ -275,11 +275,11 @@ export default function AddProduct() {
       {/* Mode Toggle */}
       <div className="flex gap-2 p-1 bg-gray-100 rounded-2xl mb-5">
         <button type="button" onClick={() => setMode("single")}
-          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition ${mode === "single" ? "bg-white shadow text-orange-500" : "text-gray-500 hover:text-gray-700"}`}>
+          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition ${mode === "single" ? "bg-white shadow text-primary-500" : "text-gray-500 hover:text-gray-700"}`}>
           {isArabic ? "➕ منتج واحد" : "➕ Single Product"}
         </button>
         <button type="button" onClick={() => { setMode("bulk"); setBulkAnalyzed(false); setBulkProducts([]); setBulkFiles([]); setBulkPreviews([]); }}
-          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition ${mode === "bulk" ? "bg-white shadow text-orange-500" : "text-gray-500 hover:text-gray-700"}`}>
+          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition ${mode === "bulk" ? "bg-white shadow text-primary-500" : "text-gray-500 hover:text-gray-700"}`}>
           {isArabic ? "🚀 رفع متعدد بالذكاء الاصطناعي" : "🚀 Bulk AI Upload"}
         </button>
       </div>
@@ -289,11 +289,11 @@ export default function AddProduct() {
         <div className="space-y-5">
           {bulkFiles.length === 0 && (
             <div className="space-y-4">
-              <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4">
-                <p className="text-sm font-medium text-orange-900">{isArabic ? "🤖 رفع متعدد ذكي" : "🤖 Smart Bulk Upload"}</p>
-                <p className="text-xs text-orange-600 mt-1">{isArabic ? "ارفع صور منتجاتك — ثم حددي أي صور تنتمي لنفس المنتج" : "Upload your product photos — then group photos that belong to the same product"}</p>
+              <div className="bg-primary-50 border border-primary-200 rounded-2xl p-4">
+                <p className="text-sm font-medium text-primary-900">{isArabic ? "🤖 رفع متعدد ذكي" : "🤖 Smart Bulk Upload"}</p>
+                <p className="text-xs text-primary-600 mt-1">{isArabic ? "ارفع صور منتجاتك — ثم حددي أي صور تنتمي لنفس المنتج" : "Upload your product photos — then group photos that belong to the same product"}</p>
               </div>
-              <label className="block border-2 border-dashed border-orange-200 rounded-2xl p-8 text-center cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition">
+              <label className="block border-2 border-dashed border-primary-200 rounded-2xl p-8 text-center cursor-pointer hover:border-primary-400 hover:bg-primary-50 transition">
                 <div className="text-4xl mb-3">📸</div>
                 <p className="text-sm font-medium text-gray-700">{isArabic ? "اختر صور منتجاتك" : "Select your product photos"}</p>
                 <p className="text-xs text-gray-400 mt-1">{isArabic ? "حتى 20 صورة دفعة واحدة" : "Up to 20 photos at once"}</p>
@@ -309,16 +309,16 @@ export default function AddProduct() {
 
           {bulkFiles.length > 0 && !bulkAnalyzed && (
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
-                <p className="text-sm font-medium text-blue-900">{isArabic ? "📌 حددي المنتج لكل صورة" : "📌 Assign each photo to a product"}</p>
-                <p className="text-xs text-blue-600 mt-1">{isArabic ? "الصور التي تحمل نفس رقم المنتج ستُجمع معاً في صفحة منتج واحدة" : "Photos with the same product number will be grouped into one product page"}</p>
+              <div className="bg-info-tint border border-info-tint rounded-2xl p-4">
+                <p className="text-sm font-medium text-info">{isArabic ? "📌 حددي المنتج لكل صورة" : "📌 Assign each photo to a product"}</p>
+                <p className="text-xs text-info mt-1">{isArabic ? "الصور التي تحمل نفس رقم المنتج ستُجمع معاً في صفحة منتج واحدة" : "Photos with the same product number will be grouped into one product page"}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 {bulkPreviews.map((src, i) => {
                   const currentGroup = bulkGroups[i] || "product_1";
                   const groupNum = parseInt(currentGroup.split("_")[1]);
-                  const groupColors = ["bg-orange-500","bg-blue-500","bg-green-500","bg-purple-500","bg-red-500","bg-yellow-500","bg-pink-500","bg-indigo-500"];
+                  const groupColors = ["bg-primary-500","bg-info","bg-success","bg-purple-500","bg-error","bg-yellow-500","bg-pink-500","bg-indigo-500"];
                   const color = groupColors[(groupNum - 1) % groupColors.length];
                   return (
                     <div key={i} className="border border-gray-200 rounded-2xl overflow-hidden">
@@ -336,7 +336,7 @@ export default function AddProduct() {
                             newGroups[i] = e.target.value;
                             setBulkGroups(newGroups);
                           }}
-                          className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                          className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-300"
                         >
                           {Array.from({length: Math.min(bulkFiles.length, 10)}, (_, j) => (
                             <option key={j+1} value={`product_${j+1}`}>
@@ -357,7 +357,7 @@ export default function AddProduct() {
                     const count = bulkGroups.filter(g => g === group).length;
                     const num = parseInt(group.split("_")[1]);
                     return (
-                      <span key={group} className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                      <span key={group} className="text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full">
                         {isArabic ? `منتج ${num}: ${count} صور` : `Product ${num}: ${count} photo${count>1?"s":""}`}
                       </span>
                     );
@@ -371,7 +371,7 @@ export default function AddProduct() {
                   {isArabic ? "إعادة الاختيار" : "Reselect"}
                 </button>
                 <button type="button" onClick={analyzeBulk} disabled={bulkLoading}
-                  className="flex-1 bg-orange-500 text-white py-3 rounded-2xl font-bold text-sm hover:bg-orange-600 disabled:opacity-50 transition">
+                  className="flex-1 bg-primary-500 text-white py-3 rounded-2xl font-bold text-sm hover:bg-primary-600 disabled:opacity-50 transition">
                   {bulkLoading ? (isArabic ? "جاري التحليل..." : "Analyzing...") : (isArabic ? "تحليل بالذكاء الاصطناعي" : "Analyze with AI")}
                 </button>
               </div>
@@ -385,14 +385,14 @@ export default function AddProduct() {
                   {isArabic ? `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} منتج تم نشره` : `${bulkProducts.filter((p:any)=>p.done).length}/${bulkProducts.length} published`}
                 </p>
                 <button type="button" onClick={() => { setBulkAnalyzed(false); setBulkFiles([]); setBulkPreviews([]); setBulkProducts([]); setBulkGroups([]); }}
-                  className="text-xs text-orange-500 hover:underline">{isArabic ? "ابدأ من جديد" : "Start over"}</button>
+                  className="text-xs text-primary-500 hover:underline">{isArabic ? "ابدأ من جديد" : "Start over"}</button>
               </div>
 
               {bulkProducts.map((prod: any, index: number) => (
-                <div key={index} className={`border rounded-2xl overflow-hidden ${prod.done ? "border-green-200 bg-green-50" : "border-gray-200"}`}>
+                <div key={index} className={`border rounded-2xl overflow-hidden ${prod.done ? "border-success-tint bg-success-tint" : "border-gray-200"}`}>
                   <div className="flex gap-1 p-2 bg-gray-50 border-b border-gray-100">
                     {prod.images.map((src: string, imgIdx: number) => (
-                      <img key={imgIdx} src={src} alt="" className={`h-16 w-16 object-cover rounded-lg ${imgIdx === 0 ? "ring-2 ring-orange-400" : ""}`} />
+                      <img key={imgIdx} src={src} alt="" className={`h-16 w-16 object-cover rounded-lg ${imgIdx === 0 ? "ring-2 ring-primary-400" : ""}`} />
                     ))}
                     {prod.images.length > 1 && (
                       <div className="flex items-center text-xs text-gray-400 px-2">
@@ -403,17 +403,17 @@ export default function AddProduct() {
 
                   <div className="p-3 space-y-2">
                     {prod.done ? (
-                      <p className="text-sm font-medium text-green-700">✅ {isArabic ? "تم النشر" : "Published"}</p>
+                      <p className="text-sm font-medium text-success">✅ {isArabic ? "تم النشر" : "Published"}</p>
                     ) : (
                       <>
                         <input value={prod.name} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, name: e.target.value} : p))}
                           placeholder={isArabic ? "اسم المنتج" : "Product name"}
-                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
                         <input type="number" value={prod.price} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, price: e.target.value} : p))}
                           placeholder={isArabic ? "السعر (درهم)" : "Price (AED)"}
-                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
                         <select value={prod.category_id} onChange={e => setBulkProducts((prev:any) => prev.map((p:any,i:number) => i===index ? {...p, category_id: e.target.value} : p))}
-                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300">
+                          className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300">
                           <option value="">{isArabic ? "اختر فئة" : "Select category"}</option>
                           {categories.map((cat: any) => (
                             <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>
@@ -421,7 +421,7 @@ export default function AddProduct() {
                         </select>
                         <button type="button" disabled={!prod.price || !prod.name}
                           onClick={() => submitBulkProduct(prod, index)}
-                          className="w-full bg-orange-500 text-white py-2 rounded-xl text-sm font-bold hover:bg-orange-600 disabled:opacity-40 transition">
+                          className="w-full bg-primary-500 text-white py-2 rounded-xl text-sm font-bold hover:bg-primary-600 disabled:opacity-40 transition">
                           {isArabic ? "نشر المنتج" : "Publish Product"}
                         </button>
                       </>
@@ -431,10 +431,10 @@ export default function AddProduct() {
               ))}
 
               {bulkProducts.length > 0 && bulkProducts.every((p:any) => p.done) && (
-                <div className="bg-green-50 border border-green-200 rounded-2xl p-4 text-center">
-                  <p className="text-green-700 font-bold text-sm">✅ {isArabic ? "تم نشر جميع المنتجات!" : "All products published!"}</p>
+                <div className="bg-success-tint border border-success-tint rounded-2xl p-4 text-center">
+                  <p className="text-success font-bold text-sm">✅ {isArabic ? "تم نشر جميع المنتجات!" : "All products published!"}</p>
                   <button type="button" onClick={() => navigate("/seller/dashboard")}
-                    className="mt-2 text-sm text-orange-500 hover:underline">{isArabic ? "عرض منتجاتي" : "View my products"}</button>
+                    className="mt-2 text-sm text-primary-500 hover:underline">{isArabic ? "عرض منتجاتي" : "View my products"}</button>
                 </div>
               )}
             </div>
@@ -447,7 +447,7 @@ export default function AddProduct() {
       <>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">{isArabic ? "إضافة منتج جديد" : "Add a new product"}</h1>
       <p className="text-gray-500 text-sm mb-8">{isArabic ? "ارفع صورة ودع الذكاء الاصطناعي يكتب قائمتك ✨" : "Upload a photo and let AI write your listing ✨"}</p>
-      {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
+      {error && <div className="bg-error-tint text-error text-sm px-4 py-3 rounded-xl mb-4">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-5">
 
         {/* Photos */}
@@ -460,7 +460,7 @@ export default function AddProduct() {
             {[0,1,2,3,4].map(i => (
               <div key={i} className="relative">
                 <label className="block cursor-pointer">
-                  <div className={`aspect-square rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${previews[i] ? "border-orange-300" : "border-gray-200 hover:border-orange-300"}`}>
+                  <div className={`aspect-square rounded-xl border-2 border-dashed flex items-center justify-center overflow-hidden transition ${previews[i] ? "border-primary-300" : "border-gray-200 hover:border-primary-300"}`}>
                     {previews[i] ? <img src={previews[i]!} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
                       : <div className="text-center text-gray-300"><div className="text-2xl">📷</div><div className="text-xs mt-1">{i === 0 ? (isArabic ? "رئيسية" : "Main") : i+1}</div></div>}
                   </div>
@@ -469,13 +469,13 @@ export default function AddProduct() {
                 {previews[i] && (
                   <div className="absolute top-1 right-1 flex flex-col gap-1">
                     <button type="button" onClick={() => setPrimaryIndex(i)}
-                      className={`w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-orange-500 text-gray-900" : "bg-white text-gray-400 hover:text-orange-500"}`}>★</button>
+                      className={`w-5 h-5 rounded-full text-xs flex items-center justify-center shadow ${primaryIndex === i ? "bg-primary-500 text-gray-900" : "bg-white text-gray-400 hover:text-primary-500"}`}>★</button>
                     <button type="button" onClick={() => handleImage(i, null)}
-                      className="w-5 h-5 rounded-full bg-white text-gray-400 hover:text-red-500 text-xs flex items-center justify-center shadow">✕</button>
+                      className="w-5 h-5 rounded-full bg-white text-gray-400 hover:text-error text-xs flex items-center justify-center shadow">✕</button>
                   </div>
                 )}
                 {primaryIndex === i && previews[i] && (
-                  <div className="absolute bottom-1 left-1 bg-orange-500 text-gray-900 text-xs px-1.5 py-0.5 rounded-full">{isArabic ? "رئيسية" : "Main"}</div>
+                  <div className="absolute bottom-1 left-1 bg-primary-500 text-gray-900 text-xs px-1.5 py-0.5 rounded-full">{isArabic ? "رئيسية" : "Main"}</div>
                 )}
               </div>
             ))}
@@ -501,7 +501,7 @@ export default function AddProduct() {
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "اسم المنتج *" : "Product name *"}</label>
           <input type="text" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required
             placeholder={isArabic ? "مثال: عباية صيفية" : "e.g. Summer Abaya"}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
         </div>
 
         {/* Description */}
@@ -509,14 +509,14 @@ export default function AddProduct() {
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الوصف" : "Description"}{aiSuggestion && <span className="ml-2 text-xs text-purple-500">✨ AI</span>}</label>
           <textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} rows={4}
             placeholder={isArabic ? "صف منتجك..." : "Describe your product..."}
-            className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none ${aiSuggestion ? "border-purple-300 bg-purple-50" : "border-gray-200"}`} />
+            className={`w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 resize-none ${aiSuggestion ? "border-purple-300 bg-purple-50" : "border-gray-200"}`} />
         </div>
 
         {/* Category */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "الفئة" : "Category"}</label>
           <select value={form.category_id} onChange={e => { setForm(f => ({ ...f, category_id: e.target.value })); setSpecs({}); }}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white">
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white">
             <option value="">{isArabic ? "اختر فئة" : "Select a category"}</option>
             {categories.map(cat => <option key={cat.id} value={cat.id}>{isArabic && cat.name_ar ? cat.name_ar : cat.name}</option>)}
           </select>
@@ -524,15 +524,15 @@ export default function AddProduct() {
 
         {/* Dynamic Category Specs */}
         {categorySpecsConfig && (
-          <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 space-y-4">
-            <p className="text-sm font-semibold text-orange-700">📋 {isArabic ? "مواصفات المنتج" : "Product Specifications"}</p>
+          <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 space-y-4">
+            <p className="text-sm font-semibold text-primary-700">📋 {isArabic ? "مواصفات المنتج" : "Product Specifications"}</p>
             {categorySpecsConfig.map(spec => (
               <div key={spec.key}>
                 <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? spec.label_ar : spec.label}</label>
                 {spec.type === "select" && (
                   <select value={(specs[spec.key] as string) || ""}
                     onChange={e => handleSpecChange(spec.key, e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white text-sm">
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white text-sm">
                     <option value="">{isArabic ? "اختر..." : "Select..."}</option>
                     {spec.options?.map(o => <option key={o} value={o}>{o}</option>)}
                   </select>
@@ -541,7 +541,7 @@ export default function AddProduct() {
                   <input type="text" value={(specs[spec.key] as string) || ""}
                     onChange={e => handleSpecChange(spec.key, e.target.value)}
                     placeholder={isArabic ? spec.label_ar : spec.label}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm" />
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary-300 text-sm" />
                 )}
                 {spec.type === "multiselect" && (
                   <div className="flex flex-wrap gap-2">
@@ -549,7 +549,7 @@ export default function AddProduct() {
                       const selected = ((specs[spec.key] as string[]) || []).includes(o);
                       return (
                         <button key={o} type="button" onClick={() => handleSpecMultiselect(spec.key, o)}
-                          className={`text-xs px-3 py-1.5 rounded-full border transition ${selected ? "bg-orange-500 text-gray-900 border-orange-500" : "bg-white text-gray-600 border-gray-200 hover:border-orange-300"}`}>
+                          className={`text-xs px-3 py-1.5 rounded-full border transition ${selected ? "bg-primary-500 text-gray-900 border-primary-500" : "bg-white text-gray-600 border-gray-200 hover:border-primary-300"}`}>
                           {o}
                         </button>
                       );
@@ -565,7 +565,7 @@ export default function AddProduct() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "السعر (درهم) *" : "Price (AED) *"}</label>
           <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required min="1" step="0.5"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
           <PricingAdvisor
             price={form.price}
             productName={form.name}
@@ -580,9 +580,9 @@ export default function AddProduct() {
           <label className="block text-sm font-medium text-gray-700 mb-1">{isArabic ? "وقت التجهيز" : "Processing time"}</label>
           <div className="flex gap-2">
             <input type="number" value={form.processing_days} onChange={e => setForm(f => ({ ...f, processing_days: e.target.value }))} min="1" max="999"
-              className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300" />
+              className="flex-1 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300" />
             <select value={form.time_unit} onChange={e => setForm(f => ({ ...f, time_unit: e.target.value }))}
-              className="border border-gray-200 rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white text-sm">
+              className="border border-gray-200 rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-primary-300 bg-white text-sm">
               <option value="minutes">{isArabic ? "دقيقة" : "mins"}</option>
               <option value="hours">{isArabic ? "ساعة" : "hrs"}</option>
               <option value="days">{isArabic ? "يوم" : "days"}</option>
@@ -591,59 +591,59 @@ export default function AddProduct() {
         </div>
 
         {/* Stock */}
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+        <div className="bg-info-tint border border-info-tint rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-sm font-medium text-blue-900">{isArabic ? "تتبع المخزون" : "Track Stock"}</p>
-              <p className="text-xs text-blue-600 mt-0.5">{isArabic ? "حدد كمية محدودة من المنتج" : "Set a limited quantity for this product"}</p>
+              <p className="text-sm font-medium text-info">{isArabic ? "تتبع المخزون" : "Track Stock"}</p>
+              <p className="text-xs text-info mt-0.5">{isArabic ? "حدد كمية محدودة من المنتج" : "Set a limited quantity for this product"}</p>
             </div>
             <button type="button" onClick={() => setForm(f => ({ ...f, track_stock: !f.track_stock }))}
-              className={`relative w-12 h-6 rounded-full transition-colors ${form.track_stock ? "bg-blue-500" : "bg-gray-300"}`}>
+              className={`relative w-12 h-6 rounded-full transition-colors ${form.track_stock ? "bg-info" : "bg-gray-300"}`}>
               <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.track_stock ? "translate-x-6" : ""}`} />
             </button>
           </div>
           {form.track_stock && (
             <input type="number" value={form.stock_quantity} onChange={e => setForm(f => ({ ...f, stock_quantity: e.target.value }))}
               min="1" required={form.track_stock} placeholder={isArabic ? "الكمية المتاحة" : "Available quantity"}
-              className="w-full border border-blue-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white" />
+              className="w-full border border-info rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-info bg-white" />
           )}
         </div>
 
         {/* Discount */}
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-3">
+        <div className="bg-error-tint border border-error-tint rounded-xl p-4 space-y-3">
           <div>
-            <p className="text-sm font-medium text-red-900">{isArabic ? "خصم على المنتج" : "Product Discount"}</p>
-            <p className="text-xs text-red-500 mt-0.5">{isArabic ? "اتركه صفراً اذا لا يوجد خصم" : "Leave 0 for no discount"}</p>
+            <p className="text-sm font-medium text-error">{isArabic ? "خصم على المنتج" : "Product Discount"}</p>
+            <p className="text-xs text-error mt-0.5">{isArabic ? "اتركه صفراً اذا لا يوجد خصم" : "Leave 0 for no discount"}</p>
           </div>
           <div className="flex items-center gap-3">
-            <input type="number" value={form.discount_percent} onChange={e => setForm(f => ({ ...f, discount_percent: e.target.value }))} min="0" max="90" step="1" placeholder="0" className="w-24 border border-red-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-red-300 bg-white text-center font-bold text-lg" />
-            <span className="text-red-700 font-bold text-lg">%</span>
+            <input type="number" value={form.discount_percent} onChange={e => setForm(f => ({ ...f, discount_percent: e.target.value }))} min="0" max="90" step="1" placeholder="0" className="w-24 border border-error-tint rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-error bg-white text-center font-bold text-lg" />
+            <span className="text-error font-bold text-lg">%</span>
             {form.discount_percent && parseFloat(form.discount_percent) > 0 && form.price && (
               <div className="flex items-center gap-2 text-sm">
                 <span className="line-through text-gray-400">AED {parseFloat(form.price).toFixed(0)}</span>
-                <span className="text-red-600 font-bold">AED {(parseFloat(form.price) * (1 - parseFloat(form.discount_percent) / 100)).toFixed(0)}</span>
-                <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">-{form.discount_percent}%</span>
+                <span className="text-error font-bold">AED {(parseFloat(form.price) * (1 - parseFloat(form.discount_percent) / 100)).toFixed(0)}</span>
+                <span className="bg-error text-white text-xs px-2 py-0.5 rounded-full">-{form.discount_percent}%</span>
               </div>
             )}
           </div>
         </div>
 
         {/* Free Shipping */}
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-3">
+        <div className="bg-success-tint border border-success-tint rounded-xl p-4 space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-green-900">{isArabic ? "توصيل مجاني" : "Free Shipping"}</p>
-              <p className="text-xs text-green-600 mt-0.5">{isArabic ? "يفعل عند طلب بمبلغ محدد او اكثر" : "Activated when order reaches a set amount"}</p>
+              <p className="text-sm font-medium text-success">{isArabic ? "توصيل مجاني" : "Free Shipping"}</p>
+              <p className="text-xs text-success mt-0.5">{isArabic ? "يفعل عند طلب بمبلغ محدد او اكثر" : "Activated when order reaches a set amount"}</p>
             </div>
-            <button type="button" onClick={() => setForm(f => ({ ...f, free_shipping_enabled: !f.free_shipping_enabled, free_shipping_min_amount: "" }))} className={`relative w-12 h-6 rounded-full transition-colors ${form.free_shipping_enabled ? "bg-green-500" : "bg-gray-300"}`}>
+            <button type="button" onClick={() => setForm(f => ({ ...f, free_shipping_enabled: !f.free_shipping_enabled, free_shipping_min_amount: "" }))} className={`relative w-12 h-6 rounded-full transition-colors ${form.free_shipping_enabled ? "bg-success" : "bg-gray-300"}`}>
               <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.free_shipping_enabled ? "translate-x-6" : ""}`} />
             </button>
           </div>
           {form.free_shipping_enabled && (
             <div className="flex items-center gap-3">
-              <span className="text-green-700 text-sm">{isArabic ? "مجاني عند طلب يبلغ" : "Free when order is"}</span>
-              <input type="number" value={form.free_shipping_min_amount} onChange={e => setForm(f => ({ ...f, free_shipping_min_amount: e.target.value }))} min="1" placeholder="100" className="w-24 border border-green-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-300 bg-white text-center font-bold" />
-              <span className="text-green-700 font-medium text-sm">AED</span>
+              <span className="text-success text-sm">{isArabic ? "مجاني عند طلب يبلغ" : "Free when order is"}</span>
+              <input type="number" value={form.free_shipping_min_amount} onChange={e => setForm(f => ({ ...f, free_shipping_min_amount: e.target.value }))} min="1" placeholder="100" className="w-24 border border-success rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success bg-white text-center font-bold" />
+              <span className="text-success font-medium text-sm">AED</span>
             </div>
           )}
         </div>
@@ -656,20 +656,20 @@ export default function AddProduct() {
               <p className="text-xs text-gray-500 mt-0.5">{isArabic ? "أضف خيارات للمشتري يختار منها" : "Let buyers choose from options"}</p>
             </div>
             <button type="button" onClick={() => setShowVariantBuilder(true)}
-              className="text-xs bg-orange-500 text-gray-900 px-3 py-1.5 rounded-lg hover:bg-orange-600 transition">
+              className="text-xs bg-primary-500 text-gray-900 px-3 py-1.5 rounded-lg hover:bg-primary-600 transition">
               + {isArabic ? "إضافة خيار" : "Add Variant"}
             </button>
           </div>
           {variants.length > 0 && (
             <div className="space-y-2 mb-3">
               {variants.map((v, i) => (
-                <div key={i} className="flex items-center justify-between bg-orange-50 rounded-lg px-3 py-2">
+                <div key={i} className="flex items-center justify-between bg-primary-50 rounded-lg px-3 py-2">
                   <div>
                     <span className="text-sm font-medium text-gray-900">{v.name}</span>
                     <span className="text-xs text-gray-500 ml-2">{v.options.map(o => o.label).join(", ")}</span>
                   </div>
                   <button type="button" onClick={() => setVariants(prev => prev.filter((_, idx) => idx !== i))}
-                    className="text-gray-400 hover:text-red-500 text-sm transition">✕</button>
+                    className="text-gray-400 hover:text-error text-sm transition">✕</button>
                 </div>
               ))}
             </div>
@@ -682,7 +682,7 @@ export default function AddProduct() {
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(VARIANT_PRESETS).map(([key, preset]) => (
                     <button key={key} type="button" onClick={() => applyPreset(key)}
-                      className="text-xs bg-white border border-gray-200 hover:border-orange-300 px-3 py-1.5 rounded-lg transition">
+                      className="text-xs bg-white border border-gray-200 hover:border-primary-300 px-3 py-1.5 rounded-lg transition">
                       {isArabic ? preset.name_ar : preset.name}
                     </button>
                   ))}
@@ -692,12 +692,12 @@ export default function AddProduct() {
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">{isArabic ? "اسم الخيار (EN)" : "Variant name (EN)"}</label>
                   <input type="text" value={newVariant.name} onChange={e => setNewVariant(v => ({ ...v, name: e.target.value }))}
-                    placeholder="e.g. Size" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                    placeholder="e.g. Size" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">{isArabic ? "اسم الخيار (AR)" : "Variant name (AR)"}</label>
                   <input type="text" value={newVariant.name_ar} onChange={e => setNewVariant(v => ({ ...v, name_ar: e.target.value }))}
-                    placeholder="مثال: المقاس" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                    placeholder="مثال: المقاس" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
                 </div>
               </div>
               <div>
@@ -707,19 +707,19 @@ export default function AddProduct() {
                     <div key={i} className="flex items-center gap-2">
                       <input type="text" value={opt.label} onChange={e => updateOption(i, "label", e.target.value)}
                         placeholder={isArabic ? "الخيار (مثال: M)" : "Option (e.g. M)"}
-                        className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                        className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
                       <div className="flex items-center gap-1">
                         <span className="text-xs text-gray-400">+AED</span>
                         <input type="number" value={opt.price_adj} onChange={e => updateOption(i, "price_adj", e.target.value)}
-                          placeholder="0" step="0.5" className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-300" />
+                          placeholder="0" step="0.5" className="w-16 border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300" />
                       </div>
                       {newVariant.options.length > 1 && (
-                        <button type="button" onClick={() => removeVariantOption(i)} className="text-gray-400 hover:text-red-500 transition">✕</button>
+                        <button type="button" onClick={() => removeVariantOption(i)} className="text-gray-400 hover:text-error transition">✕</button>
                       )}
                     </div>
                   ))}
                 </div>
-                <button type="button" onClick={addVariantOption} className="text-xs text-orange-500 hover:underline mt-2">
+                <button type="button" onClick={addVariantOption} className="text-xs text-primary-500 hover:underline mt-2">
                   + {isArabic ? "إضافة خيار آخر" : "Add another option"}
                 </button>
               </div>
@@ -736,7 +736,7 @@ export default function AddProduct() {
                   {isArabic ? "إلغاء" : "Cancel"}
                 </button>
                 <button type="button" onClick={saveVariant}
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-2 rounded-lg text-sm transition">
+                  className="flex-1 bg-primary-500 hover:bg-primary-600 text-gray-900 py-2 rounded-lg text-sm transition">
                   {isArabic ? "حفظ الخيار" : "Save Variant"}
                 </button>
               </div>
@@ -750,7 +750,7 @@ export default function AddProduct() {
             {isArabic ? "إلغاء" : "Cancel"}
           </button>
           <button type="submit" disabled={loading}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
+            className="flex-1 bg-primary-500 hover:bg-primary-600 text-gray-900 py-3 rounded-xl font-medium transition disabled:opacity-60">
             {loading ? (isArabic ? "جارٍ الإضافة..." : "Adding...") : (isArabic ? "إضافة المنتج" : "Add Product")}
           </button>
         </div>

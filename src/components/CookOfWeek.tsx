@@ -19,17 +19,17 @@ export default function SellerSpotlight() {
   return (
     <section className="py-6 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="bg-orange-50 border border-orange-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4">
+        <div className="bg-primary-50 border border-primary-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4">
           {/* Badge + seller info */}
           <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="w-12 h-12 rounded-xl overflow-hidden bg-white flex-shrink-0 border border-orange-100">
+            <div className="w-12 h-12 rounded-xl overflow-hidden bg-white flex-shrink-0 border border-primary-100">
               {img
                 ? <img src={img} alt={cook.shop_name} className="w-full h-full object-cover" />
-                : <div className="w-full h-full flex items-center justify-center bg-orange-50"><img src="/icons/bayti/ui/seller-store.png" alt="" aria-hidden="true" className="w-10 h-10 object-contain" /></div>}
+                : <div className="w-full h-full flex items-center justify-center bg-primary-50"><img src="/icons/bayti/ui/seller-store.png" alt="" aria-hidden="true" className="w-10 h-10 object-contain" /></div>}
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                <span className="text-xs font-semibold text-primary-600 bg-primary-100 px-2 py-0.5 rounded-full">
                   ⭐ {isArabic ? "بائع الأسبوع" : "Seller of the Week"}
                 </span>
               </div>
@@ -51,7 +51,7 @@ export default function SellerSpotlight() {
                 <p className="text-sm font-semibold text-gray-900 truncate max-w-32">
                   {isArabic && cook.best_product.name_ar ? cook.best_product.name_ar : cook.best_product.name}
                 </p>
-                <p className="text-sm font-bold text-orange-500">AED {cook.best_product.price}</p>
+                <p className="text-sm font-bold text-primary-500">AED {cook.best_product.price}</p>
               </div>
             </div>
           )}
@@ -60,12 +60,12 @@ export default function SellerSpotlight() {
           <div className="flex gap-2 flex-shrink-0">
             {cook.best_product && (
               <Link to={`/product/${cook.best_product.id}`}
-                className="bg-orange-500 hover:bg-orange-600 text-gray-900 text-xs font-semibold px-3 py-2 rounded-xl transition">
+                className="bg-primary-500 hover:bg-primary-600 text-gray-900 text-xs font-semibold px-3 py-2 rounded-xl transition">
                 {isArabic ? "اطلب" : "Order"}
               </Link>
             )}
             <Link to={`/shop/${cook.id}`}
-              className="bg-white border border-orange-200 text-orange-600 hover:bg-orange-50 text-xs font-semibold px-3 py-2 rounded-xl transition">
+              className="bg-white border border-primary-200 text-primary-600 hover:bg-primary-50 text-xs font-semibold px-3 py-2 rounded-xl transition">
               {isArabic ? "المتجر" : "Visit Shop"}
             </Link>
           </div>

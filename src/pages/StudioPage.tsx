@@ -231,7 +231,7 @@ function OptionGrid({ options, value, onChange, cols = 2 }: {
       {options.map(o => (
         <button key={o.value} type="button" onClick={() => onChange(o.value)}
           className={`text-right px-3 py-2.5 rounded-xl border-2 transition text-sm font-medium
-            ${value === o.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+            ${value === o.value ? "border-primary-400 bg-primary-50 text-primary-700" : "border-gray-200 text-gray-600 hover:border-primary-200"}`}>
           {o.label}
         </button>
       ))}
@@ -241,7 +241,7 @@ function OptionGrid({ options, value, onChange, cols = 2 }: {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl p-5 border border-orange-100">
+    <div className="bg-white rounded-2xl p-5 border border-primary-100">
       <h3 className="font-bold text-gray-800 mb-3">{title}</h3>
       {children}
     </div>
@@ -371,11 +371,11 @@ export default function StudioPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-50" dir="rtl">
       {/* Header */}
-      <div className="bg-white border-b border-orange-100 px-6 py-4">
+      <div className="bg-white border-b border-primary-100 px-6 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-orange-500 rounded-xl flex items-center justify-center text-white text-lg">✨</div>
+          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-primary-500 rounded-xl flex items-center justify-center text-white text-lg">✨</div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">استوديو بيتي الذكي</h1>
             <p className="text-sm text-gray-500">يحلل منتجك ويولّد prompt احترافي لـ Gemini — مجاناً</p>
@@ -384,13 +384,13 @@ export default function StudioPage() {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-8">
-        {error && <div className="mb-4 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">⚠️ {error}</div>}
+        {error && <div className="mb-4 bg-error-tint border border-error-tint text-error rounded-xl px-4 py-3 text-sm">⚠️ {error}</div>}
 
         {/* Step 1: Upload */}
         {step === "upload" && (
           <div className="space-y-4">
             <div
-              className="bg-white rounded-2xl border-2 border-dashed border-orange-300 p-12 text-center cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all"
+              className="bg-white rounded-2xl border-2 border-dashed border-primary-300 p-12 text-center cursor-pointer hover:border-primary-400 hover:bg-primary-50 transition-all"
               onClick={() => fileRef.current?.click()}
               onDragOver={e => e.preventDefault()}
               onDrop={e => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
@@ -398,11 +398,11 @@ export default function StudioPage() {
               <div className="text-5xl mb-4">📸</div>
               <h2 className="text-xl font-bold text-gray-800 mb-2">ارفع صورة منتجك</h2>
               <p className="text-gray-500 text-sm mb-4">JPG أو PNG أو WebP — حد أقصى 10MB</p>
-              <button className="bg-orange-500 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-orange-600 transition">اختر صورة</button>
+              <button className="bg-primary-500 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-primary-600 transition">اختر صورة</button>
               <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
                 onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
             </div>
-            <div className="bg-white rounded-2xl p-5 border border-orange-100">
+            <div className="bg-white rounded-2xl p-5 border border-primary-100">
               <h3 className="font-bold text-gray-800 mb-3">كيف يعمل؟</h3>
               <div className="space-y-3">
                 {[
@@ -412,7 +412,7 @@ export default function StudioPage() {
                   { n: "٤", text: "الصق الـ prompt → صورة احترافية في ثوانٍ!" },
                 ].map(s => (
                   <div key={s.n} className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full bg-orange-100 text-orange-600 font-bold text-sm flex items-center justify-center flex-shrink-0">{s.n}</span>
+                    <span className="w-7 h-7 rounded-full bg-primary-100 text-primary-600 font-bold text-sm flex items-center justify-center flex-shrink-0">{s.n}</span>
                     <p className="text-sm text-gray-600 pt-0.5">{s.text}</p>
                   </div>
                 ))}
@@ -425,13 +425,13 @@ export default function StudioPage() {
         {step === "options" && (
           <div className="space-y-4">
             {/* Preview */}
-            <div className="bg-white rounded-2xl p-4 border border-orange-100 flex gap-4 items-center">
+            <div className="bg-white rounded-2xl p-4 border border-primary-100 flex gap-4 items-center">
               <img src={imagePreview!} alt="preview" className="w-20 h-20 object-cover rounded-xl border border-gray-200" />
               <div className="flex-1">
                 <p className="font-semibold text-gray-800">صورة المنتج</p>
                 <p className="text-sm text-gray-400">{imageFile?.name}</p>
               </div>
-              <button onClick={reset} className="text-sm text-gray-400 hover:text-red-500">تغيير</button>
+              <button onClick={reset} className="text-sm text-gray-400 hover:text-error">تغيير</button>
             </div>
 
             {/* نوع المنتج */}
@@ -444,7 +444,7 @@ export default function StudioPage() {
                       {g.types.map(t => (
                         <button key={t.value} type="button" onClick={() => setProductType(t.value)}
                           className={`flex flex-col items-center gap-1 p-3 rounded-xl border-2 transition text-xs font-medium
-                            ${productType === t.value ? "border-orange-400 bg-orange-50 text-orange-700" : "border-gray-200 text-gray-600 hover:border-orange-200"}`}>
+                            ${productType === t.value ? "border-primary-400 bg-primary-50 text-primary-700" : "border-gray-200 text-gray-600 hover:border-primary-200"}`}>
                           <span className="text-xl">{t.emoji}</span>
                           {t.label}
                         </button>
@@ -556,11 +556,11 @@ export default function StudioPage() {
               <textarea value={extraNotes} onChange={e => setExtraNotes(e.target.value)}
                 placeholder="مثال: أريد اللون الأصفر يبرز أكثر، مع تأثير الدخان..."
                 rows={2}
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-orange-400 focus:outline-none transition resize-none" dir="rtl" />
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:border-primary-400 focus:outline-none transition resize-none" dir="rtl" />
             </Section>
 
             <button onClick={analyze}
-              className="w-full bg-gradient-to-r from-purple-500 to-orange-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
+              className="w-full bg-gradient-to-r from-purple-500 to-primary-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
               ✨ حلّل المنتج وولّد الـ Prompt
             </button>
           </div>
@@ -568,7 +568,7 @@ export default function StudioPage() {
 
         {/* Step 3: Analyzing */}
         {step === "analyzing" && (
-          <div className="bg-white rounded-2xl p-12 text-center border border-orange-100">
+          <div className="bg-white rounded-2xl p-12 text-center border border-primary-100">
             <div className="w-20 h-20 mx-auto mb-6 relative">
               <div className="w-20 h-20 rounded-full border-4 border-purple-200 border-t-purple-500 animate-spin"></div>
               <div className="absolute inset-0 flex items-center justify-center text-2xl">🔍</div>
@@ -591,15 +591,15 @@ export default function StudioPage() {
               </div>
             )}
 
-            <details className="bg-white rounded-2xl border border-orange-100 overflow-hidden">
-              <summary className="px-5 py-4 cursor-pointer font-bold text-gray-700 flex items-center gap-2 hover:bg-orange-50 transition list-none">
+            <details className="bg-white rounded-2xl border border-primary-100 overflow-hidden">
+              <summary className="px-5 py-4 cursor-pointer font-bold text-gray-700 flex items-center gap-2 hover:bg-primary-50 transition list-none">
                 <span>📋</span> عرض الـ Prompt
                 <span className="mr-auto text-xs text-gray-400 font-normal">اضغط للعرض</span>
               </summary>
               <div className="px-5 pb-5">
                 <div className="flex justify-end mb-2">
                   <button onClick={copyPrompt}
-                    className={`text-sm px-4 py-1.5 rounded-lg font-medium transition ${copied ? "bg-green-100 text-green-600" : "bg-orange-100 text-orange-600 hover:bg-orange-200"}`}>
+                    className={`text-sm px-4 py-1.5 rounded-lg font-medium transition ${copied ? "bg-success-tint text-success" : "bg-primary-100 text-primary-600 hover:bg-primary-200"}`}>
                     {copied ? "✅ تم النسخ!" : "نسخ"}
                   </button>
                 </div>
@@ -610,12 +610,12 @@ export default function StudioPage() {
             </details>
 
             {result.tips?.length > 0 && (
-              <div className="bg-white rounded-2xl p-5 border border-orange-100">
+              <div className="bg-white rounded-2xl p-5 border border-primary-100">
                 <h3 className="font-bold text-gray-800 mb-3">💡 نصائح للحصول على أفضل نتيجة</h3>
                 <ul className="space-y-2">
                   {result.tips.map((tip, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                      <span className="text-orange-400 mt-0.5">•</span> {tip}
+                      <span className="text-primary-400 mt-0.5">•</span> {tip}
                     </li>
                   ))}
                 </ul>
@@ -623,13 +623,13 @@ export default function StudioPage() {
             )}
 
             <button onClick={openGemini}
-              className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
+              className="flex items-center justify-center gap-3 w-full bg-gradient-to-r from-info to-purple-500 text-white py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition shadow-lg">
               <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
               {autoCopied ? "✅ Gemini مفتوح!" : "انسخ الـ Prompt وافتح Gemini ✨"}
             </button>
 
             {autoCopied && (
-              <div className="bg-green-50 border border-green-200 rounded-xl p-5 text-green-800 text-sm">
+              <div className="bg-success-tint border border-success-tint rounded-xl p-5 text-success text-sm">
                 <p className="font-bold text-base mb-3 text-center">✅ تم النسخ — Gemini مفتوح!</p>
                 <div className="space-y-2">
                   {[
@@ -639,12 +639,12 @@ export default function StudioPage() {
                     { n: "٤", text: "اضغط إرسال ← صورة احترافية! 🎉" },
                   ].map(s => (
                     <div key={s.n} className="flex items-start gap-2">
-                      <span className="bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">{s.n}</span>
+                      <span className="bg-success text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0 mt-0.5">{s.n}</span>
                       <p>{s.text}</p>
                     </div>
                   ))}
                 </div>
-                <button onClick={copyPrompt} className="mt-3 w-full text-center text-xs text-green-600 underline">
+                <button onClick={copyPrompt} className="mt-3 w-full text-center text-xs text-success underline">
                   {copied ? "✅ تم النسخ مجدداً" : "انسخ مجدداً إذا فقدت النسخ"}
                 </button>
               </div>
@@ -652,7 +652,7 @@ export default function StudioPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <button onClick={() => { setStep("options"); setResult(null); setAutoCopied(false); }}
-                className="bg-white border-2 border-orange-300 text-orange-600 py-3 rounded-xl font-medium hover:bg-orange-50 transition text-sm">
+                className="bg-white border-2 border-primary-300 text-primary-600 py-3 rounded-xl font-medium hover:bg-primary-50 transition text-sm">
                 🔄 تغيير الخيارات
               </button>
               <button onClick={reset}
