@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import {
+  startCompanionJob, getCompanionJobStatus, cancelCompanionJob, retryCompanionJob, previewCompanionPrompt,
+  type CompanionJob, type CompanionJobState,
+} from "../api/companion";
 
 const BADGE_CONFIG: Record<string, { label: string; labelAr: string; color: string; icon: string }> = {
   verified:  { label: "Verified",  labelAr: "موثق",   color: "bg-secondary-tint text-secondary border-secondary-300",     icon: "✔"  },
@@ -17,6 +21,21 @@ const STATUS_COLORS: Record<string, string> = {
   cancelled: "bg-error-tint text-error",
 };
 
+const COMPANION_JOB_STATE_DISPLAY: Record<CompanionJobState, { icon: string; ar: string; en: string }> = {
+  ready:             { icon: "⬜", ar: "جاهز",                                    en: "Ready" },
+  gemini_opened:     { icon: "🔵", ar: "تم فتح Gemini",                           en: "Gemini opened" },
+  prompt_inserted:   { icon: "🔵", ar: "تم إدخال البرومبت",                       en: "Prompt inserted" },
+  logo_attached:     { icon: "🔵", ar: "تم إرفاق الشعار",                         en: "Logo attached" },
+  waiting_generate:  { icon: "⏳", ar: "بانتظارك للضغط على Generate في Gemini",   en: "Waiting for you to click Generate in Gemini" },
+  waiting_download:  { icon: "⏳", ar: "بانتظار تنزيل الصورة",                    en: "Waiting for image download" },
+  image_downloaded:  { icon: "✅", ar: "تم تنزيل الصورة",                         en: "Image downloaded" },
+  buffer_opened:     { icon: "🔵", ar: "تم فتح Buffer",                          en: "Buffer opened" },
+  draft_created:     { icon: "✅", ar: "تم إنشاء مسودة Buffer",                  en: "Buffer draft created" },
+  done:              { icon: "✅", ar: "تم بنجاح",                               en: "Done" },
+  failed:            { icon: "❌", ar: "فشل",                                    en: "Failed" },
+  cancelled:         { icon: "⚪", ar: "أُلغيت",                                  en: "Cancelled" },
+};
+
 export default function AdminPanel() {
   const { user } = useAuth();
   const { isArabic } = useLanguage();
@@ -28,6 +47,11 @@ export default function AdminPanel() {
   const [contentCopied, setContentCopied] = useState(false);
   const [postLang, setPostLang] = useState<"ar"|"en">("ar");
   const [imageLoading, setImageLoading] = useState(false);
+  const [companionJobId, setCompanionJobId] = useState<string | null>(null);
+  const [companionJob, setCompanionJob] = useState<CompanionJob | null>(null);
+  const [companionError, setCompanionError] = useState<string | null>(null);
+  const [companionStarting, setCompanionStarting] = useState(false);
+  const [promptCopied, setPromptCopied] = useState(false);
   const [forecastLoading, setForecastLoading] = useState(false);
   const [stats, setStats] = useState<any>(null);
   const [sellers, setSellers] = useState<any[]>([]);
@@ -54,6 +78,31 @@ export default function AdminPanel() {
     if (!user || user.role !== "admin") { navigate("/"); return; }
     loadData();
   }, [user]);
+
+  // Polls the local companion app for job progress until the job reaches a
+  // terminal state. Guarded by a ref (not just the jobId param) so that
+  // switching to a new job — or retrying the same one — never lets a stale
+  // poll chain overwrite the currently-displayed status.
+  const companionJobIdRef = useRef<string | null>(null);
+  useEffect(() => { companionJobIdRef.current = companionJobId; }, [companionJobId]);
+
+  const pollCompanionJob = useCallback(async (jobId: string) => {
+    try {
+      const job = await getCompanionJobStatus(jobId, isArabic);
+      if (companionJobIdRef.current !== jobId) return; // superseded by a newer job
+      setCompanionJob(job);
+      setCompanionError(null);
+      if (!["done", "failed", "cancelled"].includes(job.state)) {
+        setTimeout(() => pollCompanionJob(jobId), 2000);
+      }
+    } catch (e: any) {
+      if (companionJobIdRef.current === jobId) setCompanionError(e.message);
+    }
+  }, [isArabic]);
+
+  useEffect(() => {
+    if (companionJobId) pollCompanionJob(companionJobId);
+  }, [companionJobId, pollCompanionJob]);
 
   const loadData = async () => {
     setLoading(true);
@@ -86,6 +135,60 @@ export default function AdminPanel() {
   const toggleProduct  = async (product: any) => { await api.patch(`/api/admin/products/${product.id}/toggle`); setAllProducts(prev => prev.map(p => p.id === product.id ? { ...p, is_available: !p.is_available } : p)); };
   const deleteProductAdmin = async (product: any) => { if (!window.confirm(`Delete "${product.name}"? This cannot be undone.`)) return; await api.delete(`/api/admin/products/${product.id}`); setAllProducts(prev => prev.filter(p => p.id !== product.id)); };
   const deleteUser     = async (u: any) => { if (!window.confirm(`⚠️ Permanently delete "${u.full_name}" (${u.email}) and ALL their data?`)) return; try { if (u.role === "seller") { const seller = sellers.find(s => s.user?.id === u.id); if (seller) { await api.delete(`/api/admin/sellers/${seller.id}`); setSellers(prev => prev.filter(s => s.id !== seller.id)); } else { await api.delete(`/api/admin/users/${u.id}`); } } else { await api.delete(`/api/admin/users/${u.id}`); } setUsers(prev => prev.filter(x => x.id !== u.id)); } catch (e: any) { alert(e.response?.data?.detail || "Delete failed"); } };
+
+  const handleStartCompanionJob = async () => {
+    if (!contentPost) return;
+    setCompanionStarting(true);
+    setCompanionError(null);
+    setCompanionJob(null);
+    try {
+      const fullCaption = contentPost.caption + "\n\n" + contentPost.hashtags;
+      const { jobId } = await startCompanionJob(
+        { caption: fullCaption, lang: postLang, contentType: contentPost.contentType || "value" },
+        isArabic
+      );
+      setCompanionJobId(jobId);
+    } catch (e: any) {
+      setCompanionError(e.message);
+    } finally {
+      setCompanionStarting(false);
+    }
+  };
+
+  const handleCopyGeminiPrompt = async () => {
+    if (!contentPost) return;
+    try {
+      const fullCaption = contentPost.caption + "\n\n" + contentPost.hashtags;
+      const prompt = await previewCompanionPrompt(
+        { caption: fullCaption, lang: postLang, contentType: contentPost.contentType || "value" },
+        isArabic
+      );
+      await navigator.clipboard.writeText(prompt);
+      setPromptCopied(true);
+      setTimeout(() => setPromptCopied(false), 2000);
+    } catch (e: any) {
+      setCompanionError(e.message);
+    }
+  };
+
+  const handleCancelCompanionJob = async () => {
+    if (!companionJobId) return;
+    try { await cancelCompanionJob(companionJobId, isArabic); } catch (e: any) { setCompanionError(e.message); }
+  };
+
+  const handleRetryCompanionJob = async () => {
+    if (!companionJobId) return;
+    try {
+      const { state } = await retryCompanionJob(companionJobId, isArabic);
+      setCompanionJob(prev => prev ? { ...prev, state, error: null } : prev);
+      pollCompanionJob(companionJobId); // resume polling — retry doesn't change companionJobId, so the mount effect won't re-fire
+    } catch (e: any) {
+      setCompanionError(e.message);
+    }
+  };
+
+  const openGeminiTab = () => window.open("https://gemini.google.com/app", "_blank", "noopener,noreferrer");
+  const openBufferTab = () => window.open("https://publish.buffer.com", "_blank", "noopener,noreferrer");
 
   const filteredSellers = sellers.filter(s => { if (sellerFilter === "pending") return !s.is_approved; if (sellerFilter === "approved") return s.is_approved; return true; });
 
@@ -604,6 +707,68 @@ export default function AdminPanel() {
                 <div dir={postLang === "ar" ? "rtl" : "ltr"} className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{contentPost.caption}</div>
                 <div className="mt-3 bg-gray-50 rounded-xl p-3 text-xs text-gray-500 leading-relaxed">{contentPost.hashtags}</div>
               </div>
+
+              {/* Bayti Social Companion — automates Gemini image + Buffer draft */}
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-3">
+                <button
+                  onClick={handleStartCompanionJob}
+                  disabled={companionStarting || (!!companionJob && !["done", "failed", "cancelled"].includes(companionJob.state))}
+                  className="w-full bg-primary-500 hover:bg-primary-600 text-white font-bold py-4 rounded-2xl transition disabled:opacity-50 text-lg"
+                >
+                  🚀 {companionStarting
+                    ? (isArabic ? "جارٍ البدء..." : "Starting...")
+                    : (isArabic ? "أنشئ صورة Gemini ومسودة Buffer" : "Create Gemini Image & Buffer Draft")}
+                </button>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <button onClick={handleCopyGeminiPrompt} className="text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 py-2.5 rounded-xl font-medium transition">
+                    {promptCopied ? "✅ " + (isArabic ? "تم النسخ" : "Copied") : "📋 " + (isArabic ? "نسخ البرومبت" : "Copy Prompt")}
+                  </button>
+                  <button onClick={openGeminiTab} className="text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 py-2.5 rounded-xl font-medium transition">
+                    🌐 {isArabic ? "افتح Gemini" : "Open Gemini"}
+                  </button>
+                  <button onClick={openBufferTab} className="text-xs sm:text-sm bg-gray-100 hover:bg-gray-200 py-2.5 rounded-xl font-medium transition">
+                    📤 {isArabic ? "افتح Buffer" : "Open Buffer"}
+                  </button>
+                </div>
+
+                {(companionJob || companionError) && (
+                  <div className="bg-gray-50 rounded-xl p-4 text-sm">
+                    <p className="font-semibold text-gray-900 mb-2">{isArabic ? "حالة المهمة" : "Job Status"}</p>
+
+                    {companionError && (
+                      <p className="text-error text-xs mb-2">⚠️ {companionError}</p>
+                    )}
+
+                    {companionJob && (
+                      <>
+                        <p className="text-gray-700">
+                          {COMPANION_JOB_STATE_DISPLAY[companionJob.state]?.icon}{" "}
+                          {isArabic ? COMPANION_JOB_STATE_DISPLAY[companionJob.state]?.ar : COMPANION_JOB_STATE_DISPLAY[companionJob.state]?.en}
+                        </p>
+                        {companionJob.dryRunStoppedBeforeBuffer && (
+                          <p className="text-xs text-gray-400 mt-1">{isArabic ? "(تجربة جافة — توقف قبل Buffer)" : "(dry run — stopped before Buffer)"}</p>
+                        )}
+                        {companionJob.state === "failed" && companionJob.error && (
+                          <div className="mt-2 space-y-2">
+                            <p className="text-error text-xs">{companionJob.error.stage}: {companionJob.error.message}</p>
+                            <div className="flex gap-2 flex-wrap">
+                              <button onClick={handleRetryCompanionJob} className="text-xs bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded-lg font-medium transition">🔄 {isArabic ? "إعادة المحاولة" : "Retry"}</button>
+                              <button onClick={handleCopyGeminiPrompt} className="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1.5 rounded-lg font-medium transition">📋 {isArabic ? "نسخ البرومبت" : "Copy Prompt"}</button>
+                              <button onClick={openGeminiTab} className="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1.5 rounded-lg font-medium transition">🌐 {isArabic ? "افتح Gemini" : "Open Gemini"}</button>
+                              <button onClick={openBufferTab} className="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1.5 rounded-lg font-medium transition">📤 {isArabic ? "افتح Buffer" : "Open Buffer"}</button>
+                            </div>
+                          </div>
+                        )}
+                        {!["done", "failed", "cancelled"].includes(companionJob.state) && (
+                          <button onClick={handleCancelCompanionJob} className="mt-2 text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1.5 rounded-lg font-medium transition">❌ {isArabic ? "إلغاء" : "Cancel"}</button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <a href="https://publish.buffer.com" target="_blank" rel="noopener noreferrer" className="block w-full bg-gray-900 text-white font-bold py-4 rounded-2xl hover:bg-gray-800 transition text-center text-lg">📱 {isArabic ? "افتح Buffer للنشر" : "Open Buffer to Publish"}</a>
             </>
           )}
