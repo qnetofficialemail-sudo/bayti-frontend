@@ -26,7 +26,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
   const [unlocked, setUnlocked]       = useState(false);
   const [pin, setPin]                 = useState("");
   const [pinError, setPinError]       = useState(false);
-  const [tab, setTab]                 = useState<"brief"|"accounts"|"compose"|"objections">("brief");
+  const [tab, setTab]                 = useState<"brief"|"accounts"|"compose"|"proposal"|"objections">("brief");
   const [accounts, setAccounts]       = useState<Account[]>([]);
   const [stats, setStats]             = useState<Stats | null>(null);
   const [brief, setBrief]             = useState<string>("");
@@ -43,6 +43,12 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
   const [seeding, setSeeding]         = useState(false);
   const [expandedObj, setExpandedObj] = useState<number | null>(null);
   const [objection, setObjection]     = useState("");
+  const [proposalAcc, setProposalAcc]         = useState<Account | null>(null);
+  const [proposalLoading, setProposalLoading] = useState(false);
+  const [proposalHtml, setProposalHtml]       = useState("");
+  const [proposalFilename, setProposalFilename] = useState("");
+  const [proposalError, setProposalError]     = useState("");
+  const [proposalCopied, setProposalCopied]   = useState(false);
 
   const getHeaders = () => {
     const token = localStorage.getItem("token");
@@ -80,6 +86,31 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
     });
     if (res.ok) { const d = await res.json(); setGeneratedMsg(d.message); }
     setGenLoading(false);
+  }
+  async function generateProposal(acc: Account) {
+    setProposalAcc(acc); setProposalLoading(true); setProposalHtml(""); setProposalError(""); setProposalCopied(false);
+    try {
+      const res = await fetch(`${BACKEND}/api/ai/generate-proposal`, {
+        method: "POST", headers: getHeaders(),
+        body: JSON.stringify({ account_id: acc.id }),
+      });
+      if (res.ok) {
+        const d = await res.json();
+        setProposalHtml(d.html_content);
+        setProposalFilename(d.suggested_filename);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        setProposalError(err.detail || "تعذّر توليد العرض");
+      }
+    } catch {
+      setProposalError("تعذّر الاتصال بالخادم");
+    }
+    setProposalLoading(false);
+  }
+  function copyProposalHtml() {
+    if (!proposalHtml) return;
+    navigator.clipboard.writeText(proposalHtml);
+    setProposalCopied(true); setTimeout(() => setProposalCopied(false), 2000);
   }
   async function seedAccounts() {
     setSeeding(true);
@@ -195,6 +226,7 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
             { id: "brief",      label: "🧠 التقرير اليومي" },
             { id: "accounts",   label: "🎯 غرفة العمليات" },
             { id: "compose",    label: "✍️ مصنع الرسائل" },
+            { id: "proposal",   label: "📄 توليد Proposal" },
             { id: "objections", label: "💬 ردود الاعتراضات" },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id as any)}
@@ -409,6 +441,83 @@ export default function GrowthOSPage({ embedded = false }: { embedded?: boolean 
                 )}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Tab: Proposal Generator */}
+        {tab === "proposal" && (
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+              <div className="p-4 border-b border-gray-100">
+                <h2 className="font-bold text-gray-800">📄 توليد عرض Proposal</h2>
+                <p className="text-xs text-gray-400 mt-1">اختر حساباً لتوليد صفحة عرض HTML مخصصة بالذكاء الاصطناعي، بناءً على قالب auntyzkitchen.html</p>
+              </div>
+              <div className="max-h-[560px] overflow-y-auto divide-y divide-gray-50">
+                {accounts.map(acc => (
+                  <button key={acc.id} onClick={() => generateProposal(acc)}
+                    disabled={proposalLoading}
+                    className={`w-full flex items-center gap-3 p-3 text-right hover:bg-primary-50 transition disabled:opacity-50 ${proposalAcc?.id === acc.id ? "bg-primary-50" : ""}`}>
+                    <div className="w-9 h-9 bg-gradient-to-br from-primary-400 to-primary-400 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                      {acc.username[0].toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-gray-800 text-sm">@{acc.username}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_CONFIG[acc.status]?.bg} ${STATUS_CONFIG[acc.status]?.color}`}>
+                          {STATUS_CONFIG[acc.status]?.label}
+                        </span>
+                      </div>
+                      <div className="text-xs text-gray-400 truncate">{acc.category}{acc.emirate ? ` · ${acc.emirate}` : ""}</div>
+                    </div>
+                    {proposalLoading && proposalAcc?.id === acc.id && <span className="text-xs text-primary-500 flex-shrink-0">⏳</span>}
+                  </button>
+                ))}
+                {accounts.length === 0 && (
+                  <div className="text-center py-12 text-gray-400 text-sm">لا يوجد حسابات — أضيفي حسابات من تبويب "غرفة العمليات"</div>
+                )}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-gray-100 p-5">
+              {proposalLoading ? (
+                <div className="text-center py-16 text-gray-400">
+                  <div className="text-3xl mb-3">⏳</div>
+                  <p className="text-sm">Claude يكتب عرضاً مخصصاً لـ @{proposalAcc?.username}...</p>
+                </div>
+              ) : proposalError ? (
+                <div className="text-center py-16 text-error">
+                  <div className="text-3xl mb-3">⚠️</div>
+                  <p className="text-sm">{proposalError}</p>
+                </div>
+              ) : proposalHtml && proposalAcc ? (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                      <h3 className="font-bold text-gray-800 text-sm">عرض @{proposalAcc.username}</h3>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        الرابط النهائي بعد الرفع: <span className="font-mono text-primary-600">bayti.ink/p/{proposalAcc.username}</span>
+                      </p>
+                    </div>
+                    <button onClick={copyProposalHtml}
+                      className={`text-sm px-4 py-1.5 rounded-xl font-medium transition ${proposalCopied ? "bg-success-tint text-success" : "bg-primary-100 text-primary-600 hover:bg-primary-200"}`}>
+                      {proposalCopied ? "✅ تم النسخ!" : "📋 نسخ HTML"}
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-400 bg-gray-50 rounded-lg p-2 border border-gray-100">
+                    الصقي الكود في ملف جديد باسم <span className="font-mono">{proposalFilename}</span> داخل مجلد <span className="font-mono">bayti-proposals</span>، ثم ارفعيه إلى <span className="font-mono">public/p/</span> على المستودع.
+                  </p>
+                  <div className="border border-gray-200 rounded-xl overflow-hidden" style={{ height: 500 }}>
+                    <iframe title="proposal-preview" srcDoc={proposalHtml} className="w-full h-full" sandbox="allow-same-origin" />
+                  </div>
+                  <button onClick={() => generateProposal(proposalAcc)} className="w-full text-sm bg-gray-100 text-gray-600 py-2.5 rounded-xl hover:bg-gray-200 transition">🔄 أعد التوليد</button>
+                </div>
+              ) : (
+                <div className="text-center py-16 text-gray-400">
+                  <div className="text-3xl mb-3">📄</div>
+                  <p className="text-sm">اختاري حساباً من القائمة لتوليد عرض Proposal له</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
