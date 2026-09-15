@@ -25,7 +25,6 @@ export default function Landing() {
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
   const [categories, setCategories] = useState<any[]>([]);
-  const [stats, setStats] = useState({ sellers: 0, products: 0 });
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -38,9 +37,6 @@ export default function Landing() {
 
   useEffect(() => {
     api.get("/api/categories").then(r => setCategories(r.data.filter((c: any) => c.is_active !== false))).catch(() => setCategories([]));
-    Promise.all([api.get("/api/sellers"), api.get("/api/products")]).then(([s, p]) => {
-      setStats({ sellers: s.data.length, products: p.data.length });
-    }).catch(() => {});
   }, []);
 
   if (isLoading) return null;
@@ -104,38 +100,48 @@ export default function Landing() {
               : "From handmade crafts to perfumes and fashion — choose what suits you"}
           </p>
 
+          {/* Two audiences */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+            <Link to="/marketplace"
+              className="bg-primary-500 hover:bg-primary-600 text-gray-900 font-bold px-8 py-3 rounded-2xl text-center transition">
+              {isArabic ? "🛍️ تسوق المنتجات المحلية" : "🛍️ Shop Local Products"}
+            </Link>
+            <Link to="/sell"
+              className="border-2 border-primary-500 text-primary-600 hover:bg-primary-50 font-bold px-8 py-3 rounded-2xl text-center transition">
+              {isArabic ? "🏪 ابدأ البيع من البيت" : "🏪 Start Selling from Home"}
+            </Link>
+          </div>
+
           {/* Search */}
           <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-8">
-            <div className="flex gap-2 bg-white rounded-2xl shadow-lg p-2 border border-gray-100">
+            <div className="flex flex-col sm:flex-row gap-2 bg-white rounded-2xl shadow-lg p-2 border border-gray-100">
               <input value={search} onChange={e => setSearch(e.target.value)} type="text"
                 aria-label={isArabic ? "ابحث عن منتجات" : "Search products and sellers"}
                 placeholder={isArabic ? "ابحث عن منتجات، بائعين، حرفيين..." : "Search for products, sellers, artisans..."}
-                className="flex-1 px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
-              <button type="submit" className="bg-primary-500 hover:bg-primary-600 text-gray-900 px-6 py-2 rounded-xl font-medium transition">
+                className="flex-1 w-full px-4 py-2 text-gray-900 focus:outline-none bg-transparent" />
+              <button type="submit" className="w-full sm:w-auto bg-primary-500 hover:bg-primary-600 text-gray-900 px-6 py-2 rounded-xl font-medium transition">
                 {isArabic ? "بحث" : "Search"}
               </button>
             </div>
           </form>
 
-          {/* Live stats */}
-          {stats.sellers > 0 && (
-            <div className="flex justify-center gap-8 text-center">
-              <div>
-                <p className="text-3xl font-bold text-primary-500">{stats.sellers}+</p>
-                <p className="text-sm text-gray-500">{isArabic ? "بائع محلي" : "Local Sellers"}</p>
-              </div>
-              <div className="w-px bg-gray-200" />
-              <div>
-                <p className="text-3xl font-bold text-primary-500">{stats.products}+</p>
-                <p className="text-sm text-gray-500">{isArabic ? "منتج متاح" : "Products Available"}</p>
-              </div>
-              <div className="w-px bg-gray-200" />
-              <div>
-                <p className="text-3xl font-bold text-primary-500">🇦🇪</p>
-                <p className="text-sm text-gray-500">{isArabic ? "كل الإمارات" : "All UAE"}</p>
-              </div>
+          {/* Benefit stats */}
+          <div className="flex flex-wrap justify-center gap-8 text-center">
+            <div>
+              <p className="text-3xl font-bold text-primary-500">{isArabic ? "٤" : "4"}</p>
+              <p className="text-sm text-gray-500">{isArabic ? "أدوات ذكاء اصطناعي مجانية" : "Free AI Tools"}</p>
             </div>
-          )}
+            <div className="w-px bg-gray-200" />
+            <div>
+              <p className="text-3xl font-bold text-primary-500">{isArabic ? "٠٪" : "0%"}</p>
+              <p className="text-sm text-gray-500">{isArabic ? "عمولة" : "Commission"}</p>
+            </div>
+            <div className="w-px bg-gray-200" />
+            <div>
+              <p className="text-3xl font-bold text-primary-500">🇦🇪</p>
+              <p className="text-sm text-gray-500">{isArabic ? "توصيل لكل الإمارات" : "Delivery Across UAE"}</p>
+            </div>
+          </div>
         </div>
       </section>
 

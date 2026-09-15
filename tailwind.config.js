@@ -59,6 +59,15 @@ module.exports = {
         en: "var(--font-body-en)",
         mono: "var(--font-mono)",
       },
+      keyframes: {
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+      },
+      animation: {
+        shimmer: "shimmer 1.5s ease-in-out infinite",
+      },
     },
   },
   plugins: [],
