@@ -1,55 +1,36 @@
 {
-  "rewrites": [
-    { "source": "/((?!.*\\.[\\w]+$).*)", "destination": "/index.html" }
-  ],
-  "headers": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
+      "src": "/(.*)",
+      "headers": {
+        "X-Frame-Options": "SAMEORIGIN",
+        "X-Content-Type-Options": "nosniff",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "X-XSS-Protection": "1; mode=block"
+      },
+      "continue": true
     },
     {
-      "source": "/static/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
+      "src": "/static/(.*)",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" },
+      "continue": true
     },
     {
-      "source": "/(favicon.ico|logo192.png|logo512.png|logo-icon.png|manifest.json|robots.txt|sitemap.xml|llms.txt)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=3600, must-revalidate"
-        }
-      ]
+      "src": "/(favicon\\.ico|logo192\\.png|logo512\\.png|logo-icon\\.png|manifest\\.json|robots\\.txt|sitemap\\.xml|llms\\.txt)",
+      "headers": { "Cache-Control": "public, max-age=3600, must-revalidate" },
+      "continue": true
     },
     {
-      "source": "/(index.html)?",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    }
+      "src": "/(index\\.html)?$",
+      "headers": { "Cache-Control": "public, max-age=0, must-revalidate" },
+      "continue": true
+    },
+    { "handle": "filesystem" },
+    {
+      "src": "^/.*\\.[a-zA-Z0-9]+$",
+      "status": 404,
+      "dest": "/index.html"
+    },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

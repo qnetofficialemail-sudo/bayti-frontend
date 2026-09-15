@@ -27,6 +27,7 @@ import GrowthOSPage from './pages/GrowthOSPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import About from './pages/About';
 import { useAuth } from "./context/AuthContext";
 import { Navigate } from "react-router-dom";
 
@@ -70,6 +71,7 @@ export default function App() {
               <Route path="/reset-password" element={<><Navbar /><main id="main-content"><ResetPasswordPage /></main></>} />
               <Route path="/seller-register" element={<><Navbar /><main id="main-content"><SellerRegisterPage /></main></>} />
               <Route path="/privacy-policy" element={<><Navbar /><main id="main-content"><PrivacyPolicy /></main></>} />
+              <Route path="/about" element={<><Navbar /><main id="main-content"><About /></main></>} />
               <Route path="/p/:seller" element={<ProposalPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

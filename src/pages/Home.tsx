@@ -168,6 +168,11 @@ export default function Home() {
           })}
         </div>
       )}
+      <footer className="mt-12 pt-6 border-t border-gray-100 text-center text-sm text-gray-400">
+        <Link to="/privacy-policy" className="hover:text-primary-500 transition">
+          {isArabic ? "سياسة الخصوصية" : "Privacy Policy"}
+        </Link>
+      </footer>
     </div>
     <AIPersonalShopper />
     </>
