@@ -1,0 +1,17 @@
+# Bayti (بيتي)
+
+> UAE local marketplace connecting home-based sellers with buyers. Discover handmade products, home cooking, abayas, and unique gifts from sellers across the UAE.
+
+Bayti is a bilingual (Arabic/English) marketplace focused on home-based sellers in the United Arab Emirates. Buyers browse products by category, message sellers directly, and place orders for local pickup or delivery. Sellers manage a shop profile, product catalog, and order pipeline.
+
+## Key pages
+
+- [Marketplace](https://bayti.ink/marketplace): Browse all products and sellers.
+- [Categories](https://bayti.ink/categories): Browse by product category.
+- [Sell on Bayti](https://bayti.ink/sell): Information for prospective sellers.
+- [Seller application](https://bayti.ink/seller-apply): Apply to become a seller.
+
+## Notes for crawlers and agents
+
+- Content is rendered client-side (React SPA). Product and seller listings are fetched from the Bayti API at request time.
+- The sitemap is at https://bayti.ink/sitemap.xml.

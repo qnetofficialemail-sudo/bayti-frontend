@@ -84,6 +84,7 @@ export default function Landing() {
         </div>
       </nav>
 
+      <main id="main-content">
       {/* Hero */}
       <section className="bg-gradient-to-br from-primary-50 via-primary-50 to-white py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
@@ -294,6 +295,7 @@ export default function Landing() {
           </button>
         </div>
       )}
+      </main>
     </div>
   );
 }
