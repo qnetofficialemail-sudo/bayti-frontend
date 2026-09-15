@@ -14,8 +14,8 @@ interface SEOProps {
 
 const SITE_NAME = "Bayti | بيتي";
 const DEFAULT_DESC = "Discover handmade crafts, perfumes, abayas, home-cooked meals and more from local UAE home sellers. اكتشف منتجات محلية من بائعين في الإمارات.";
-const DEFAULT_IMAGE = "https://bayti.ink/logo192.png";
-const BASE_URL = "https://bayti.ink";
+const DEFAULT_IMAGE = "https://www.bayti.ink/logo192.png";
+const BASE_URL = "https://www.bayti.ink";
 
 export default function SEO({ title, description, image, url, type = "website", price, currency = "AED" }: SEOProps) {
   const { isArabic } = useLanguage();

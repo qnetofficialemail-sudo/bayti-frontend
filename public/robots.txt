@@ -6,4 +6,4 @@ Disallow: /seller/shop/edit
 Disallow: /login
 Disallow: /register
 
-Sitemap: https://bayti.ink/sitemap.xml
+Sitemap: https://www.bayti.ink/sitemap.xml

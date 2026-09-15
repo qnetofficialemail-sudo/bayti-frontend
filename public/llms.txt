@@ -6,12 +6,12 @@ Bayti is a bilingual (Arabic/English) marketplace focused on home-based sellers 
 
 ## Key pages
 
-- [Marketplace](https://bayti.ink/marketplace): Browse all products and sellers.
-- [Categories](https://bayti.ink/categories): Browse by product category.
-- [Sell on Bayti](https://bayti.ink/sell): Information for prospective sellers.
-- [Seller application](https://bayti.ink/seller-apply): Apply to become a seller.
+- [Marketplace](https://www.bayti.ink/marketplace): Browse all products and sellers.
+- [Categories](https://www.bayti.ink/categories): Browse by product category.
+- [Sell on Bayti](https://www.bayti.ink/sell): Information for prospective sellers.
+- [Seller application](https://www.bayti.ink/seller-apply): Apply to become a seller.
 
 ## Notes for crawlers and agents
 
 - Content is rendered client-side (React SPA). Product and seller listings are fetched from the Bayti API at request time.
-- The sitemap is at https://bayti.ink/sitemap.xml.
+- The sitemap is at https://www.bayti.ink/sitemap.xml.
