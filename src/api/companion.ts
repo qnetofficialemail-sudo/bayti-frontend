@@ -11,7 +11,7 @@ const companion = axios.create({
 
 export type CompanionJobState =
   | "ready" | "gemini_opened" | "prompt_inserted" | "logo_attached"
-  | "waiting_generate" | "waiting_download" | "image_downloaded"
+  | "ready_to_generate" | "generate_clicked" | "generating" | "image_downloaded"
   | "buffer_opened" | "draft_created" | "done" | "failed" | "cancelled";
 
 export interface CompanionJob {

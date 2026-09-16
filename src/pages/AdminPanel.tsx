@@ -26,8 +26,9 @@ const COMPANION_JOB_STATE_DISPLAY: Record<CompanionJobState, { icon: string; ar:
   gemini_opened:     { icon: "🔵", ar: "تم فتح Gemini",                           en: "Gemini opened" },
   prompt_inserted:   { icon: "🔵", ar: "تم إدخال البرومبت",                       en: "Prompt inserted" },
   logo_attached:     { icon: "🔵", ar: "تم إرفاق الشعار",                         en: "Logo attached" },
-  waiting_generate:  { icon: "⏳", ar: "بانتظارك للضغط على Generate في Gemini",   en: "Waiting for you to click Generate in Gemini" },
-  waiting_download:  { icon: "⏳", ar: "بانتظار تنزيل الصورة",                    en: "Waiting for image download" },
+  ready_to_generate: { icon: "🔵", ar: "جاهز للتوليد",                           en: "Ready to generate" },
+  generate_clicked:  { icon: "🔵", ar: "تم الضغط على Generate",                  en: "Generate clicked" },
+  generating:        { icon: "⏳", ar: "جارٍ توليد الصورة وتنزيلها تلقائيًا",     en: "Generating and downloading image" },
   image_downloaded:  { icon: "✅", ar: "تم تنزيل الصورة",                         en: "Image downloaded" },
   buffer_opened:     { icon: "🔵", ar: "تم فتح Buffer",                          en: "Buffer opened" },
   draft_created:     { icon: "✅", ar: "تم إنشاء مسودة Buffer",                  en: "Buffer draft created" },
@@ -35,6 +36,14 @@ const COMPANION_JOB_STATE_DISPLAY: Record<CompanionJobState, { icon: string; ar:
   failed:            { icon: "❌", ar: "فشل",                                    en: "Failed" },
   cancelled:         { icon: "⚪", ar: "أُلغيت",                                  en: "Cancelled" },
 };
+
+// The 4 fixed combinations the Daily Content Loop runs through, in order.
+const DAILY_LOOP_JOBS: { lang: "ar" | "en"; contentType: "sellers" | "value"; labelAr: string; labelEn: string }[] = [
+  { lang: "ar", contentType: "sellers", labelAr: "عربي - بائعات",    labelEn: "Arabic Sellers" },
+  { lang: "ar", contentType: "value",   labelAr: "عربي - قيمة",      labelEn: "Arabic Value" },
+  { lang: "en", contentType: "sellers", labelAr: "إنجليزي - بائعات", labelEn: "English Sellers" },
+  { lang: "en", contentType: "value",   labelAr: "إنجليزي - قيمة",   labelEn: "English Value" },
+];
 
 export default function AdminPanel() {
   const { user } = useAuth();
@@ -52,6 +61,11 @@ export default function AdminPanel() {
   const [companionError, setCompanionError] = useState<string | null>(null);
   const [companionStarting, setCompanionStarting] = useState(false);
   const [promptCopied, setPromptCopied] = useState(false);
+  const [dailyLoopActive, setDailyLoopActive] = useState(false);
+  const [dailyLoopIndex, setDailyLoopIndex] = useState(0);
+  const [dailyLoopPhase, setDailyLoopPhase] = useState<"idle" | "generating" | "job" | "failed" | "complete" | "stopped">("idle");
+  const [dailyLoopJob, setDailyLoopJob] = useState<CompanionJob | null>(null);
+  const [dailyLoopError, setDailyLoopError] = useState<string | null>(null);
   const [forecastLoading, setForecastLoading] = useState(false);
   const [stats, setStats] = useState<any>(null);
   const [sellers, setSellers] = useState<any[]>([]);
@@ -85,6 +99,12 @@ export default function AdminPanel() {
   // poll chain overwrite the currently-displayed status.
   const companionJobIdRef = useRef<string | null>(null);
   useEffect(() => { companionJobIdRef.current = companionJobId; }, [companionJobId]);
+
+  // Daily Content Loop's own stop flag and active-job id — kept as refs
+  // (not state) since the loop's async chain needs to read the latest value
+  // synchronously between awaits, not a snapshot from when the closure was created.
+  const dailyLoopStopRef = useRef(false);
+  const dailyLoopJobIdRef = useRef<string | null>(null);
 
   const pollCompanionJob = useCallback(async (jobId: string) => {
     try {
@@ -185,6 +205,143 @@ export default function AdminPanel() {
     } catch (e: any) {
       setCompanionError(e.message);
     }
+  };
+
+  const sleep = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+
+  const generateDailyLoopContent = async (lang: "ar" | "en", contentType: "sellers" | "value"): Promise<string> => {
+    const res = await fetch("https://web-production-63685.up.railway.app/api/ai/instagram-content-v2", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: contentType, lang }),
+    });
+    if (!res.ok) throw new Error(`Content generation failed (HTTP ${res.status})`);
+    const data = await res.json();
+    return `${data.caption}\n\n${data.hashtags}`;
+  };
+
+  // Polls a companion job every 3s (per spec) until it reaches a terminal
+  // state, updating dailyLoopJob for live display. Resolves with the final
+  // job, or null if Stop Loop was clicked mid-poll.
+  const pollDailyLoopJob = async (jobId: string): Promise<CompanionJob | null> => {
+    while (!dailyLoopStopRef.current) {
+      const job = await getCompanionJobStatus(jobId, isArabic);
+      if (dailyLoopStopRef.current) return null;
+      setDailyLoopJob(job);
+      if (["done", "failed", "cancelled"].includes(job.state)) return job;
+      await sleep(3000);
+    }
+    return null;
+  };
+
+  const startAndPollDailyLoopJob = async (
+    caption: string, lang: "ar" | "en", contentType: "sellers" | "value"
+  ): Promise<"done" | "failed" | "stopped"> => {
+    let jobId: string;
+    try {
+      const res = await startCompanionJob({ caption, lang, contentType }, isArabic);
+      jobId = res.jobId;
+    } catch (e: any) {
+      setDailyLoopError(e.message);
+      return "failed";
+    }
+    dailyLoopJobIdRef.current = jobId;
+    if (dailyLoopStopRef.current) return "stopped";
+    const job = await pollDailyLoopJob(jobId);
+    if (!job) return "stopped";
+    setDailyLoopError(job.state === "failed" && job.error ? `${job.error.stage}: ${job.error.message}` : null);
+    return job.state === "done" ? "done" : "failed";
+  };
+
+  const retryAndPollDailyLoopJob = async (): Promise<"done" | "failed" | "stopped"> => {
+    const jobId = dailyLoopJobIdRef.current;
+    if (!jobId) return "failed";
+    try {
+      const { state } = await retryCompanionJob(jobId, isArabic);
+      setDailyLoopJob(prev => (prev ? { ...prev, state, error: null } : prev));
+    } catch (e: any) {
+      setDailyLoopError(e.message);
+      return "failed";
+    }
+    if (dailyLoopStopRef.current) return "stopped";
+    const job = await pollDailyLoopJob(jobId);
+    if (!job) return "stopped";
+    setDailyLoopError(job.state === "failed" && job.error ? `${job.error.stage}: ${job.error.message}` : null);
+    return job.state === "done" ? "done" : "failed";
+  };
+
+  // Runs one job in the loop end to end: generate its caption, start the
+  // companion job, poll to a terminal state, and — if it fails — attempt
+  // exactly one automatic retry (mirroring the existing manual Retry button)
+  // before giving up on this step.
+  const runDailyLoopStep = async (index: number): Promise<"done" | "failed" | "stopped"> => {
+    setDailyLoopIndex(index);
+    setDailyLoopPhase("generating");
+    setDailyLoopJob(null);
+    setDailyLoopError(null);
+    dailyLoopJobIdRef.current = null;
+    const { lang, contentType } = DAILY_LOOP_JOBS[index];
+
+    let fullCaption: string;
+    try {
+      fullCaption = await generateDailyLoopContent(lang, contentType);
+    } catch (e: any) {
+      setDailyLoopError(e.message || (isArabic ? "فشل توليد المحتوى" : "Content generation failed"));
+      return "failed";
+    }
+    if (dailyLoopStopRef.current) return "stopped";
+
+    setDailyLoopPhase("job");
+    let outcome = await startAndPollDailyLoopJob(fullCaption, lang, contentType);
+    if (outcome !== "failed") return outcome;
+
+    // One automatic retry: resume the same job's failed stage if it got far
+    // enough to have a jobId, otherwise just attempt to start fresh once more.
+    if (dailyLoopStopRef.current) return "stopped";
+    outcome = dailyLoopJobIdRef.current
+      ? await retryAndPollDailyLoopJob()
+      : await startAndPollDailyLoopJob(fullCaption, lang, contentType);
+    return outcome;
+  };
+
+  // Drives the loop forward from `index` through the rest of DAILY_LOOP_JOBS,
+  // pausing (awaiting a Retry Loop / Skip decision from the user) on any step
+  // that still fails after its one automatic retry. Never starts the next
+  // job until the current one reaches a terminal state.
+  const advanceDailyLoop = async (index: number) => {
+    for (let i = index; i < DAILY_LOOP_JOBS.length; i++) {
+      if (dailyLoopStopRef.current) { setDailyLoopPhase("stopped"); setDailyLoopActive(false); return; }
+      const outcome = await runDailyLoopStep(i);
+      if (outcome === "stopped") { setDailyLoopPhase("stopped"); setDailyLoopActive(false); return; }
+      if (outcome === "failed") { setDailyLoopPhase("failed"); return; } // stays active — Stop Loop stays visible
+    }
+    setDailyLoopPhase("complete");
+    setDailyLoopActive(false);
+  };
+
+  const handleStartDailyLoop = () => {
+    dailyLoopStopRef.current = false;
+    setDailyLoopActive(true);
+    advanceDailyLoop(0);
+  };
+
+  const handleDailyLoopRetry = () => {
+    setDailyLoopActive(true);
+    advanceDailyLoop(dailyLoopIndex);
+  };
+
+  const handleDailyLoopSkip = () => {
+    setDailyLoopActive(true);
+    advanceDailyLoop(dailyLoopIndex + 1);
+  };
+
+  const handleStopDailyLoop = async () => {
+    dailyLoopStopRef.current = true;
+    if (dailyLoopJobIdRef.current) {
+      try { await cancelCompanionJob(dailyLoopJobIdRef.current, isArabic); } catch {}
+    }
+    setDailyLoopPhase("stopped");
+    setDailyLoopActive(false);
   };
 
   const openGeminiTab = () => window.open("https://gemini.google.com/app", "_blank", "noopener,noreferrer");
@@ -663,6 +820,81 @@ export default function AdminPanel() {
 
       {tab === "content" && (
         <div className="max-w-2xl mx-auto space-y-6">
+          {/* Daily Content Loop — sequentially generates + creates all 4 standard posts */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900">🗓️ {isArabic ? "الحلقة اليومية للمحتوى" : "Daily Content Loop"}</h3>
+                <p className="text-gray-500 text-sm mt-1">
+                  {isArabic
+                    ? "ينشئ 4 منشورات تلقائيًا بالتسلسل: عربي/بائعات، عربي/قيمة، إنجليزي/بائعات، إنجليزي/قيمة"
+                    : "Sequentially generates all 4 posts: Arabic/Sellers, Arabic/Value, English/Sellers, English/Value"}
+                </p>
+              </div>
+              {!dailyLoopActive ? (
+                <button onClick={handleStartDailyLoop}
+                  className="bg-secondary hover:bg-secondary-700 text-white font-bold py-3 px-6 rounded-2xl transition text-sm whitespace-nowrap">
+                  🗓️ {isArabic ? "ابدأ الحلقة اليومية" : "Start Daily Content Loop"}
+                </button>
+              ) : (
+                <button onClick={handleStopDailyLoop}
+                  className="bg-error hover:bg-error text-white font-bold py-3 px-6 rounded-2xl transition text-sm whitespace-nowrap">
+                  ⏹ {isArabic ? "إيقاف الحلقة" : "Stop Loop"}
+                </button>
+              )}
+            </div>
+
+            {dailyLoopPhase !== "idle" && (
+              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+                <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                  <div className="bg-primary-500 h-2.5 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, (dailyLoopPhase === "complete" ? 4 : dailyLoopIndex) / 4 * 100)}%` }} />
+                </div>
+
+                {(dailyLoopPhase === "generating" || dailyLoopPhase === "job") && (
+                  <p className="text-gray-700 font-medium text-sm">
+                    🔄 {isArabic ? `المهمة ${dailyLoopIndex + 1}/4` : `Job ${dailyLoopIndex + 1}/4`}
+                    {" — "}{isArabic ? DAILY_LOOP_JOBS[dailyLoopIndex].labelAr : DAILY_LOOP_JOBS[dailyLoopIndex].labelEn}
+                    {dailyLoopPhase === "generating" || !dailyLoopJob
+                      ? "..."
+                      : ` (${isArabic ? COMPANION_JOB_STATE_DISPLAY[dailyLoopJob.state]?.ar : COMPANION_JOB_STATE_DISPLAY[dailyLoopJob.state]?.en})`}
+                  </p>
+                )}
+
+                {dailyLoopPhase === "failed" && (
+                  <div className="space-y-2">
+                    <p className="text-error text-sm font-medium">
+                      ⚠️ {isArabic ? `المهمة ${dailyLoopIndex + 1}/4 فشلت` : `Job ${dailyLoopIndex + 1}/4 failed`}
+                      {dailyLoopError ? ` — ${dailyLoopError}` : ""}
+                    </p>
+                    <div className="flex gap-2 flex-wrap">
+                      <button onClick={handleDailyLoopRetry}
+                        className="text-xs bg-primary-500 hover:bg-primary-600 text-white px-3 py-1.5 rounded-lg font-medium transition">
+                        🔄 {isArabic ? "إعادة المحاولة" : "Retry Loop"}
+                      </button>
+                      <button onClick={handleDailyLoopSkip}
+                        className="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1.5 rounded-lg font-medium transition">
+                        ⏭ {isArabic ? "تخطي" : "Skip"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {dailyLoopPhase === "complete" && (
+                  <p className="text-success font-bold text-sm">
+                    ✅ {isArabic ? "اكتملت الحلقة اليومية — 4 مسودات جاهزة في Buffer" : "Daily loop complete — 4 drafts ready in Buffer"}
+                  </p>
+                )}
+
+                {dailyLoopPhase === "stopped" && (
+                  <p className="text-gray-500 font-medium text-sm">
+                    ⏹ {isArabic ? "تم إيقاف الحلقة" : "Loop stopped"}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
             <h3 className="text-lg font-bold text-gray-900 mb-2">🎨 {isArabic ? "مولّد محتوى إنستقرام" : "Instagram Content Generator"}</h3>
             <p className="text-gray-500 text-sm mb-6">{isArabic ? "يولّد نص + صورة احترافية جاهزة للنشر على @baytimarketplace" : "Generate caption + AI image ready for @baytimarketplace"}</p>
